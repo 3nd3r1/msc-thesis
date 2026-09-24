@@ -10,10 +10,14 @@ An optimizer that knows this should estimate better and make fewer LLM calls. Bu
 
 ```
 CLAUDE.md        working rules for this repo
-LOG.md           dated research log: what ran, results, decisions
+LOG.md           dated research log and current status
 docs/thesis.md   research context, related work, open questions
 data/            raw data (gitignored)
 experiments/     NN_short_name/run.py + results/
 ```
 
 Start with `docs/thesis.md` for the full context.
+
+## Status
+
+In the top entry of [`LOG.md`](LOG.md).

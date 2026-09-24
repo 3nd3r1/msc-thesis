@@ -2,7 +2,7 @@
 
 Code and experiments for Viljami's MSc thesis in computer science at the University of Helsinki (graduating 2027), supervised by Prof. Jiaheng Lu (UDBMS group). The thesis itself is written in LaTeX on Overleaf; this repo holds code, results and the research log only.
 
-Full research context, related work and open questions: `docs/thesis.md`. Read it before proposing new experiments or changing direction.
+Full research context, related work and open questions: `docs/thesis.md` (topic and background, no status). Read it before proposing new experiments or changing direction.
 
 ## The thesis in short
 
@@ -14,9 +14,8 @@ Semantic operators over graph data: LLM-evaluated predicates (e.g. "review compl
 
 ## Current status
 
-- Direction emailed to Lu for feedback (late Sep 2026); waiting for a reply. Nothing is committed until he agrees.
-- Next deliverable after agreement: a 1–2 page thesis plan submitted through PreThesis.
-- Experiment 01 tests the core idea: do `sem_filter` verdicts cluster by product in Amazon Reviews 2023, also after conditioning on star rating?
+In the top entry of `LOG.md`. Read it at the start of a session; it is the only place
+status is tracked. Do not restate it in other files.
 
 ## Repo layout
 

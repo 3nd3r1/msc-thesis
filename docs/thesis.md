@@ -1,6 +1,8 @@
 # Thesis context
 
-Background for anyone (human or Claude) working in this repo. `CLAUDE.md` has the short version.
+Background for anyone (human or Claude) working in this repo: what the topic is and why.
+`CLAUDE.md` has the short version and the working rules. Current status and results are
+in `LOG.md`, not here — this file describes the topic, not where it stands.
 
 ## People
 
@@ -34,9 +36,9 @@ Other directions considered and set aside: an executor for Lu's categorical alge
 2. Cardinality estimation for them (SemCEB) ignores correlation between predicates.
 3. On graph data, LLM verdicts are correlated along edges: reviews of the same product, or by the same user, tend to get the same verdict. That structure could improve selectivity estimates, filter placement, and let the system skip or batch LLM calls.
 
-The first step is checking that the correlation actually exists (experiment 01).
+The claim in step 3 is an assumption until measured, and everything else rests on it. A confounder to rule out: if verdicts merely track the star rating, the correlation is already available from structured data and buys nothing.
 
-## Thesis scope (tentative, pending Lu)
+## Thesis scope
 
 - Fixed-shape pattern queries with LLM filters.
 - Optimizations: filter placement, caching, batching, correlation-aware estimation.
