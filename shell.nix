@@ -5,23 +5,24 @@
 let
   ps = pkgs.python3Packages;
 
-  # Not in nixpkgs -> build it from PyPI ourselves.
   lotus-ai = ps.buildPythonPackage rec {
     pname = "lotus-ai";
     version = "1.2.4";
     pyproject = true;
 
     src = ps.fetchPypi {
-      pname = "lotus_ai"; # PyPI sdist uses the underscore spelling
+      pname = "lotus_ai";
       inherit version;
       hash = "sha256-A/EWrUry/qIGYRfO1lk4qWxMyB7WFjFc8Y6GKymmVH0=";
     };
 
     build-system = [ ps.hatchling ];
 
-    # nixpkgs ships newer numpy/pandas/sentence-transformers than upstream pins,
-    # and nixpkgs calls faiss-cpu just "faiss".
-    pythonRelaxDeps = [ "numpy" "pandas" "sentence-transformers" ];
+    pythonRelaxDeps = [
+      "numpy"
+      "pandas"
+      "sentence-transformers"
+    ];
     pythonRemoveDeps = [ "faiss-cpu" ];
 
     dependencies = with ps; [
@@ -30,7 +31,7 @@ let
       litellm
       numpy
       pandas
-      pillow # undeclared upstream, but lotus.dtype_extensions imports PIL
+      pillow
       pydantic
       requests
       sentence-transformers
@@ -39,7 +40,6 @@ let
     ];
 
     pythonImportsCheck = [ "lotus" ];
-    doCheck = false; # no tests in the sdist
   };
 in
 pkgs.mkShell {
