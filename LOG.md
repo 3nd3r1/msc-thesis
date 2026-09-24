@@ -7,6 +7,43 @@ Every experiment entry records its predicate, model, sample sizes and seed.
 
 ---
 
+## 2026-09-24 — pivot: entity-aware cascades instead of graph cardinality estimation
+
+Narrowed the topic. Working title is now **entity-aware cascades for semantic filters**.
+Full writeup in `docs/thesis.md`.
+
+What changed. The correlation insight is unchanged: rows that belong to the same entity
+(reviews of a product, posts by a user) tend to get the same LLM verdict. What changed is
+what we do with it. Before: use correlation to improve *cardinality estimation* for LLM
+filters inside graph pattern queries, against the SemCEB gap. Now: use it inside a *model
+cascade*, spending the oracle budget per entity instead of per row, and deciding an
+entity's remaining rows from the verdicts already confirmed within it.
+
+Why. The cascade framing has a primary metric that is directly comparable to existing work
+(oracle calls at a fixed accuracy target), concrete baselines to beat (LOTUS's own cascade,
+CSV, Two-Phase), and it extends code that already exists in LOTUS. Cardinality estimation
+over graph patterns needed more machinery to say anything measurable. Graph edges are now
+a stated extension — an entity key is a one-hop relationship — rather than the scope.
+
+The gap it claims: CSV (Hou et al., VLDB 2026) and adaptive Two-Phase (Kim et al., 2026)
+both exploit row similarity, but infer groups from embeddings because they target corpora
+with no schema. Dataframe and SQL data already carries entity identifiers; `sem_filter`
+just never looks at them. Exact grouping for free, and nobody has tested whether it helps.
+
+Consequences for experiment 01. It is still the go/no-go on within-entity correlation, but
+it now has to answer more, matching RQ1 and the three risks:
+- correlation within product IDs (as before);
+- the same measurement for embedding clusters, to show the entity key adds something
+  embeddings do not already capture;
+- the entity-size distribution, since long-tailed sizes cap the achievable saving —
+  entities with 2–3 rows are too small to sample and vote on.
+It should also record token logprobs while labelling, so the labelled set can be reused
+offline for every later comparison and for the Bayes-error difficulty measure.
+`experiments/01_edge_correlation/run.py` predates the pivot and covers only the first of
+these.
+
+Still no reply from Lu, and the pivot has not been sent to him.
+
 ## 2026-09-24 — repo set up, waiting on Lu
 
 Repo scaffolded: `CLAUDE.md` (working rules), `docs/thesis.md` (topic and background),

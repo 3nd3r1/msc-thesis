@@ -6,11 +6,14 @@ Full research context, related work and open questions: `docs/thesis.md` (topic 
 
 ## The thesis in short
 
-Semantic operators over graph data: LLM-evaluated predicates (e.g. "review complains about quality") inside graph pattern queries.
+**Entity-aware cascades for semantic filters.** A semantic filter runs an LLM predicate on every row. The standard way to make that affordable is a model cascade: a cheap proxy scores each row, only uncertain rows are escalated to the expensive oracle, and thresholds are calibrated to hit an accuracy target.
 
-- Scope: fixed-shape pattern queries such as user–review–product, with LLM filters. Focus on filter placement, caching, batching, and cost/cardinality estimation. Variable-length paths are out of scope.
-- Build on an existing semantic-operator system (LOTUS) and extend it. Do not build a new engine.
-- Core idea: cardinality estimation for semantic operators (SemCEB) assumes predicates are independent. On graphs, LLM verdicts are likely correlated along edges (reviews of the same product tend to get the same verdict). An optimizer that knows this can estimate better and skip LLM calls.
+- Core idea: cascades treat rows as independent, but rows belong to entities (reviews of a product, posts by a user) and verdicts correlate within them. Spend the oracle budget per entity rather than per row, then settle an entity's remaining rows from the verdicts already confirmed within it.
+- Gap: prior work (CSV, adaptive Two-Phase) exploits row similarity but infers groups from embeddings, because it targets corpora with no schema. Dataframe and SQL data already carries entity keys — exact and free — and no method uses them.
+- Scope: single entity keys, `sem_filter` only. Foreign keys and graph edges are a stated extension, not the scope.
+- Build on LOTUS and extend its existing cascade. Do not build a new engine.
+- Primary metric: oracle calls at a fixed accuracy target. Baselines: full oracle run, LOTUS cascade, CSV, Two-Phase.
+- Label each dataset once with the oracle, recording logprobs, so every later comparison runs offline.
 
 ## Current status
 

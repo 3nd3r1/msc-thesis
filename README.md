@@ -1,10 +1,10 @@
-# MSC Thesis - Semantic operators over graph data
+# MSC Thesis - Entity-aware cascades for semantic filters
 
 Code, results and research log for Viljami's MSc thesis (computer science, University of Helsinki, supervised by Prof. Jiaheng Lu, UDBMS group).
 
-**TLDR:** LLM-evaluated predicates inside fixed-shape graph pattern queries (e.g. `user–review–product`).
-Existing cardinality estimation for semantic operators assumes predicates are independent, but on graphs LLM verdicts are likely correlated along edges — reviews of the same product tend to get the same verdict.
-An optimizer that knows this should estimate better and make fewer LLM calls. Built as an extension of [LOTUS](https://github.com/lotus-data/lotus), not a new engine.
+**TLDR:** A semantic filter runs an LLM predicate on every row, so a filter over a million rows means a million model calls. Cascades cut that by escalating only uncertain rows to the expensive model — but they treat rows as independent.
+Rows belong to entities: reviews of a product, posts by a user. Verdicts correlate within them, so once a few of a product's reviews are confirmed, the rest carry strong evidence for free.
+Prior work exploits this only through embedding clusters; dataframe and SQL data already carries exact entity keys and nothing uses them. Built as an extension of [LOTUS](https://github.com/lotus-data/lotus)'s cascade, not a new engine.
 
 ## Layout
 
