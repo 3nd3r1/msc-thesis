@@ -1,30 +1,22 @@
 # Thesis
 
-Home note for the vault. Everything else hangs off this.
+MSc thesis, computer science, University of Helsinki. Supervised by Prof. Jiaheng Lu.
 
-## Research question
+> **TODO — research question.** One paragraph, in your own words.
 
-> **TODO — fill in.** One paragraph: the question the thesis answers, in your own
-> words. The long-form background is in [Thesis context](Thesis%20context.md); this
-> should be the short version you could say out loud.
-
-## Status
-
-> **TODO — fill in.** Where things stand right now: what is running, what is blocked,
-> what the next deliverable is. Keep the detail in [Log/](Log/Log.md) and only the
-> one-line summary here.
+> **TODO — status.** One line. The detail lives in `Log/`.
 
 ## Directions
 
-Candidate directions live in `Directions/`.
+- [Entity-aware cascades for semantic filters](Directions/Entity-aware%20cascades%20for%20semantic%20filters.md) — active
+- [Correlation-Aware Optimization of LLM Predicates in Graph Pattern Queries](Directions/Correlation-Aware%20Optimization%20of%20LLM%20Predicates%20in%20Graph%20Pattern%20Queries.md) — set aside 2026-09-24
 
-> **TODO — none yet.** No direction notes exist. Add one per candidate direction and
-> link it here.
+## Rest of the vault
 
-## Elsewhere in the vault
-
-- [Thesis context](Thesis%20context.md) — topic, key concepts, gap, research questions, evaluation plan
-- [Log](Log/Log.md) — dated work log, newest file is the current status
-- [Ideas](Ideas.md) — unsorted
-- `Concepts/` — one note per idea
+- `Log/` — dated work log, newest file is the current status
 - `Meetings/` — supervisor meetings
+- `Concepts/` — one note per idea
+- [Ideas](Ideas.md) — unsorted, plus directions set aside
+- [People](People.md)
+- [Process](Process.md) — Helsinki thesis process
+- [Sources](Sources.md)

@@ -6,10 +6,8 @@ itself is written in LaTeX on Overleaf; this repo holds code, results and the no
 
 ## Layout
 
-- `notes/` — all markdown notes, an Obsidian vault. **Start with `notes/Thesis.md`.**
-  Inside it: `Thesis context.md` (topic, related work, open questions — read before
-  proposing experiments or changing direction), `Log/` (dated work log, `YYYY-MM-DD.md`,
-  newest file is the current status), `Directions/`, `Concepts/`, `Meetings/`, `Ideas.md`.
+- `notes/` — all markdown notes, an Obsidian vault. **`notes/Thesis.md` is the only way
+  in: read it first and follow its links.** Do not map the vault's structure here.
 - `experiments/` — one folder per experiment, `NN_short_name/run.py` plus `results/`
   for small committed outputs.
 - `data/` — raw data downloads, gitignored.
@@ -44,10 +42,10 @@ thresholds are calibrated to hit an accuracy target.
   means a new experiment folder.
 - Every run records its predicate, model, sample sizes and seed, in the code as constants
   and in the log.
-- After a result or decision, add a dated note to `notes/Log/YYYY-MM-DD.md`: what was run,
-  the key numbers, what it means. This log is the source for the thesis's methods and
-  results chapters, so keep it accurate. It is the only place status is tracked — do not
-  restate status in other files.
+- After a result or decision, add a dated entry to the work log — `notes/Thesis.md` links
+  it. Record what was run, the key numbers, what it means. This log is the source for the
+  thesis's methods and results chapters, so keep it accurate. It is the only place status
+  is tracked — do not restate status in other files.
 - LLM calls cost money. Cache verdicts to disk and reuse them; ask before anything that
   would make more than a few thousand calls.
 - LOTUS changes go in a separate fork pinned in `requirements.txt`, not copied into this
