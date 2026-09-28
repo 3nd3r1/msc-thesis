@@ -1,7 +1,5 @@
 # Correlation-Aware Optimization of LLM Predicates in Graph Pattern Queries
 
-**Status:** set aside 2026-09-24 — superseded by [Entity-aware cascades for semantic filters](Entity-aware%20cascades%20for%20semantic%20filters.md). The correlation insight carried over; the vehicle changed from cardinality estimation over graph patterns to cascades over a single entity key.
-
 ## Problem
 
 Many questions over graph data depend on what text means, not just how things are connected. A trust & safety team wants posts spreading vaccine misinformation by people who are friends with healthcare workers. A compliance team wants suppliers linked to companies whose filings mention sanctions exposure. Each is a graph pattern with one or more semantic predicates: conditions only a language model can judge.
@@ -54,11 +52,10 @@ RQ3: Which graph properties (assortativity, clustering, degree skew) predict whe
 
 ## Evaluation
 
-> **TODO** — datasets, metrics and baselines were never written down for this direction.
-
+TODO
 ## Risks
 
-> **TODO** — never written down for this direction.
+TODO
 
 ## References
 
