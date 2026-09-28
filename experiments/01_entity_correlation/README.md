@@ -13,6 +13,11 @@ product mostly gets positive reviews.
 - Amazon Reviews 2023 (McAuley Lab), category All_Beauty
 - Downloaded from the hub on first run and cached in `data/hf`
 
+## Outcome
+
+If agreement inside entities is close to chance, or embedding clusters match it, the
+cascade idea loses its core and the direction needs rethinking.
+
 ## Steps
 
 ### Sizes
@@ -38,7 +43,39 @@ Suppose you sample k = 3 reviews per product for products with at least 5 review
 
 This assumes propagation is always right, which is what the next steps test.
 
-## Outcome
+### Sample
 
-If agreement inside entities is close to chance, or embedding clusters match it, the
-cascade idea loses its core and the direction needs rethinking.
+Labeling all reviews is unnecessary.
+Lets take 100 products each from the 5–10, 10–50 and 50+ buckets.
+Take up to 20 reviews per product, which gives roughly 5k reviews.
+
+### Label
+
+Label the sample with these 7 predicates:
+
+- "reports skin irritation or an allergic reaction", "says the product doesn't work as advertised", "suspects the product is fake" - Product-level
+- "mentions having sensitive skin", "bought it as a gift" - Author-level
+- "mentions another person (partner, child, friend)" - Row-level
+- "the review is positive" - Control
+
+Use open-weight model as the oracle.
+Save the verdict and yes/no logprob.
+
+### Compare
+
+For each predicate, measure how homogeneous each grouping is:
+
+- product ID
+- user ID (where the data allows it)
+- embedding clusters, using k-means on sentence embeddings with the same number and sizes of clusters as the product groups
+- shuffled groups with the same sizes, as the chance baseline
+
+For the metric, use pairwise agreement corrected for chance.
+Compare the probability that two rows in the same group agree with the probability that two random rows agree.
+This works like kappa or an intra-class correlation, and it handles the "a group of two agrees half the time anyway" problem.
+
+For the rating check, compute the same thing only over pairs with the same star rating.
+If agreement within products stays high among, say, 3-star reviews only, the signal isn't just the rating.
+
+Also add one practical number: label k = 3 random rows per product, propagate the majority to the rest, and report the accuracy.
+That turns "correlation" into "how many calls would this save at what accuracy".
