@@ -6,13 +6,14 @@ Code, results and research log for Viljami's MSc thesis (computer science, Unive
 
 ```
 CLAUDE.md        working rules for this repo
-notes/           Obsidian vault: all markdown notes, start at notes/Thesis.md
+docs/            all markdown notes, start at docs/Thesis.md
+refs.bib         bibliography, exported from Zotero
 data/            raw data (gitignored)
 experiments/     NN_short_name/run.py + results/
 ```
 
-Start with [`notes/Thesis.md`](notes/Thesis.md).
+Start with [`docs/Thesis.md`](docs/Thesis.md).
 
 ## Status
 
-In the newest file in [`notes/Log/`](notes/Log).
+In the newest file in [`docs/Log/`](docs/Log).

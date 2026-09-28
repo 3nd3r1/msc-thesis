@@ -6,8 +6,8 @@ itself is written in LaTeX on Overleaf; this repo holds code, results and the no
 
 ## Layout
 
-- `notes/` — all markdown notes, an Obsidian vault. **`notes/Thesis.md` is the only way
-  in: read it first and follow its links.** Do not map the vault's structure here.
+- `docs/` — all markdown notes. **`docs/Thesis.md` is the only way in: read it first and
+  follow its links.** Do not map the structure of `docs/` here.
 - `experiments/` — one folder per experiment, `NN_short_name/run.py` plus `results/`
   for small committed outputs.
 - `data/` — raw data downloads, gitignored.
@@ -42,7 +42,7 @@ thresholds are calibrated to hit an accuracy target.
   means a new experiment folder.
 - Every run records its predicate, model, sample sizes and seed, in the code as constants
   and in the log.
-- After a result or decision, add a dated entry to the work log — `notes/Thesis.md` links
+- After a result or decision, add a dated entry to the work log — `docs/Thesis.md` links
   it. Record what was run, the key numbers, what it means. This log is the source for the
   thesis's methods and results chapters, so keep it accurate. It is the only place status
   is tracked — do not restate status in other files.
