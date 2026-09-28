@@ -46,8 +46,16 @@ This assumes propagation is always right, which is what the next steps test.
 ### Sample
 
 Labeling all reviews is unnecessary.
-Lets take 100 products each from the 5–10, 10–50 and 50+ buckets.
+Lets take 100 products each from the 5-9, 10-49 and 50+ buckets.
 Take up to 20 reviews per product, which gives roughly 5k reviews.
+
+#### Verdict
+
+4,235 reviews over 300 products, seed 0.
+Only 29 reviewers have more than one review in the sample, so the user ID grouping cannot be
+measured from it.
+Deferred. The author-level predicates stay in as a contrast class, they
+should group weakly by product if the metric works.
 
 ### Label
 
