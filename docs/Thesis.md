@@ -5,11 +5,11 @@ MSc thesis, computer science, University of Helsinki. Supervised by Prof. Jiahen
 ## Research questions
 
 TODO
+
 ## Links
 
-- `Log/` - dated work log, newest file is the current status
-- `Meetings/` - supervisor meetings
-- `Concepts/` - one note per idea
-- `Ideas/` - Random ideas
-- [People](People.md)
+- [Log](Log/) - dated work log, newest file is the current status
+- [Mettings](Meetings/) - supervisor meetings
+- [Concepts](Concepts/) - one note per idea
+- [Ideas](Ideas/) - Random ideas
 - [Process](Process.md) - Uni helsinki thesis process
