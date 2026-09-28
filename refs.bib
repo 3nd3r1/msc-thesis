@@ -53,7 +53,7 @@
   file = {/home/ender/Zotero/storage/4DMJBGMH/Chaudhuri et al. - 1999 - On random sampling over joins.pdf}
 }
 
-@misc{houLinearLLMInvocation2026,
+@misc{csv,
   title = {Beyond {{Linear LLM Invocation}}: {{An Efficient}} and {{Effective Semantic Filter Paradigm}}},
   shorttitle = {Beyond {{Linear LLM Invocation}}},
   author = {Hou, Nan and Zhao, Kangfei and Xie, Jiadong and Yu, Jeffrey Xu},
@@ -159,6 +159,28 @@
   file = {/home/ender/Zotero/storage/69JJMEB5/Li et al. - 2016 - Wander Join Online Aggregation via Random Walks.pdf}
 }
 
+@misc{lotus,
+  title = {Semantic {{Operators}}: {{A Declarative Model}} for {{Rich}}, {{AI-based Data Processing}}},
+  shorttitle = {Semantic {{Operators}}},
+  author = {Patel, Liana and Jha, Siddharth and Pan, Melissa and Gupta, Harshit and Asawa, Parth and Guestrin, Carlos and Zaharia, Matei},
+  year = 2025,
+  month = mar,
+  number = {arXiv:2407.11418},
+  eprint = {2407.11418},
+  primaryclass = {cs.DB},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2407.11418},
+  urldate = {2026-09-21},
+  abstract = {The semantic capabilities of large language models (LLMs) have the potential to enable rich analytics and reasoning over vast knowledge corpora. Unfortunately, existing systems either empirically optimize expensive LLM-powered operations with no performance guarantees, or serve a limited set of row-wise LLM operations, providing limited robustness, expressiveness and usability. We introduce semantic operators, the first formalism for declarative and general-purpose AI-based transformations based on natural language specifications (e.g., filtering, sorting, joining or aggregating records using natural language criteria). Each operator opens a rich space for execution plans, similar to relational operators. Our model specifies the expected behavior of each operator with a high-quality gold algorithm, and we develop an optimization framework that reduces cost, while providing accuracy guarantees with respect to a gold algorithm. Using this approach, we propose several novel optimizations to accelerate semantic filtering, joining, group-by and top-k operations by up to \$1,000\textbackslash times\$. We implement semantic operators in the LOTUS system and demonstrate LOTUS' effectiveness on real, bulk-semantic processing applications, including fact-checking, biomedical multi-label classification, search, and topic analysis. We show that the semantic operator model is expressive, capturing state-of-the-art AI pipelines in a few operator calls, and making it easy to express new pipelines that match or exceed quality of recent LLM-based analytic systems by up to \$170\textbackslash\%\$, while offering accuracy guarantees. Overall, LOTUS programs match or exceed the accuracy of state-of-the-art AI pipelines for each task while running up to \$3.6\textbackslash times\$ faster than the highest-quality baselines. LOTUS is publicly available at https://github.com/lotus-data/lotus.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Databases},
+  note = {LOTUS
+
+\par
+They optimize single predicates (like a single sem\_filter) via model cascades meaning that proxy models check a sample and then rows with low confidence are sent to the Oracle model},
+  file = {/home/ender/Zotero/storage/3MBWCR7A/Patel et al. - 2025 - Semantic Operators A Declarative Model for Rich, AI-based Data Processing.pdf;/home/ender/Zotero/storage/9CRI25QM/2407.html}
+}
+
 @misc{luCategoricalUnificationMultiModel2025,
   title = {A {{Categorical Unification}} for {{Multi-Model Data}}: {{Part I Categorical Model}} and {{Normal Forms}}},
   shorttitle = {A {{Categorical Unification}} for {{Multi-Model Data}}},
@@ -236,28 +258,6 @@ They dont touch cardinality estimation but assume it has moderate errors.},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language},
   note = {Comment: Accepted to the IJCNLP AACL 2025 Findings},
   file = {/home/ender/Zotero/storage/X8B5VQBS/Nooralahzadeh et al. - 2025 - Multi-Modal Data Exploration via Language Agents.pdf;/home/ender/Zotero/storage/KL3IB2TK/2412.html}
-}
-
-@misc{patelSemanticOperatorsDeclarative2025,
-  title = {Semantic {{Operators}}: {{A Declarative Model}} for {{Rich}}, {{AI-based Data Processing}}},
-  shorttitle = {Semantic {{Operators}}},
-  author = {Patel, Liana and Jha, Siddharth and Pan, Melissa and Gupta, Harshit and Asawa, Parth and Guestrin, Carlos and Zaharia, Matei},
-  year = 2025,
-  month = mar,
-  number = {arXiv:2407.11418},
-  eprint = {2407.11418},
-  primaryclass = {cs.DB},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2407.11418},
-  urldate = {2026-09-21},
-  abstract = {The semantic capabilities of large language models (LLMs) have the potential to enable rich analytics and reasoning over vast knowledge corpora. Unfortunately, existing systems either empirically optimize expensive LLM-powered operations with no performance guarantees, or serve a limited set of row-wise LLM operations, providing limited robustness, expressiveness and usability. We introduce semantic operators, the first formalism for declarative and general-purpose AI-based transformations based on natural language specifications (e.g., filtering, sorting, joining or aggregating records using natural language criteria). Each operator opens a rich space for execution plans, similar to relational operators. Our model specifies the expected behavior of each operator with a high-quality gold algorithm, and we develop an optimization framework that reduces cost, while providing accuracy guarantees with respect to a gold algorithm. Using this approach, we propose several novel optimizations to accelerate semantic filtering, joining, group-by and top-k operations by up to \$1,000\textbackslash times\$. We implement semantic operators in the LOTUS system and demonstrate LOTUS' effectiveness on real, bulk-semantic processing applications, including fact-checking, biomedical multi-label classification, search, and topic analysis. We show that the semantic operator model is expressive, capturing state-of-the-art AI pipelines in a few operator calls, and making it easy to express new pipelines that match or exceed quality of recent LLM-based analytic systems by up to \$170\textbackslash\%\$, while offering accuracy guarantees. Overall, LOTUS programs match or exceed the accuracy of state-of-the-art AI pipelines for each task while running up to \$3.6\textbackslash times\$ faster than the highest-quality baselines. LOTUS is publicly available at https://github.com/lotus-data/lotus.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Databases},
-  note = {LOTUS
-
-\par
-They optimize single predicates (like a single sem\_filter) via model cascades meaning that proxy models check a sample and then rows with low confidence are sent to the Oracle model},
-  file = {/home/ender/Zotero/storage/3MBWCR7A/Patel et al. - 2025 - Semantic Operators A Declarative Model for Rich, AI-based Data Processing.pdf;/home/ender/Zotero/storage/9CRI25QM/2407.html}
 }
 
 @misc{qiSemaHighperformanceSystem2026,
