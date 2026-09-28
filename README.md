@@ -10,14 +10,13 @@ Prior work exploits this only through embedding clusters; dataframe and SQL data
 
 ```
 CLAUDE.md        working rules for this repo
-LOG.md           dated research log and current status
-docs/thesis.md   research context, related work, open questions
+notes/           Obsidian vault: all markdown notes, start at notes/Thesis.md
 data/            raw data (gitignored)
 experiments/     NN_short_name/run.py + results/
 ```
 
-Start with `docs/thesis.md` for the full context.
+Start with [`notes/Thesis.md`](notes/Thesis.md), or [`notes/Thesis context.md`](notes/Thesis%20context.md) for the full context.
 
 ## Status
 
-In the top entry of [`LOG.md`](LOG.md).
+In the newest file in [`notes/Log/`](notes/Log).

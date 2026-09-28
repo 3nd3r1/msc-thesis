@@ -1,8 +1,8 @@
 # Thesis context
 
 Background for anyone (human or Claude) working in this repo: what the topic is and why.
-`CLAUDE.md` has the short version and the working rules. Current status and results are
-in `LOG.md`, not here — this file describes the topic, not where it stands.
+`../CLAUDE.md` has the short version and the working rules. Current status and results are
+in `Log/`, not here — this file describes the topic, not where it stands.
 
 **Working title:** Entity-aware cascades for semantic filters.
 

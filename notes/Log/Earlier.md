@@ -1,0 +1,6 @@
+## Earlier — topic chosen
+
+Lu's steer was semantic operators over multi-model or multi-modal data, pointing at
+M2EX and CAESURA. The multi-modal variant was dropped because LOTUS already handles
+multimodal data; the multi-model variant over graph data was taken instead. Directions
+considered and set aside are listed in `../Thesis context.md`.
