@@ -1,0 +1,10 @@
+All_Beauty: sample of 100 products per bucket,
+up to 20 reviews each, seed 0
+
+    bucket   products    rows  rows/product
+       5-9        100     641           6.4
+     10-49        100   1,594          15.9
+       50+        100   2,000          20.0
+
+total 4,235 reviews, 300 products
+reviewers with 2+ reviews in the sample: 29 of 4,202
