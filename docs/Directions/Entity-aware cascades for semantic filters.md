@@ -13,7 +13,7 @@ for that evidence.
 
 ## Gap
 
-CSV [@houLinearLLMInvocation2026] and adaptive Two-Phase [@kimFastLLMBasedSemantic2026]
+CSV [@csv] and adaptive Two-Phase [@kimFastLLMBasedSemantic2026]
 already exploit similarity between rows, but they infer the groups from embeddings because
 they target corpora with no schema. Dataframes and SQL already carry entity keys. Grouping
 by them is exact and free, and no method uses them.
@@ -59,9 +59,9 @@ Experiment 01 measures all three before the method is committed to.
 
 ## References
 
-- houLinearLLMInvocation2026 - CSV, clusters rows by embedding and propagates a sampled label
+- csv - CSV, clusters rows by embedding and propagates a sampled label
 - kimFastLLMBasedSemantic2026 - adaptive Two-Phase, clustering first, then a trained proxy
-- patelSemanticOperatorsDeclarative2025 - LOTUS, semantic operators and the cascade this extends
+- lotus - LOTUS, semantic operators and the cascade this extends
 - zimmererSemCEBCardinalityEstimation2026 - SemCEB, cardinality estimation benchmark for semantic operators
 - xuBridgingGapCardinality2026 - cardinality estimation for semantic queries on unstructured data
 - urbanSelectivityEstimationSemantic2026 - selectivity estimation for semantic filters on images

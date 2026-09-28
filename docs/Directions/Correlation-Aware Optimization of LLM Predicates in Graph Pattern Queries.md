@@ -47,7 +47,7 @@ key, which is smaller, measurable, and has directly comparable baselines.
 
 - yanDBMSLLMIntegrationStrategies2025 - DBMS-LLM survey, names cost modelling of LLM operators as open
 - zimmererSemCEBCardinalityEstimation2026 - SemCEB, cardinality estimation benchmark for semantic operators
-- patelSemanticOperatorsDeclarative2025 - LOTUS, semantic operators and model cascades
+- lotus - LOTUS, semantic operators and model cascades
 - mangPLOPCostBasedPlacement2026 - PLOP, cost-based placement of semantic operators
 - zhaoLarchLearnedQuery2026 - Larch, learned predicate ordering, states the independence assumption
 - russoAbacusCostBasedOptimizer2026 - Abacus, cost-based optimizer for semantic operator systems
