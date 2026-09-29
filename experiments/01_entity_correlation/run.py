@@ -1,6 +1,5 @@
 import json
 import sys
-import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -151,27 +150,22 @@ def label():
         print(f"resuming, {len(done):,} already in {path.name}")
 
     api = client()
-    lock = threading.Lock()
-    failed = 0
 
     def work(job):
-        nonlocal failed
         i, predicate = job
         row = rows.loc[i]
         verdict, p = judge(
             api, ORACLE, predicate, {"title": row.title, "text": row.text}
         )
-        if verdict is None:
-            with lock:
-                failed += 1
-            return
-        rec = {"row": int(i), "predicate": predicate, "verdict": verdict, "p": p}
-        with lock:
-            with path.open("a") as f:
-                f.write(json.dumps(rec) + "\n")
+        return {"row": int(i), "predicate": predicate, "verdict": verdict, "p": p}
 
-    with ThreadPoolExecutor(WORKERS) as pool:
-        for n, _ in enumerate(pool.map(work, jobs), 1):
+    failed = 0
+    with ThreadPoolExecutor(WORKERS) as pool, path.open("a", buffering=1) as f:
+        for n, rec in enumerate(pool.map(work, jobs), 1):
+            if rec["verdict"] is None:
+                failed += 1
+            else:
+                f.write(json.dumps(rec) + "\n")
             if n % 200 == 0:
                 print(f"  {n:,}/{len(jobs):,}")
 
