@@ -81,6 +81,8 @@ Label the sample with these 7 predicates:
 | mentions another person (partner, child, friend) | row     |
 | the review is positive                           | control |
 
+Use the LOTUS sem_filter prompt.
+
 Store the verdict and the chosen token's probability as two fields, and derive p(yes) from them:
 p if the verdict is yes, 1 - p if no.
 No model on DeepInfra returns top_logprobs, so the alternatives are not available and this is the
