@@ -1,7 +1,11 @@
+import json
 import sys
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import pandas as pd
+from llm import ORACLE, client, judge, p_yes
 
 from data import load
 
@@ -14,6 +18,18 @@ SEED = 0
 SAMPLE_BUCKETS = [(5, 9), (10, 49), (50, None)]
 PRODUCTS_PER_BUCKET = 100
 ROWS_PER_PRODUCT = 20
+
+WORKERS = 16
+PILOT_ROWS = 100
+PREDICATES = [
+    "reports skin irritation or an allergic reaction",
+    "says the product doesn't work as advertised",
+    "suspects the product is fake",
+    "mentions having sensitive skin",
+    "bought it as a gift",
+    "mentions another person (partner, child, friend)",
+    "the review is positive",
+]
 
 
 def report(name):
@@ -114,7 +130,72 @@ def sample(category="All_Beauty"):
     print(f"wrote {path}")
 
 
-STEPS = {"sizes": sizes, "sample": sample}
+def label():
+    pilot = "--pilot" in sys.argv
+    rows = pd.read_json(RESULTS / "sample.jsonl", lines=True)
+    if pilot:
+        rows = rows.head(PILOT_ROWS)
+    path = RESULTS / ("labels_pilot.jsonl" if pilot else "labels.jsonl")
+
+    done = set()
+    if path.exists():
+        for line in path.open():
+            d = json.loads(line)
+            done.add((d["row"], d["predicate"]))
+
+    jobs = [(i, p) for i in rows.index for p in PREDICATES if (i, p) not in done]
+    print(
+        f"{len(rows):,} rows, {len(PREDICATES)} predicates, {len(jobs):,} calls to make"
+    )
+    if done:
+        print(f"resuming, {len(done):,} already in {path.name}")
+
+    api = client()
+    lock = threading.Lock()
+    failed = 0
+
+    def work(job):
+        nonlocal failed
+        i, predicate = job
+        row = rows.loc[i]
+        verdict, p = judge(
+            api, ORACLE, predicate, {"title": row.title, "text": row.text}
+        )
+        if verdict is None:
+            with lock:
+                failed += 1
+            return
+        rec = {"row": int(i), "predicate": predicate, "verdict": verdict, "p": p}
+        with lock:
+            with path.open("a") as f:
+                f.write(json.dumps(rec) + "\n")
+
+    with ThreadPoolExecutor(WORKERS) as pool:
+        for n, _ in enumerate(pool.map(work, jobs), 1):
+            if n % 200 == 0:
+                print(f"  {n:,}/{len(jobs):,}")
+
+    if failed:
+        print(f"{failed:,} calls returned no verdict")
+
+    out, save = report("labels_pilot" if pilot else "labels")
+    labels = pd.read_json(path, lines=True)
+    labels["p_yes"] = [p_yes(v, p) for v, p in zip(labels.verdict, labels.p)]
+    out(f"{ORACLE}, {len(labels):,} labels over {labels.row.nunique():,} reviews")
+
+    out(f"\n  {'yes':>6} {'mean p':>7} {'p<.5':>6}  predicate")
+    for predicate in PREDICATES:
+        sub = labels[labels.predicate == predicate]
+        yes = (sub.verdict == "yes").mean() if len(sub) else float("nan")
+        unsure = (sub.p < 0.5).mean() if len(sub) else float("nan")
+        out(f"  {yes:>6.1%} {sub.p.mean():>7.3f} {unsure:>6.1%}  {predicate}")
+
+    # p_yes contradicts the verdict below p = 0.5, so track how often that happens.
+    out(f"\np < 0.5 on {(labels.p < 0.5).mean():.1%} of labels, where p_yes is unreliable")
+    save()
+
+
+STEPS = {"sizes": sizes, "sample": sample, "label": label}
 
 if __name__ == "__main__":
     step = sys.argv[1] if len(sys.argv) > 1 else ""
