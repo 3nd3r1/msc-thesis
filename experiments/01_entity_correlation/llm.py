@@ -9,12 +9,19 @@ BASE_URL = "https://api.deepinfra.com/v1/openai"
 ORACLE = "meta-llama/Meta-Llama-3.1-70B-Instruct"
 PROXY = "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"
 
-PROMPT = """Claim: {predicate}
+# LOTUS sem_filter format.
+SYSTEM = """The user will provide a claim and some relevant context.
+Your job is to determine whether the claim is true for the given context.
+Use the following format to provide your answer:
+Answer: <Your answer here. The answer should be either True or False>"""
 
-Review title: {title}
-Review text: {text}
+PROMPT = """Context:
+[Title]: «{title}»
+[Text]: «{text}»
 
-Does the claim hold for this review? Answer with one word, Yes or No."""
+Claim: {predicate}"""
+
+VERDICTS = {"true": "yes", "false": "no"}
 
 
 def client():
@@ -32,7 +39,8 @@ def judge(api, model, predicate, row):
     choice = api.chat.completions.create(
         model=model,
         messages=[
-            {"role": "user", "content": PROMPT.format(predicate=predicate, **row)}
+            {"role": "system", "content": SYSTEM},
+            {"role": "user", "content": PROMPT.format(predicate=predicate, **row)},
         ],
         max_tokens=8,
         temperature=0,
@@ -41,6 +49,6 @@ def judge(api, model, predicate, row):
 
     for t in choice.logprobs.content if choice.logprobs else []:
         word = t.token.strip().lower().strip(".")
-        if word in ("yes", "no"):
-            return word, math.exp(t.logprob)
+        if word in VERDICTS:
+            return VERDICTS[word], math.exp(t.logprob)
     return None, None
