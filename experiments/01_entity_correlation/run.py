@@ -4,6 +4,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 from llm import ORACLE, client, judge, p_yes
 
@@ -19,8 +20,13 @@ SAMPLE_BUCKETS = [(5, 9), (10, 49), (50, None)]
 PRODUCTS_PER_BUCKET = 100
 ROWS_PER_PRODUCT = 20
 
-WORKERS = 16
-RETRIES = 5
+WORKERS = 8
+RETRIES = 8
+
+SHUFFLES = 5
+EMBEDDER = "all-MiniLM-L6-v2"
+PROPAGATE_K = 3
+PROPAGATE_MIN = 5
 PREDICATES = [
     "reports skin irritation or an allergic reaction",
     "says the product doesn't work as advertised",
@@ -190,11 +196,112 @@ def label():
         out(f"  {yes:>6.1%} {sub.p.mean():>7.3f} {unsure:>6.1%}  {predicate}")
 
     # p_yes contradicts the verdict below p = 0.5, so track how often that happens.
-    out(f"\np < 0.5 on {(labels.p < 0.5).mean():.1%} of labels, where p_yes is unreliable")
+    out(
+        f"\np < 0.5 on {(labels.p < 0.5).mean():.1%} of labels, where p_yes is unreliable"
+    )
     save()
 
 
-STEPS = {"sizes": sizes, "sample": sample, "label": label}
+def pair_agreement(groups, verdicts):
+    d = pd.DataFrame({"g": groups, "v": verdicts})
+    c = d.groupby("g").v.agg(n="size", y=lambda s: (s == "yes").sum())
+    pairs = c.n * (c.n - 1) / 2
+    agree = c.y * (c.y - 1) / 2 + (c.n - c.y) * (c.n - c.y - 1) / 2
+    return agree.sum() / pairs.sum() if pairs.sum() else float("nan")
+
+
+def kappa(groups, verdicts, strata=None, rng=None):
+    observed = pair_agreement(groups, verdicts)
+    v = pd.Series(list(verdicts))
+    chance = []
+    for _ in range(SHUFFLES):
+        if strata is None:
+            shuffled = v.sample(frac=1, random_state=rng.integers(1 << 31)).to_numpy()
+        else:
+            shuffled = (
+                v.groupby(list(strata))
+                .transform(
+                    lambda s: s.sample(
+                        frac=1, random_state=rng.integers(1 << 31)
+                    ).to_numpy()
+                )
+                .to_numpy()
+            )
+        chance.append(pair_agreement(groups, shuffled))
+    chance = sum(chance) / len(chance)
+    return (
+        observed,
+        chance,
+        (observed - chance) / (1 - chance) if chance < 1 else float("nan"),
+    )
+
+
+def embed_clusters(rows, k):
+    from sentence_transformers import SentenceTransformer
+    from sklearn.cluster import KMeans
+
+    text = (rows.title.fillna("") + ". " + rows.text.fillna("")).tolist()
+    vectors = SentenceTransformer(EMBEDDER).encode(text, show_progress_bar=False)
+    return KMeans(n_clusters=k, random_state=SEED, n_init=10).fit_predict(vectors)
+
+
+def propagate(df, rng):
+    right = settled = calls = 0
+    for _, g in df.groupby("parent_asin"):
+        if len(g) < PROPAGATE_MIN:
+            calls += len(g)
+            continue
+        seen = g.sample(PROPAGATE_K, random_state=rng.integers(1 << 31))
+        rest = g.drop(seen.index)
+        guess = "yes" if (seen.verdict == "yes").mean() > 0.5 else "no"
+        right += (rest.verdict == guess).sum()
+        settled += len(rest)
+        calls += len(seen)
+    return right / settled if settled else float("nan"), calls, len(df)
+
+
+def compare():
+    labels = pd.read_json(RESULTS / "labels.jsonl", lines=True)
+    rows = pd.read_json(RESULTS / "sample.jsonl", lines=True)
+    rng = np.random.default_rng(SEED)
+
+    n_products = rows.parent_asin.nunique()
+    rows["cluster"] = embed_clusters(rows, n_products)
+    labels = labels.join(rows[["parent_asin", "rating", "cluster"]], on="row")
+
+    out, save = report("compare")
+    out(f"{len(labels):,} labels, {n_products:,} products, {n_products:,} clusters")
+    out("\nagreement between two rows of the same group, and how far above chance")
+    out(
+        f"\n  {'product':>17} {'cluster':>17} {'same rating':>17}  predicate"
+        f"\n  {'obs':>5} {'chance':>6} {'k':>4} {'obs':>5} {'chance':>6} {'k':>4}"
+        f" {'obs':>5} {'chance':>6} {'k':>4}"
+    )
+    for predicate in PREDICATES:
+        sub = labels[labels.predicate == predicate]
+        line = ""
+        for groups, strata in [
+            (sub.parent_asin, None),
+            (sub.cluster, None),
+            (sub.parent_asin, sub.rating),
+        ]:
+            o, c, k = kappa(groups, sub.verdict, strata, rng)
+            line += f"  {o:>5.2f} {c:>6.2f} {k:>4.2f}"
+        out(f"{line}  {predicate}")
+
+    out(
+        f"\nsample {PROPAGATE_K} rows per product with {PROPAGATE_MIN}+ rows, "
+        f"propagate the majority"
+    )
+    out(f"\n  {'accuracy':>8} {'calls':>7} {'saved':>6}  predicate")
+    for predicate in PREDICATES:
+        sub = labels[labels.predicate == predicate]
+        accuracy, calls, total = propagate(sub, rng)
+        out(f"  {accuracy:>8.1%} {calls:>7,} {1 - calls / total:>6.1%}  {predicate}")
+    save()
+
+
+STEPS = {"sizes": sizes, "sample": sample, "label": label, "compare": compare}
 
 if __name__ == "__main__":
     step = sys.argv[1] if len(sys.argv) > 1 else ""
