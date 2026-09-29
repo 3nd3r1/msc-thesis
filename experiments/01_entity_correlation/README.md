@@ -82,6 +82,9 @@ Label the sample with these 7 predicates:
 | the review is positive                           | control |
 
 Use the LOTUS sem_filter prompt.
+It still gives 5 to 10 false positives per 100 reviews on the rare predicates, all on reviews
+with almost no text like 'Flimsy' or 'Apricot lotion'. Known limitation, noise attenuates
+agreement so it errs toward a null result.
 
 Store the verdict and the chosen token's probability as two fields, and derive p(yes) from them:
 p if the verdict is yes, 1 - p if no.
