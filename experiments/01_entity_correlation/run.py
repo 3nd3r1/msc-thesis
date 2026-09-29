@@ -5,6 +5,7 @@ import pandas as pd
 
 from data import load
 
+
 RESULTS = Path(__file__).resolve().parent / "results"
 BUCKETS = [(1, 1), (2, 4), (5, 9), (10, 19), (20, 49), (50, None)]
 THRESHOLDS = [2, 5, 10, 20, 50]
@@ -51,9 +52,13 @@ def group_report(df, key, out):
         sel = select(sizes, lo, hi)
         g = int(sel.sum())
         r = int(sizes[sel].sum())
-        out(f"  {label(lo, hi):>8}  {g:>10,} {g / n_groups:>7.1%}  {r:>10,} {r / n_rows:>6.1%}")
+        out(
+            f"  {label(lo, hi):>8}  {g:>10,} {g / n_groups:>7.1%}  {r:>10,} {r / n_rows:>6.1%}"
+        )
 
-    out(f"\n  {'at least':>8}  {'groups':>10} {'%groups':>8}  {'rows':>10} {'%rows':>7}")
+    out(
+        f"\n  {'at least':>8}  {'groups':>10} {'%groups':>8}  {'rows':>10} {'%rows':>7}"
+    )
     for t in THRESHOLDS:
         sel = sizes >= t
         g = int(sel.sum())
@@ -96,8 +101,12 @@ def sample(category="All_Beauty"):
 
     df_sample = pd.concat(parts)
     users = df_sample.groupby("user_id").size()
-    out(f"\ntotal {len(df_sample):,} reviews, {df_sample.parent_asin.nunique():,} products")
-    out(f"reviewers with 2+ reviews in the sample: {int((users >= 2).sum()):,} of {len(users):,}")
+    out(
+        f"\ntotal {len(df_sample):,} reviews, {df_sample.parent_asin.nunique():,} products"
+    )
+    out(
+        f"reviewers with 2+ reviews in the sample: {int((users >= 2).sum()):,} of {len(users):,}"
+    )
 
     path = RESULTS / "sample.jsonl"
     df_sample.to_json(path, orient="records", lines=True)
