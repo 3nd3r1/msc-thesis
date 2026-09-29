@@ -1,3 +1,3 @@
 # Model cascade
 
-The standard way to make a semantic filter affordable. A cheap *proxy* model scores every row; only rows whose score is uncertain are escalated to the expensive *oracle* model. Thresholds are calibrated so the final result meets a user-specified accuracy target. The saving comes from rows the proxy can settle on its own.
+The usual way to make a semantic filter affordable. A cheap proxy model scores every row, and the rows it can settle on its own never reach the expensive oracle model. Only the uncertain ones are escalated. Thresholds are calibrated so the final result still meets a user-given accuracy target.

@@ -7,16 +7,16 @@ calls. A cascade cuts that down. A cheap proxy scores every row, only uncertain 
 the oracle, and the thresholds are calibrated to an accuracy target.
 
 Cascades score each row on its own text and treat rows as independent. Real rows belong to
-entities, like reviews of one product. Verdicts correlate inside an entity, so once a few
-reviews of a product are confirmed the rest are close to decided. Cascades pay full price
-for that evidence.
+entities, like reviews of one product, and verdicts correlate inside an entity, so once a few
+reviews of a product are confirmed the rest are close to decided. The cascade still pays full
+price for them.
 
 ## Gap
 
-CSV [@csv] and adaptive Two-Phase [@kimFastLLMBasedSemantic2026]
-already exploit similarity between rows, but they infer the groups from embeddings because
-they target corpora with no schema. Dataframes and SQL already carry entity keys. Grouping
-by them is exact and free, and no method uses them.
+CSV [@csv] and adaptive Two-Phase [@kimFastLLMBasedSemantic2026] already exploit similarity
+between rows, but they infer the groups from embeddings because they target corpora with no
+schema. Dataframes and SQL already carry entity keys, grouping by them is exact and free, and I
+have not found a method that uses them.
 
 ## Idea
 
@@ -29,8 +29,8 @@ Mechanisms to try:
 - neighbour verdicts as a feature of the proxy
 - per-entity calibration thresholds
 
-Embedding clustering stays as the fallback when there is no useful key. Scope is single
-entity keys. Foreign keys and graph edges are an extension, not the scope.
+Embedding clustering stays as the fallback when there is no useful key. The scope is single
+entity keys, with foreign keys and graph edges left as an extension.
 
 ## Research questions
 
@@ -42,8 +42,8 @@ entity keys. Foreign keys and graph edges are an extension, not the scope.
 
 ## Evaluation
 
-Two or three datasets with entity keys, several predicates each. Each dataset is labelled
-once with the oracle, recording logprobs, so later comparisons run offline.
+Two or three datasets with entity keys, several predicates each. Each dataset gets labelled
+once with the oracle, logprobs recorded, so the later comparisons can run offline.
 
 - Metric: oracle calls at a fixed accuracy target
 - Baselines: full oracle, LOTUS cascade, CSV, Two-Phase
@@ -55,7 +55,7 @@ once with the oracle, recording logprobs, so later comparisons run offline.
 - Embedding clusters may already capture the same structure.
 - Entity sizes are long tailed, so most entities are too small to sample and vote on.
 
-Experiment 01 measures all three before the method is committed to.
+Experiment 01 measures all three before I commit to the method.
 
 ## References
 

@@ -9,21 +9,21 @@ many are made. Cost modelling of LLM operators in query plans is an open problem
 
 ## Gap
 
-Semantic operator optimizers estimate each predicate separately and combine the estimates
+Semantic operator optimizers estimate each predicate separately and then combine the estimates
 as if the predicates were independent. SemCEB [@zimmererSemCEBCardinalityEstimation2026]
-benchmarks cardinality estimation but evaluates filters and joins in isolation. Nobody has
-measured correlation between semantic predicates across an edge or a join.
+benchmarks cardinality estimation but evaluates filters and joins in isolation. I found no
+measurement of correlation between semantic predicates across an edge or a join.
 
 ## Idea
 
-Semantic verdicts on connected nodes correlate. Misinformation clusters in friend groups,
-complaints cluster on bad products. Graph statistics that engines already keep, such as
-clustering coefficient and assortativity, predict that correlation before any LLM call.
+Semantic verdicts on connected nodes correlate, the way misinformation clusters in friend
+groups or complaints cluster on a bad product. Graph statistics that engines already keep, such
+as clustering coefficient and assortativity, predict that correlation before any LLM call.
 
-The economics differ from classical optimization. Semantic predicates have no free
-statistics, so an optimizer has to sample with the LLM anyway, and sampled verdicts can be
-cached and reused during execution. Sampling along the pattern is affordable here in a way
-it is not in a normal database.
+The economics differ from classical optimization. Semantic predicates have no free statistics, so
+the optimizer has to sample with the LLM anyway, and sampled verdicts can be cached and reused
+during execution. That makes sampling along the pattern affordable here, where in a normal
+database it would not be.
 
 Contributions:
 
@@ -40,8 +40,9 @@ Contributions:
 
 ## Why it was set aside
 
-The correlation insight carried over. The vehicle changed to cascades over a single entity
-key, which is smaller, measurable, and has directly comparable baselines.
+The correlation insight carried over to [Entity-aware cascades for semantic filters](Entity-aware%20cascades%20for%20semantic%20filters.md),
+which is smaller and has baselines I can compare against directly. Reasons in
+[2026-09-24](../Log/2026-09-24.md).
 
 ## References
 

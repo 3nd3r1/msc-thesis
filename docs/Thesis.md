@@ -9,7 +9,7 @@ TODO
 ## Links
 
 - [Log](Log/) - dated work log, newest file is the current status
-- [Mettings](Meetings/) - supervisor meetings
+- [Meetings](Meetings/) - supervisor meetings
 - [Concepts](Concepts/) - one note per idea
-- [Ideas](Ideas/) - Random ideas
-- [Process](Process.md) - Uni helsinki thesis process
+- [Ideas](Ideas/) - loose ideas, one per note
+- [Process](Process.md) - the Helsinki thesis process
