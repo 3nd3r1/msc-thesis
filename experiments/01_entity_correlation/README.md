@@ -21,8 +21,14 @@ embedding clusters match it, the cascade idea loses its core.
 Llama 3.1 70B as the oracle, Llama 3.1 8B as the proxy, both on DeepInfra.
 Same family as the LOTUS cascade, so the later comparison is against their setup rather than a
 reimplementation of it.
-Which models return logprobs on DeepInfra is per model and undocumented, `smoketest.py` checks it.
 Needs `DEEPINFRA_API_KEY`, see `.env.example` at the repo root.
+
+DeepInfra logprobs are unreliable. Support is per model and undocumented, no model returns
+top_logprobs, and on a third of calls the logprobs go missing entirely, same request every time
+and no error. We parse the verdict from the reply text on those rows and store no p.
+
+The steps here only need verdicts so that is fine, but the LOTUS cascade baseline does need
+top_logprobs, so it needs another provider or a rented GPU running vLLM.
 
 ## Steps
 
