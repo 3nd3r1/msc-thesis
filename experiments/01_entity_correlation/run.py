@@ -1,5 +1,6 @@
 import json
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -19,6 +20,7 @@ PRODUCTS_PER_BUCKET = 100
 ROWS_PER_PRODUCT = 20
 
 WORKERS = 16
+RETRIES = 5
 PILOT_ROWS = 100
 PREDICATES = [
     "reports skin irritation or an allergic reaction",
@@ -154,9 +156,16 @@ def label():
     def work(job):
         i, predicate = job
         row = rows.loc[i]
-        verdict, p = judge(
-            api, ORACLE, predicate, {"title": row.title, "text": row.text}
-        )
+        verdict = p = None
+        # 429 model-busy is routine under load, so retry rather than kill the run.
+        for attempt in range(RETRIES):
+            try:
+                verdict, p = judge(
+                    api, ORACLE, predicate, {"title": row.title, "text": row.text}
+                )
+                break
+            except Exception:
+                time.sleep(2**attempt)
         return {"row": int(i), "predicate": predicate, "verdict": verdict, "p": p}
 
     failed = 0
