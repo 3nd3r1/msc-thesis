@@ -1,0 +1,12 @@
+meta-llama/Meta-Llama-3.1-70B-Instruct, 18,870 labels over 3,838 reviews
+
+     yes  mean p   p<.5  predicate
+    3.5%   0.983   0.1%  reports skin irritation or an allergic reaction
+   17.2%   0.969   0.4%  says the product doesn't work as advertised
+    9.7%   0.962   0.4%  suspects the product is fake
+    3.2%   0.984   0.3%  mentions having sensitive skin
+    9.9%   0.965   0.4%  bought it as a gift
+   12.3%   0.978   0.2%  mentions another person (partner, child, friend)
+   70.6%   0.988   0.2%  the review is positive
+
+p < 0.5 on 0.3% of labels, where p_yes is unreliable
