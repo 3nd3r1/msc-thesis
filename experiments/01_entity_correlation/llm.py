@@ -35,11 +35,11 @@ def p_yes(verdict, p):
     return p if verdict == "yes" else 1 - p
 
 
-def judge(api, model, predicate, row):
+def judge(api, model, predicate, row, system=SYSTEM):
     choice = api.chat.completions.create(
         model=model,
         messages=[
-            {"role": "system", "content": SYSTEM},
+            {"role": "system", "content": system},
             {"role": "user", "content": PROMPT.format(predicate=predicate, **row)},
         ],
         max_tokens=8,
