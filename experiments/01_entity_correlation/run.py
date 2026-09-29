@@ -21,7 +21,6 @@ ROWS_PER_PRODUCT = 20
 
 WORKERS = 16
 RETRIES = 5
-PILOT_ROWS = 100
 PREDICATES = [
     "reports skin irritation or an allergic reaction",
     "says the product doesn't work as advertised",
@@ -132,11 +131,8 @@ def sample(category="All_Beauty"):
 
 
 def label():
-    pilot = "--pilot" in sys.argv
     rows = pd.read_json(RESULTS / "sample.jsonl", lines=True)
-    if pilot:
-        rows = rows.head(PILOT_ROWS)
-    path = RESULTS / ("labels_pilot.jsonl" if pilot else "labels.jsonl")
+    path = RESULTS / "labels.jsonl"
 
     done = set()
     if path.exists():
@@ -181,7 +177,7 @@ def label():
     if failed:
         print(f"{failed:,} calls returned no verdict")
 
-    out, save = report("labels_pilot" if pilot else "labels")
+    out, save = report("labels")
     labels = pd.read_json(path, lines=True)
     labels["p_yes"] = [p_yes(v, p) for v, p in zip(labels.verdict, labels.p)]
     out(f"{ORACLE}, {len(labels):,} labels over {labels.row.nunique():,} reviews")
