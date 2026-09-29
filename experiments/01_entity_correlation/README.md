@@ -81,9 +81,15 @@ Label the sample with these 7 predicates:
 | mentions another person (partner, child, friend) | row     |
 | the review is positive                           | control |
 
-Save the verdict and the chosen token's probability, as two fields.
-DeepInfra returns no alternatives, only the logprob of the token the model picked, so a single
-p(yes) is not recoverable and misreads the verdict when the model is unsure.
+Store the verdict and the chosen token's probability as two fields, and derive p(yes) from them:
+p if the verdict is yes, 1 - p if no.
+No model on DeepInfra returns top_logprobs, so the alternatives are not available and this is the
+only route to p(yes). We only learn how likely the model thought its own answer was, never the alternatives, so we
+treat all the leftover probability as the opposite answer.
+That is close enough when the model is sure.
+It breaks when p drops below 0.5, because then the model answers no while 1 - p comes out above
+0.5 and reads as yes.
+The step reports how often p lands below 0.5.
 
 ### 4. Compare
 
