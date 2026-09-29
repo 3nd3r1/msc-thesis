@@ -185,20 +185,25 @@ def label():
 
     out, save = report("labels")
     labels = pd.read_json(path, lines=True)
-    labels["p_yes"] = [p_yes(v, p) for v, p in zip(labels.verdict, labels.p)]
+    labels["p_yes"] = [
+        p_yes(v, p) if pd.notna(p) else None for v, p in zip(labels.verdict, labels.p)
+    ]
+    scored = labels[labels.p.notna()]
     out(f"{ORACLE}, {len(labels):,} labels over {labels.row.nunique():,} reviews")
 
     out(f"\n  {'yes':>6} {'mean p':>7} {'p<.5':>6}  predicate")
     for predicate in PREDICATES:
         sub = labels[labels.predicate == predicate]
         yes = (sub.verdict == "yes").mean() if len(sub) else float("nan")
-        unsure = (sub.p < 0.5).mean() if len(sub) else float("nan")
+        unsure = (sub.p < 0.5).mean() if sub.p.notna().any() else float("nan")
         out(f"  {yes:>6.1%} {sub.p.mean():>7.3f} {unsure:>6.1%}  {predicate}")
 
     # p_yes contradicts the verdict below p = 0.5, so track how often that happens.
     out(
-        f"\np < 0.5 on {(labels.p < 0.5).mean():.1%} of labels, where p_yes is unreliable"
+        f"\np < 0.5 on {(scored.p < 0.5).mean():.1%} of scored labels, "
+        "where p_yes is unreliable"
     )
+    out(f"{1 - len(scored) / len(labels):.1%} of labels have no p, logprobs were dropped")
     save()
 
 

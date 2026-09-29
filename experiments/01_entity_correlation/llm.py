@@ -51,4 +51,11 @@ def judge(api, model, predicate, row, system=SYSTEM):
         word = t.token.strip().lower().strip(".")
         if word in VERDICTS:
             return VERDICTS[word], math.exp(t.logprob)
+
+    # DeepInfra drops logprobs on some calls with no error. The reply still carries the
+    # verdict, so keep it and lose only the confidence.
+    reply = (choice.message.content or "").lower()
+    for word, verdict in VERDICTS.items():
+        if word in reply:
+            return verdict, None
     return None, None
