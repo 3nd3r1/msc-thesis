@@ -23,7 +23,8 @@ ROWS_PER_PRODUCT = 20
 WORKERS = 8
 RETRIES = 8
 
-SHUFFLES = 5
+SHUFFLES = 200
+BOOTSTRAP = 1000
 EMBEDDER = "all-MiniLM-L6-v2"
 PROPAGATE_K = 3
 PROPAGATE_MIN = 5
@@ -194,7 +195,9 @@ def label():
     out(f"\n  {'yes':>6} {'mean p':>7} {'p<.5':>6}  predicate")
     for predicate in PREDICATES:
         sub = labels[labels.predicate == predicate]
-        yes = (sub.verdict == "yes").mean() if len(sub) else float("nan")
+        if not len(sub):
+            continue
+        yes = (sub.verdict == "yes").mean()
         unsure = (sub.p < 0.5).mean() if sub.p.notna().any() else float("nan")
         out(f"  {yes:>6.1%} {sub.p.mean():>7.3f} {unsure:>6.1%}  {predicate}")
 
@@ -207,38 +210,67 @@ def label():
     save()
 
 
-def pair_agreement(groups, verdicts):
-    d = pd.DataFrame({"g": groups, "v": verdicts})
+def group_counts(groups, verdicts):
+    d = pd.DataFrame({"g": list(groups), "v": list(verdicts)})
     c = d.groupby("g").v.agg(n="size", y=lambda s: (s == "yes").sum())
-    pairs = c.n * (c.n - 1) / 2
-    agree = c.y * (c.y - 1) / 2 + (c.n - c.y) * (c.n - c.y - 1) / 2
-    return agree.sum() / pairs.sum() if pairs.sum() else float("nan")
+    return c.n.to_numpy(), c.y.to_numpy()
 
 
-def kappa(groups, verdicts, strata=None, rng=None):
+def pair_agreement(groups, verdicts):
+    n, y = group_counts(groups, verdicts)
+    pairs = (n * (n - 1) / 2).sum()
+    agree = (y * (y - 1) / 2 + (n - y) * (n - y - 1) / 2).sum()
+    return agree / pairs if pairs else float("nan")
+
+
+# Two random rows agree whenever both are yes or both are no, so the chance term is exact
+# and needs no shuffling.
+def chance(n, y):
+    return (y * (y - 1) + (n - y) * (n - y - 1)) / (n * (n - 1))
+
+
+def corrected(observed, expected):
+    return (observed - expected) / (1 - expected) if expected < 1 else float("nan")
+
+
+def kappa(groups, verdicts, rng):
+    n, y = group_counts(groups, verdicts)
+    pairs = n * (n - 1) / 2
+    agree = y * (y - 1) / 2 + (n - y) * (n - y - 1) / 2
+    observed = agree.sum() / pairs.sum()
+    expected = chance(n.sum(), y.sum())
+
+    # Resample whole groups, so the interval reflects how few groups carry the signal.
+    pick = rng.integers(0, len(n), (BOOTSTRAP, len(n)))
+    obs = agree[pick].sum(1) / pairs[pick].sum(1)
+    exp = chance(n[pick].sum(1), y[pick].sum(1))
+    with np.errstate(divide="ignore", invalid="ignore"):
+        draws = (obs - exp) / (1 - exp)
+    lo, hi = np.nanpercentile(draws, [2.5, 97.5])
+    return observed, expected, corrected(observed, expected), lo, hi
+
+
+# Shuffling within rating strata leaves the chance term with no closed form, so it is
+# estimated. The groups stay put and only the verdicts move.
+def kappa_strata(groups, verdicts, strata, rng):
     observed = pair_agreement(groups, verdicts)
     v = pd.Series(list(verdicts))
-    chance = []
-    for _ in range(SHUFFLES):
-        if strata is None:
-            shuffled = v.sample(frac=1, random_state=rng.integers(1 << 31)).to_numpy()
-        else:
-            shuffled = (
+    expected = np.mean(
+        [
+            pair_agreement(
+                groups,
                 v.groupby(list(strata))
                 .transform(
                     lambda s: s.sample(
                         frac=1, random_state=rng.integers(1 << 31)
                     ).to_numpy()
                 )
-                .to_numpy()
+                .to_numpy(),
             )
-        chance.append(pair_agreement(groups, shuffled))
-    chance = sum(chance) / len(chance)
-    return (
-        observed,
-        chance,
-        (observed - chance) / (1 - chance) if chance < 1 else float("nan"),
+            for _ in range(SHUFFLES)
+        ]
     )
+    return observed, expected, corrected(observed, expected)
 
 
 def embed_clusters(rows, k):
@@ -252,6 +284,7 @@ def embed_clusters(rows, k):
 
 def propagate(df, rng):
     right = settled = calls = 0
+    kept = []
     for _, g in df.groupby("parent_asin"):
         if len(g) < PROPAGATE_MIN:
             calls += len(g)
@@ -262,7 +295,18 @@ def propagate(df, rng):
         right += (rest.verdict == guess).sum()
         settled += len(rest)
         calls += len(seen)
-    return right / settled if settled else float("nan"), calls, len(df)
+        kept.append(rest)
+
+    # Always answering with the commoner verdict costs no calls, so propagation has to
+    # beat it to be worth anything.
+    rest = pd.concat(kept) if kept else df.iloc[:0]
+    yes = (rest.verdict == "yes").mean() if len(rest) else float("nan")
+    return (
+        right / settled if settled else float("nan"),
+        max(yes, 1 - yes),
+        calls,
+        len(df),
+    )
 
 
 def compare():
@@ -274,35 +318,48 @@ def compare():
     rows["cluster"] = embed_clusters(rows, n_products)
     labels = labels.join(rows[["parent_asin", "rating", "cluster"]], on="row")
 
+    present = [p for p in PREDICATES if (labels.predicate == p).any()]
+    missing = [p for p in PREDICATES if p not in present]
+
     out, save = report("compare")
     out(f"{len(labels):,} labels, {n_products:,} products, {n_products:,} clusters")
+    out(f"{len(present)} of {len(PREDICATES)} predicates labelled")
+    if missing:
+        out("not labelled yet: " + ", ".join(missing))
+
     out("\nagreement between two rows of the same group, and how far above chance")
-    out(
-        f"\n  {'product':>17} {'cluster':>17} {'same rating':>17}  predicate"
-        f"\n  {'obs':>5} {'chance':>6} {'k':>4} {'obs':>5} {'chance':>6} {'k':>4}"
-        f" {'obs':>5} {'chance':>6} {'k':>4}"
-    )
-    for predicate in PREDICATES:
-        sub = labels[labels.predicate == predicate]
-        line = ""
-        for groups, strata in [
-            (sub.parent_asin, None),
-            (sub.cluster, None),
-            (sub.parent_asin, sub.rating),
-        ]:
-            o, c, k = kappa(groups, sub.verdict, strata, rng)
-            line += f"  {o:>5.2f} {c:>6.2f} {k:>4.2f}"
-        out(f"{line}  {predicate}")
+    out(f"ci is a {BOOTSTRAP:,} draw bootstrap over groups")
+    for name, column in [("product", "parent_asin"), ("cluster", "cluster"), ("rating", "rating")]:
+        out(f"\n{name}")
+        out(f"  {'obs':>5} {'chance':>6} {'k':>6} {'95% ci':>15}  predicate")
+        for predicate in present:
+            rows_p = labels[labels.predicate == predicate]
+            o, c, k, lo, hi = kappa(rows_p[column], rows_p.verdict, rng)
+            out(f"  {o:>5.2f} {c:>6.2f} {k:>6.2f} {lo:>7.2f} {hi:>7.2f}  {predicate}")
+
+    out("\nproduct, with the chance term shuffled within rating strata")
+    out(f"{SHUFFLES} shuffles, so the baseline already knows the rating")
+    out(f"\n  {'obs':>5} {'chance':>6} {'k':>6}  predicate")
+    for predicate in present:
+        rows_p = labels[labels.predicate == predicate]
+        o, c, k = kappa_strata(rows_p.parent_asin, rows_p.verdict, rows_p.rating, rng)
+        out(f"  {o:>5.2f} {c:>6.2f} {k:>6.2f}  {predicate}")
 
     out(
         f"\nsample {PROPAGATE_K} rows per product with {PROPAGATE_MIN}+ rows, "
         f"propagate the majority"
     )
-    out(f"\n  {'accuracy':>8} {'calls':>7} {'saved':>6}  predicate")
-    for predicate in PREDICATES:
-        sub = labels[labels.predicate == predicate]
-        accuracy, calls, total = propagate(sub, rng)
-        out(f"  {accuracy:>8.1%} {calls:>7,} {1 - calls / total:>6.1%}  {predicate}")
+    out(
+        f"\n  {'accuracy':>8} {'guess':>7} {'gain':>6} {'calls':>7} {'saved':>6}"
+        "  predicate"
+    )
+    for predicate in present:
+        rows_p = labels[labels.predicate == predicate]
+        accuracy, guess, calls, total = propagate(rows_p, rng)
+        out(
+            f"  {accuracy:>8.1%} {guess:>7.1%} {accuracy - guess:>+6.1%}"
+            f" {calls:>7,} {1 - calls / total:>6.1%}  {predicate}"
+        )
     save()
 
 
