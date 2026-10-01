@@ -15,6 +15,7 @@ itself is written in LaTeX on Overleaf; this repo holds code, results and the no
 ## Working rules
 
 - Never write useless markdown accents like `*` or `_` in notes.
+- In markdown write one sentence per line. Do not wrap sentences.
 - Do not repeat information in multiple places.
 - After a result or decision ask to add a short entry to docs/Log.
 - Keep code extremely simple by default. No useless comments.
