@@ -1,6 +1,6 @@
 # MSC Thesis
 
-Code, results and research log for Viljami's MSc thesis (computer science, University of Helsinki, supervised by Prof. Jiaheng Lu, UDBMS group).
+Code, results and research log for my MSc thesis (computer science, University of Helsinki, supervised by Prof. Jiaheng Lu, UDBMS group).
 
 ## Layout
 
