@@ -123,5 +123,24 @@ That turns "correlation" into "how many calls would this save at what accuracy".
 
 ## Conclusion
 
-Open. Steps 3 and 4 are not run yet.
-Sizes says the savings are reachable on this dataset, but nothing has measured agreement.
+No-go for entity-aware cascades as written.
+
+Product identity carries small but real agreement, kappa 0.04 to 0.16.
+Embedding clusters beat it clearly on "doesn't work as advertised" (0.29 against 0.16) and on the positive control (0.39 against 0.16).
+The other predicates are ties within the 95% intervals.
+
+Star rating explains most of what product carries on the quality predicates.
+Once the chance term knows the rating, product drops to 0.01 to 0.07 on positive, doesn't work, fake and irritation.
+It keeps 0.10 to 0.13 on gift, another person and sensitive skin.
+Product identity says little about quality beyond the rating, and something about who buys the product.
+
+Propagating the majority of 3 sampled reviews per product loses to a constant guess on every predicate, by 0.3 to 2.5 points over 20 draws.
+
+A pilot of eight further predicates failed.
+The judgements are about the review text, so a product property only counts in reviews that mention it, and short reviews rarely do.
+
+Pairwise agreement is an imperfect proxy for what a cascade needs.
+With very unequal group sizes the largest groups dominate the pair count, so kappa goes negative when they have an above-average rate, even if many small groups are pure.
+That explains -0.20 for clusters on sensitive skin and -0.12 for rating on gift.
+
+Experiment 02 measures oracle calls at an accuracy target instead.
