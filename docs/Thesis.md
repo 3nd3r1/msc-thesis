@@ -11,5 +11,6 @@ TODO
 - [Log](Log/) - dated work log, newest file is the current status
 - [Meetings](Meetings/) - supervisor meetings
 - [Concepts](Concepts/) - one note per idea
+- [Directions](Directions/) - candidate thesis directions, one per note
 - [Ideas](Ideas/) - loose ideas, one per note
 - [Process](Process.md) - the Helsinki thesis process
