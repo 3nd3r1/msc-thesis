@@ -1,5 +1,4 @@
 import html
-import json
 import sys
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -8,11 +7,13 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "lib"))
+
 import run
 from data import load
 
 
-RESULTS = Path(__file__).resolve().parent / "results"
+LABELS = Path(__file__).resolve().parents[2] / "labels" / "all_beauty"
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8765
 LIMIT = 100
 
@@ -142,8 +143,8 @@ class Browser:
         self.users = self.df.groupby("user_id").indices
         self.counts = self.df.groupby("parent_asin").size()
 
-        sample = pd.read_json(RESULTS / "sample.jsonl", lines=True)
-        labels = pd.read_json(RESULTS / "labels.jsonl", lines=True)
+        sample = pd.read_json(LABELS / "sample.jsonl", lines=True)
+        labels = pd.read_json(LABELS / "labels.jsonl", lines=True)
         labels["short"] = labels.predicate.map(SHORT)
         sample = sample.join(labels.pivot(index="row", columns="short", values="verdict")[PREDICATES])
         self.sample = sample
@@ -175,14 +176,8 @@ class Browser:
 
     def clusters(self):
         if self._clusters is None:
-            path = RESULTS / "clusters.json"
-            if path.exists():
-                self._clusters = json.loads(path.read_text())
-            else:
-                print("embedding the sample, this takes a minute")
-                k = self.sample.parent_asin.nunique()
-                self._clusters = [int(c) for c in run.embed_clusters(self.sample, k)]
-                path.write_text(json.dumps(self._clusters))
+            k = self.sample.parent_asin.nunique()
+            self._clusters = run.embed_clusters(self.sample, k)
             self.sample["cluster"] = self._clusters
 
     def key(self, by):

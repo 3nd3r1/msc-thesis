@@ -6,12 +6,17 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from llm import ORACLE, client, judge, p_yes
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "lib"))
 
 from data import load
+from embed import embed
+from llm import ORACLE, client, judge, p_yes
+from report import report
 
 
 RESULTS = Path(__file__).resolve().parent / "results"
+LABELS = Path(__file__).resolve().parents[2] / "labels" / "all_beauty"
 BUCKETS = [(1, 1), (2, 4), (5, 9), (10, 19), (20, 49), (50, None)]
 THRESHOLDS = [2, 5, 10, 20, 50]
 
@@ -25,7 +30,6 @@ RETRIES = 8
 
 SHUFFLES = 200
 BOOTSTRAP = 1000
-EMBEDDER = "all-MiniLM-L6-v2"
 PROPAGATE_K = 3
 PROPAGATE_MIN = 5
 PROPAGATE_REPEATS = 20
@@ -38,21 +42,6 @@ PREDICATES = [
     "mentions another person (partner, child, friend)",
     "the review is positive",
 ]
-
-
-def report(name):
-    lines = []
-
-    def out(line=""):
-        print(line)
-        lines.append(line)
-
-    def save():
-        path = RESULTS / f"{name}.txt"
-        path.write_text("\n".join(lines) + "\n")
-        print(f"\nwrote {path}")
-
-    return out, save
 
 
 def bucket(lo, hi):
@@ -92,7 +81,7 @@ def group_report(df, key, out):
 
 def sizes(category="All_Beauty"):
     df = load(category)
-    out, save = report("sizes")
+    out, save = report(RESULTS, "sizes")
     out(f"{category}: entity size distribution")
     group_report(df, "parent_asin", out)
     group_report(df, "user_id", out)
@@ -102,7 +91,7 @@ def sizes(category="All_Beauty"):
 def sample(category="All_Beauty"):
     df = load(category)
     counts = df.groupby("parent_asin").size()
-    out, save = report("sample")
+    out, save = report(RESULTS, "sample")
     out(f"{category}: sample of {PRODUCTS_PER_BUCKET} products per bucket,")
     out(f"up to {ROWS_PER_PRODUCT} reviews each, seed {SEED}")
 
@@ -132,15 +121,16 @@ def sample(category="All_Beauty"):
         f"reviewers with 2+ reviews in the sample: {int((users >= 2).sum()):,} of {len(users):,}"
     )
 
-    path = RESULTS / "sample.jsonl"
+    path = LABELS / "sample.jsonl"
+    LABELS.mkdir(parents=True, exist_ok=True)
     df_sample.to_json(path, orient="records", lines=True)
     save()
     print(f"wrote {path}")
 
 
 def label():
-    rows = pd.read_json(RESULTS / "sample.jsonl", lines=True)
-    path = RESULTS / "labels.jsonl"
+    rows = pd.read_json(LABELS / "sample.jsonl", lines=True)
+    path = LABELS / "labels.jsonl"
 
     done = set()
     if path.exists():
@@ -185,7 +175,7 @@ def label():
     if failed:
         print(f"{failed:,} calls returned no verdict")
 
-    out, save = report("labels")
+    out, save = report(RESULTS, "labels")
     labels = pd.read_json(path, lines=True)
     labels["p_yes"] = [
         p_yes(v, p) if pd.notna(p) else None for v, p in zip(labels.verdict, labels.p)
@@ -278,12 +268,10 @@ def kappa_strata(groups, verdicts, strata, rng):
 
 
 def embed_clusters(rows, k):
-    from sentence_transformers import SentenceTransformer
     from sklearn.cluster import KMeans
 
     text = (rows.title.fillna("") + ". " + rows.text.fillna("")).tolist()
-    vectors = SentenceTransformer(EMBEDDER).encode(text, show_progress_bar=False)
-    return KMeans(n_clusters=k, random_state=SEED, n_init=10).fit_predict(vectors)
+    return KMeans(n_clusters=k, random_state=SEED, n_init=10).fit_predict(embed(text))
 
 
 def propagate_once(df, rng):
@@ -317,8 +305,8 @@ def propagate(df, rng):
 
 
 def compare():
-    labels = pd.read_json(RESULTS / "labels.jsonl", lines=True)
-    rows = pd.read_json(RESULTS / "sample.jsonl", lines=True)
+    labels = pd.read_json(LABELS / "labels.jsonl", lines=True)
+    rows = pd.read_json(LABELS / "sample.jsonl", lines=True)
     rng = np.random.default_rng(SEED)
 
     n_products = rows.parent_asin.nunique()
@@ -328,7 +316,7 @@ def compare():
     present = [p for p in PREDICATES if (labels.predicate == p).any()]
     missing = [p for p in PREDICATES if p not in present]
 
-    out, save = report("compare")
+    out, save = report(RESULTS, "compare")
     out(f"{len(labels):,} labels, {n_products:,} products, {n_products:,} clusters")
     out(f"{len(present)} of {len(PREDICATES)} predicates labelled")
     if missing:
