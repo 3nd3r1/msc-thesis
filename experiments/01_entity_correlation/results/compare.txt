@@ -1,0 +1,24 @@
+29,645 labels, 300 products, 300 clusters
+
+agreement between two rows of the same group, and how far above chance
+
+            product           cluster       same rating  predicate
+    obs chance    k   obs chance    k   obs chance    k
+   0.95   0.94 0.06   0.94   0.94 -0.02   0.95   0.94 0.04  reports skin irritation or an allergic reaction
+   0.77   0.73 0.16   0.81   0.73 0.28   0.77   0.75 0.08  says the product doesn't work as advertised
+   0.87   0.85 0.08   0.88   0.85 0.16   0.87   0.86 0.05  suspects the product is fake
+   0.96   0.95 0.09   0.94   0.95 -0.20   0.96   0.95 0.09  mentions having sensitive skin
+   0.87   0.85 0.15   0.87   0.85 0.09   0.87   0.85 0.13  bought it as a gift
+   0.82   0.80 0.10   0.82   0.80 0.13   0.82   0.80 0.10  mentions another person (partner, child, friend)
+   0.65   0.59 0.15   0.75   0.59 0.39   0.65   0.65 0.00  the review is positive
+
+sample 3 rows per product with 5+ rows, propagate the majority
+
+  accuracy   calls  saved  predicate
+     96.6%     900  78.7%  reports skin irritation or an allergic reaction
+     82.5%     900  78.7%  says the product doesn't work as advertised
+     90.8%     900  78.7%  suspects the product is fake
+     96.9%     900  78.7%  mentions having sensitive skin
+     89.3%     900  78.7%  bought it as a gift
+     86.3%     900  78.7%  mentions another person (partner, child, friend)
+     68.7%     900  78.7%  the review is positive
