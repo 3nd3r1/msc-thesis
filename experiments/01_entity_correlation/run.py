@@ -53,7 +53,7 @@ def report(name):
     return out, save
 
 
-def label(lo, hi):
+def bucket(lo, hi):
     return f"{lo}+" if hi is None else f"{lo}-{hi}"
 
 
@@ -75,7 +75,7 @@ def group_report(df, key, out):
         g = int(sel.sum())
         r = int(sizes[sel].sum())
         out(
-            f"  {label(lo, hi):>8}  {g:>10,} {g / n_groups:>7.1%}  {r:>10,} {r / n_rows:>6.1%}"
+            f"  {bucket(lo, hi):>8}  {g:>10,} {g / n_groups:>7.1%}  {r:>10,} {r / n_rows:>6.1%}"
         )
 
     out(
@@ -111,7 +111,7 @@ def sample(category="All_Beauty"):
         rows = df[df.parent_asin.isin(picked)]
         rows = rows.sample(frac=1, random_state=SEED)
         rows = rows.groupby("parent_asin").head(ROWS_PER_PRODUCT)
-        parts.append(rows.assign(bucket=label(lo, hi)))
+        parts.append(rows.assign(bucket=bucket(lo, hi)))
 
     out(f"\n  {'bucket':>8}  {'products':>9} {'rows':>7} {'rows/product':>13}")
     for part in parts:
