@@ -1,59 +1,63 @@
 4,235 rows, 7 predicates, seed 0
-csv settings, 4 initial k-means clusters, 100 rows sampled
-per group, propagate when the sample agrees at the target rate, otherwise
-split the rest in two with k-means, and oracle any group at or below the
-sample size. Means over 10 draws, calls as a fraction of all rows.
+4 initial k-means clusters for csv
+sample ceil(0.005 * group size) rows per group, at least 1
+propagate when the sample agrees at the target rate, otherwise split the rest
+in two with k-means, and oracle any group at or below its sample size
 
 initial groups per variant: csv 4, rating 5, product 300, product+rating 1,034
-groups at or below 100 rows cannot be sampled and go straight to the oracle
+a group of 200 rows or fewer samples 1 row, which always agrees,
+so for those groups the procedure propagates at once and the target does nothing
 
-  accuracy target 90%, calls and f1 reached
-                              csv         rating        product product+rating
-        irritation     9.9% 0.24    14.2% 0.42   100.0% 1.00   100.0% 1.00
-      doesn't work    72.1% 0.90    32.3% 0.96   100.0% 1.00   100.0% 1.00
-              fake    13.5% 0.26    27.4% 0.77   100.0% 1.00   100.0% 1.00
-    sensitive skin     9.4% 0.19    11.8% 0.18   100.0% 1.00   100.0% 1.00
-              gift    31.1% 0.70    28.3% 0.49   100.0% 1.00   100.0% 1.00
-    another person    31.6% 0.51    36.4% 0.51   100.0% 1.00   100.0% 1.00
-          positive    94.7% 1.00    25.5% 0.99   100.0% 1.00   100.0% 1.00
+  accuracy target 90%, calls% +- sd, f1, share of draws reaching it
+                                    csv               rating              product       product+rating
+        irritation    0.7+-0.1  0.01 100%    0.7+-0.1  0.05 100%    7.1+-0.0  0.13 100%   24.4+-0.0  0.44 100%
+      doesn't work    1.1+-0.3  0.03   0%    0.8+-0.2  0.64   0%    7.1+-0.0  0.32   0%   24.4+-0.0  0.76 100%
+              fake    0.9+-0.2  0.02 100%    0.8+-0.2  0.11  80%    7.1+-0.0  0.19   0%   24.4+-0.0  0.44 100%
+    sensitive skin    0.6+-0.1  0.01 100%    0.7+-0.1  0.02 100%    7.1+-0.0  0.14 100%   24.4+-0.0  0.29 100%
+              gift    0.8+-0.2  0.06  70%    0.9+-0.2  0.02  90%    7.1+-0.0  0.23   0%   24.4+-0.0  0.37  60%
+    another person    1.1+-0.2  0.03   0%    1.1+-0.3  0.03   0%    7.1+-0.0  0.25   0%   24.4+-0.0  0.36   0%
+          positive    1.6+-0.5  0.80   0%    0.7+-0.1  0.96 100%    7.1+-0.0  0.78   0%   24.4+-0.0  0.97 100%
+    target missed: csv on doesn't work at 83.8%, rating on doesn't work at 88.0%, product on doesn't work at 78.8%, product on fake at 86.9%, product on gift at 88.1%, csv on another person at 88.3%, rating on another person at 88.4%, product on another person at 83.5%, product+rating on another person at 85.6%, csv on positive at 70.1%, product on positive at 68.0%
 
-  accuracy target 95%, calls and f1 reached
-                              csv         rating        product product+rating
-        irritation    12.9% 0.30    27.1% 0.80   100.0% 1.00   100.0% 1.00
-      doesn't work    91.8% 0.98    32.7% 0.96   100.0% 1.00   100.0% 1.00
-              fake    57.0% 0.80    32.3% 0.82   100.0% 1.00   100.0% 1.00
-    sensitive skin    13.3% 0.29    12.1% 0.20   100.0% 1.00   100.0% 1.00
-              gift    41.6% 0.81    61.5% 0.86   100.0% 1.00   100.0% 1.00
-    another person    84.8% 0.95    85.5% 0.95   100.0% 1.00   100.0% 1.00
-          positive    97.4% 1.00    28.0% 0.99   100.0% 1.00   100.0% 1.00
+  accuracy target 95%, calls% +- sd, f1, share of draws reaching it
+                                    csv               rating              product       product+rating
+        irritation    0.7+-0.1  0.01 100%    0.8+-0.2  0.05 100%    7.1+-0.0  0.13  70%   24.4+-0.0  0.43 100%
+      doesn't work    1.1+-0.3  0.09   0%    0.8+-0.1  0.66   0%    7.1+-0.0  0.34   0%   24.4+-0.0  0.76   0%
+              fake    1.0+-0.3  0.02   0%    0.9+-0.2  0.09   0%    7.1+-0.0  0.19   0%   24.4+-0.0  0.44   0%
+    sensitive skin    0.6+-0.1  0.01 100%    0.7+-0.1  0.01 100%    7.1+-0.0  0.15  90%   24.4+-0.0  0.29 100%
+              gift    0.9+-0.2  0.04   0%    1.1+-0.3  0.04   0%    7.1+-0.0  0.24   0%   24.4+-0.0  0.36   0%
+    another person    1.1+-0.3  0.02   0%    1.2+-0.3  0.03   0%    7.1+-0.0  0.27   0%   24.4+-0.0  0.37   0%
+          positive    1.8+-0.2  0.82   0%    0.7+-0.1  0.96  80%    7.1+-0.0  0.77   0%   24.4+-0.0  0.97  90%
+    target missed: csv on doesn't work at 82.9%, rating on doesn't work at 89.0%, product on doesn't work at 78.3%, product+rating on doesn't work at 92.2%, csv on fake at 92.2%, rating on fake at 91.5%, product on fake at 87.3%, product+rating on fake at 91.2%, csv on gift at 91.2%, rating on gift at 91.9%, product on gift at 88.0%, product+rating on gift at 89.6%, csv on another person at 88.7%, rating on another person at 87.8%, product on another person at 83.5%, product+rating on another person at 85.8%, csv on positive at 71.2%, rating on positive at 94.9%, product on positive at 67.7%
 
-  accuracy target 99%, calls and f1 reached
-                              csv         rating        product product+rating
-        irritation    47.6% 0.77    37.3% 0.88   100.0% 1.00   100.0% 1.00
-      doesn't work    99.9% 1.00    45.5% 0.98   100.0% 1.00   100.0% 1.00
-              fake    98.9% 1.00    85.5% 0.97   100.0% 1.00   100.0% 1.00
-    sensitive skin    37.9% 0.85    41.1% 0.60   100.0% 1.00   100.0% 1.00
-              gift    83.5% 0.96    88.6% 0.97   100.0% 1.00   100.0% 1.00
-    another person   100.0% 1.00    98.8% 1.00   100.0% 1.00   100.0% 1.00
-          positive    97.7% 1.00    38.9% 0.99   100.0% 1.00   100.0% 1.00
-    target missed: csv on irritation at 99.0%, rating on sensitive skin at 98.8%
+  accuracy target 99%, calls% +- sd, f1, share of draws reaching it
+                                    csv               rating              product       product+rating
+        irritation    0.6+-0.1  0.00   0%    0.7+-0.2  0.04   0%    7.1+-0.0  0.14   0%   24.4+-0.0  0.44   0%
+      doesn't work    1.3+-0.3  0.05   0%    0.8+-0.1  0.61   0%    7.1+-0.0  0.34   0%   24.4+-0.0  0.77   0%
+              fake    0.8+-0.2  0.01   0%    0.8+-0.2  0.09   0%    7.1+-0.0  0.19   0%   24.4+-0.0  0.44   0%
+    sensitive skin    0.6+-0.1  0.01   0%    0.8+-0.3  0.02   0%    7.1+-0.0  0.16   0%   24.4+-0.0  0.30   0%
+              gift    0.9+-0.2  0.06   0%    1.1+-0.4  0.04   0%    7.1+-0.0  0.24   0%   24.4+-0.0  0.36   0%
+    another person    1.1+-0.3  0.05   0%    1.4+-0.3  0.03   0%    7.1+-0.0  0.26   0%   24.4+-0.0  0.37   0%
+          positive    1.7+-0.2  0.81   0%    0.8+-0.2  0.96   0%    7.1+-0.0  0.77   0%   24.4+-0.0  0.97   0%
+    target missed: csv on irritation at 97.1%, rating on irritation at 96.9%, product on irritation at 95.2%, product+rating on irritation at 96.8%, csv on doesn't work at 83.3%, rating on doesn't work at 87.4%, product on doesn't work at 78.4%, product+rating on doesn't work at 92.4%, csv on fake at 92.2%, rating on fake at 90.9%, product on fake at 87.2%, product+rating on fake at 91.2%, csv on sensitive skin at 97.7%, rating on sensitive skin at 97.7%, product on sensitive skin at 96.1%, product+rating on sensitive skin at 96.9%, csv on gift at 90.8%, rating on gift at 91.5%, product on gift at 87.9%, product+rating on gift at 90.0%, csv on another person at 88.3%, rating on another person at 88.6%, product on another person at 83.2%, product+rating on another person at 85.4%, csv on positive at 70.7%, rating on positive at 94.7%, product on positive at 67.6%, product+rating on positive at 95.2%
 
   calls to find 90% of the yes rows, on the 99% run
-                              csv         rating        product product+rating
-        irritation         never         never         85.4%         95.4%
-      doesn't work         93.3%         44.1%         86.8%         95.3%
-              fake         92.5%         never         85.4%         90.2%
-    sensitive skin         never         never         79.2%         84.1%
-              gift         never         never         83.9%         84.1%
-    another person         88.9%         91.8%         85.8%         88.4%
-          positive         87.1%         24.8%         91.0%         88.0%
+                                    csv               rating              product       product+rating
+        irritation                never                never                never                never
+      doesn't work                never                never                never                never
+              fake                never                never                never                never
+    sensitive skin                never                never                never                never
+              gift                never                never                never                never
+    another person                never                never                never                never
+          positive                never                 0.7%                never                20.4%
 
-  cheapest variant per predicate, and its saving over csv
+  cheapest variant that reaches the target, and its saving over csv
+  none means no variant reached the target on every draw
                                       @90%                    @95%                    @99%
-        irritation                 csv +0%                 csv +0%             rating +22%
-      doesn't work             rating +55%             rating +64%             rating +54%
-              fake                 csv +0%             rating +43%             rating +14%
-    sensitive skin                 csv +0%              rating +9%                 csv +0%
-              gift              rating +9%                 csv +0%                 csv +0%
-    another person                 csv +0%                 csv +0%              rating +1%
-          positive             rating +73%             rating +71%             rating +60%
+        irritation                 csv +0%                 csv +0%                    none
+      doesn't work   product+rating -2072%                    none                    none
+              fake                 csv +0%                    none                    none
+    sensitive skin                 csv +0%                 csv +0%                    none
+              gift                    none                    none                    none
+    another person                    none                    none                    none
+          positive             rating +60%                    none                    none
