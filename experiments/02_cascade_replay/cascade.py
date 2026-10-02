@@ -13,7 +13,7 @@ def indices(keys):
     return np.split(order, bounds)
 
 
-def sample_size(n, fraction=0.005, floor=100):
+def sample_size(n, fraction, floor):
     return max(int(np.ceil(fraction * n)), floor)
 
 
@@ -25,7 +25,7 @@ def split(idx, vectors, seed):
     return [p for p in parts if len(p)]
 
 
-def run(groups, truth, vectors, target, size, rng, seed=0):
+def run(groups, truth, vectors, target, rng, seed, fraction, floor):
     guess = np.empty(len(truth), dtype=bool)
     calls = 0
     found = 0
@@ -34,6 +34,7 @@ def run(groups, truth, vectors, target, size, rng, seed=0):
 
     while queue:
         idx = queue.popleft()
+        size = sample_size(len(idx), fraction, floor)
 
         if len(idx) <= size:
             guess[idx] = truth[idx]
