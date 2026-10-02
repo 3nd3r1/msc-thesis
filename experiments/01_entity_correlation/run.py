@@ -9,8 +9,8 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "lib"))
 
-from data import load
-from embed import embed
+from data import load_amazon
+from embed import cluster
 from llm import ORACLE, client, judge, p_yes
 from report import report
 
@@ -80,7 +80,7 @@ def group_report(df, key, out):
 
 
 def sizes(category="All_Beauty"):
-    df = load(category)
+    df = load_amazon(category)
     out, save = report(RESULTS, "sizes")
     out(f"{category}: entity size distribution")
     group_report(df, "parent_asin", out)
@@ -89,7 +89,7 @@ def sizes(category="All_Beauty"):
 
 
 def sample(category="All_Beauty"):
-    df = load(category)
+    df = load_amazon(category)
     counts = df.groupby("parent_asin").size()
     out, save = report(RESULTS, "sample")
     out(f"{category}: sample of {PRODUCTS_PER_BUCKET} products per bucket,")
@@ -268,10 +268,8 @@ def kappa_strata(groups, verdicts, strata, rng):
 
 
 def embed_clusters(rows, k):
-    from sklearn.cluster import KMeans
-
     text = (rows.title.fillna("") + ". " + rows.text.fillna("")).tolist()
-    return KMeans(n_clusters=k, random_state=SEED, n_init=10).fit_predict(embed(text))
+    return cluster(text, k, SEED)
 
 
 def propagate_once(df, rng):
