@@ -21,3 +21,9 @@ def embed(texts, model=MODEL):
     CACHE.mkdir(parents=True, exist_ok=True)
     np.save(path, vectors)
     return vectors
+
+
+def cluster(texts, k, seed=0):
+    from sklearn.cluster import KMeans
+
+    return KMeans(n_clusters=k, random_state=seed, n_init=10).fit_predict(embed(texts))
