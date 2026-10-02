@@ -1,7 +1,9 @@
+from collections import deque
+
 import numpy as np
 import pandas as pd
 
-from metrics import score
+from embed import kmeans
 
 
 def indices(keys):
@@ -11,54 +13,64 @@ def indices(keys):
     return np.split(order, bounds)
 
 
-def majority(truth):
-    return np.full(len(truth), truth.mean() > 0.5)
+def sample_size(n, fraction=0.005, floor=100):
+    return max(int(np.ceil(fraction * n)), floor)
 
 
-def replay(groups, truth, k, threshold, rng):
-    if k == 0:
-        return 0, majority(truth)
+def split(idx, vectors, seed):
+    if len(idx) < 2:
+        return [idx]
+    labels = kmeans(vectors[idx], 2, seed)
+    parts = [idx[labels == c] for c in (0, 1)]
+    return [p for p in parts if len(p)]
 
+
+def run(groups, truth, vectors, target, size, rng, seed=0):
     guess = np.empty(len(truth), dtype=bool)
     calls = 0
-    for idx in groups:
-        if len(idx) <= k:
+    found = 0
+    trace = []
+    queue = deque(groups)
+
+    while queue:
+        idx = queue.popleft()
+
+        if len(idx) <= size:
             guess[idx] = truth[idx]
             calls += len(idx)
+            found += truth[idx].sum()
+            trace.append((calls, found))
             continue
 
-        seen = rng.choice(idx, k, replace=False)
+        seen = rng.choice(idx, size, replace=False)
         rest = np.setdiff1d(idx, seen, assume_unique=True)
         guess[seen] = truth[seen]
-        calls += k
+        calls += size
+        found += truth[seen].sum()
 
         yes = truth[seen].mean()
-        if max(yes, 1 - yes) >= threshold:
+        if max(yes, 1 - yes) >= target:
             guess[rest] = yes > 0.5
+            if yes > 0.5:
+                found += truth[rest].sum()
         else:
+            parts = split(rest, vectors, seed)
+            if len(parts) == 2:
+                queue.extend(parts)
+                trace.append((calls, found))
+                continue
             guess[rest] = truth[rest]
             calls += len(rest)
-    return calls, guess
+            found += truth[rest].sum()
+
+        trace.append((calls, found))
+
+    return calls, guess, trace
 
 
-def sweep(groups, truth, configs, repeats, rng):
-    results = [{"k": None, "threshold": 1.0, "calls": 1.0, "accuracy": 1.0, "f1": 1.0}]
-    for k, threshold in configs:
-        runs = [replay(groups, truth, k, threshold, rng) for _ in range(repeats)]
-        accuracy, f1 = np.mean([score(truth, g) for _, g in runs], axis=0)
-        results.append(
-            {
-                "k": k,
-                "threshold": threshold,
-                "calls": np.mean([c for c, _ in runs]) / len(truth),
-                "accuracy": accuracy,
-                "f1": f1,
-            }
-        )
-    return results
-
-
-def cheapest(results, target):
-    return min(
-        (r for r in results if r["accuracy"] >= target), key=lambda r: r["calls"]
-    )
+def calls_at_recall(trace, positives, target):
+    need = target * positives
+    for calls, found in trace:
+        if found >= need:
+            return calls
+    return None

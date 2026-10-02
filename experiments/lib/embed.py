@@ -23,7 +23,11 @@ def embed(texts, model=MODEL):
     return vectors
 
 
-def cluster(texts, k, seed=0):
+def kmeans(vectors, k, seed=0):
     from sklearn.cluster import KMeans
 
-    return KMeans(n_clusters=k, random_state=seed, n_init=10).fit_predict(embed(texts))
+    return KMeans(n_clusters=k, random_state=seed, n_init=10).fit_predict(vectors)
+
+
+def cluster(texts, k, seed=0):
+    return kmeans(embed(texts), k, seed)
