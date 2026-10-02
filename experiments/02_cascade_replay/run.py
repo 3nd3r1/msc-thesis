@@ -93,8 +93,6 @@ def replay():
     out("propagate when the sample agrees at the target rate, otherwise split the rest")
     out("in two with k-means, and oracle any group at or below its sample size")
     out("\ninitial groups per variant: " + ", ".join(f"{n} {len(groups[n]):,}" for n in names))
-    out(f"a group of {int(1 / FRACTION * FLOOR):,} rows or fewer samples {FLOOR} row, which always agrees,")
-    out("so for those groups the procedure propagates at once and the target does nothing")
 
     results = {t: {} for t in TARGETS}
     for target in TARGETS:

@@ -5,8 +5,6 @@ propagate when the sample agrees at the target rate, otherwise split the rest
 in two with k-means, and oracle any group at or below its sample size
 
 initial groups per variant: csv 4, rating 5, product 300, product+rating 1,034
-a group of 200 rows or fewer samples 1 row, which always agrees,
-so for those groups the procedure propagates at once and the target does nothing
 
   accuracy target 90%, calls% +- sd, f1, share of draws reaching it
                                     csv               rating              product       product+rating
