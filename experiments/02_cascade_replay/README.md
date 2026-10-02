@@ -14,8 +14,8 @@ Every variant runs the same [@csv] procedure with a different first split:
 - product
 - product and rating together
 
-Start with the first split, sample max(⌈0.005N⌉, 100) rows per group and propagate the majority if it agrees at the target rate.
-A group that fails is split in two with k-means, and a group too small to split goes to the oracle.
+Start with the first split, sample ⌈0.005 * group size⌉ rows per group and propagate the majority if it agrees at the target rate.
+A group that fails is split in two with k-means, and a group at or below its sample size goes to the oracle.
 Settings are fixed for every variant, with no tuning on the labels.
 
 ## Output
@@ -37,4 +37,37 @@ The sample has 4,235 rows from products with 5+ reviews, so this is a feasibilit
 
 ## Conclusion
 
-Open.
+Half answered.
+Rating beats a k-means first split on the predicates coupled to the star rating, and the sample rule decides whether anything else can be measured at all.
+
+Under csv's own sample rule, with the floor of 100 rows that the paper uses, rating needs 32% of the calls against csv's 72% on "doesn't work as advertised" at a 90% target, and 25% against 94% on the positive control.
+That holds at all three targets with equal or better F1.
+On the other five predicates it is a wash or slightly worse, and csv is cheaper on the two rarest.
+So the expectation from 01 held exactly, rating wins on the control and on "doesn't work", and ties elsewhere.
+Two predicates out of seven is not the "several" that would make a selector obviously worth building.
+
+The entity key could not be tested under that rule.
+csv samples 100 rows per group whenever 0.005N is below 100, and no product in the sample has more than 20 reviews, so product and product+rating go straight to full oracle at 100% of calls.
+Re-sampling does not rescue it.
+All Beauty has 744 products with 100 or more reviews, and even a sample built only from those leaves the per-group sample at about half the group, which caps the saving on a product first split near 50% by the rule alone.
+
+Dropping the floor breaks the procedure the other way, which is what the current results show.
+Any group of 200 rows or fewer then samples a single row, a single row agrees with itself at any target, so propagation is unconditional and the target does nothing.
+Product spends 7.1% of calls at every target and reaches 68.0% accuracy on the positive control, below the 71.4% that answering no everywhere gets.
+
+The best evidence on the entity key is still the first run, which swept k and the agreement threshold per predicate.
+Those numbers are optimistic, since the configuration is picked on the same rows it is scored on, so read them as an upper bound.
+Even as an upper bound product loses to embedding clusters at a 95% target on four of seven predicates and ties on the rest.
+
+Recall is the wall nobody clears.
+Finding 90% of the yes rows costs full oracle on irritation, sensitive skin and gift under every rule tried.
+
+03 needs matched call budgets before a selector is worth building.
+With a fixed sample per group the cost is set by the number of groups, 4 for csv against 300 for product, so granularity and grouping quality cannot be told apart.
+Give every variant the same budget and compare accuracy and F1 along a swept budget instead.
+
+Numbers above come from three runs, all in git:
+
+- `7f7d406` swept k and the threshold, four groupings including embeddings, tuned per predicate
+- `1daf8a7` csv's rule with the 100-row floor
+- `ded4072` csv's rule with no floor, which is what `results/replay.txt` holds now
