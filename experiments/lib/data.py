@@ -1,7 +1,4 @@
-import io
 import json
-import tarfile
-import urllib.request
 from pathlib import Path
 
 import numpy as np
@@ -30,27 +27,26 @@ def load_amazon(category="All_Beauty", fields=REVIEW_FIELDS, limit=None):
     return hf_jsonl(AMAZON, f"raw/review_categories/{category}.jsonl", fields, limit)
 
 
-CORA = "https://linqs-data.soe.ucsc.edu/public/lbc/cora.tgz"
-GRAPHS = Path(__file__).resolve().parents[2] / "data" / "graphs"
+CORA = "Graph-COM/Text-Attributed-Graphs"
 
 
 def load_cora():
-    """Papers with their class, binary word features and the citation edges."""
-    folder = GRAPHS / "cora"
-    if not (folder / "cora.content").exists():
-        GRAPHS.mkdir(parents=True, exist_ok=True)
-        print(f"downloading {CORA}")
-        with urllib.request.urlopen(CORA) as response:
-            body = io.BytesIO(response.read())
-        tarfile.open(fileobj=body).extractall(GRAPHS, filter="data")
+    """Papers with title, abstract, class and word features, and the citation edges."""
+    import torch
 
-    content = pd.read_csv(folder / "cora.content", sep="\t", header=None, dtype={0: str})
-    nodes = pd.DataFrame({"paper": content[0], "label": content.iloc[:, -1]})
-    features = content.iloc[:, 1:-1].to_numpy(float)
+    path = hf_hub_download(CORA, "cora/processed_data.pt", repo_type="dataset", cache_dir=CACHE)
+    data = torch.load(path, weights_only=False)
 
-    index = {paper: i for i, paper in enumerate(nodes["paper"])}
-    cites = pd.read_csv(folder / "cora.cites", sep="\t", header=None, dtype=str)
-    edges = np.array(
-        [[index[a], index[b]] for a, b in cites.itertuples(index=False) if a in index and b in index]
+    def strip(values, prefix):
+        return [v.removeprefix(prefix).strip() for v in values]
+
+    nodes = pd.DataFrame(
+        {
+            "title": strip(data.title, "Title:"),
+            "abstract": strip(data.abs, "Abstract:"),
+            "label": [data.label_texts[i] for i in data.y.tolist()],
+        }
     )
+    features = data.x.numpy()
+    edges = np.unique(np.sort(data.edge_index.numpy().T, axis=1), axis=0)
     return nodes, features, edges

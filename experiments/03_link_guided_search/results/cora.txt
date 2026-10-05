@@ -1,4 +1,4 @@
-cora, 2,708 papers, 5,429 citations
+cora, 2,708 papers, 5,278 citations
 calls to 90% recall, mean of 5 seeds
 
   calls% +- sd                random            embeddings                 links      links+embeddings
