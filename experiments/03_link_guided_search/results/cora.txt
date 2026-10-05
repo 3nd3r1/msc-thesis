@@ -1,0 +1,11 @@
+cora, 2,708 papers, 5,429 citations
+calls to 90% recall, mean of 5 seeds
+
+  calls% +- sd                random            embeddings                 links      links+embeddings
+         Neural_Networks 30.2%    89.8%+-0.4%    86.0%+-0.1%    57.0%+-3.0%    47.3%+-0.1%
+   Probabilistic_Methods 15.7%    90.2%+-1.0%    80.5%+-0.2%    43.2%+-4.0%    28.3%+-0.1%
+      Genetic_Algorithms 15.4%    90.5%+-0.4%    70.3%+-0.1%    17.1%+-0.3%    16.4%+-0.1%
+                  Theory 13.0%    90.1%+-1.2%    68.2%+-0.7%    34.3%+-6.3%    29.4%+-0.1%
+              Case_Based 11.0%    89.9%+-1.0%    57.7%+-0.1%    35.0%+-3.4%    16.1%+-0.3%
+  Reinforcement_Learning  8.0%    89.2%+-1.8%    44.2%+-1.6%    29.1%+-6.1%    12.5%+-0.7%
+           Rule_Learning  6.6%    90.2%+-2.2%    59.6%+-2.8%    38.9%+-6.6%    35.5%+-10.8%
