@@ -19,6 +19,7 @@ itself is written in LaTeX on Overleaf; this repo holds code, results and the no
 - Do not repeat information in multiple places.
 - After a result or decision ask to add a short entry to docs/Log.
 - Keep code extremely simple by default. No useless comments.
+- Never run experiment scripts unless asked. Verifying a piece in isolation is fine.
 
 ## How to communicate
 
