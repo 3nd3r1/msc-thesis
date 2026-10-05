@@ -1,3 +1,22 @@
+@misc{bargain,
+  title = {Cut {{Costs}}, {{Not Accuracy}}: {{LLM-Powered Data Processing}} with {{Guarantees}}},
+  shorttitle = {Cut {{Costs}}, {{Not Accuracy}}},
+  author = {Zeighami, Sepanta and Shankar, Shreya and Parameswaran, Aditya},
+  year = 2025,
+  month = sep,
+  number = {arXiv:2509.02896},
+  eprint = {2509.02896},
+  primaryclass = {cs.DB},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2509.02896},
+  urldate = {2026-10-05},
+  abstract = {Large Language Models (LLMs) are being increasingly used as a building block in data systems to process large text datasets. To do so, LLM model providers offer multiple LLMs with different sizes, spanning various cost-quality trade-offs when processing text at scale. Top-of-the-line LLMs (e.g., GPT-4o, Claude Sonnet) operate with high accuracy but are prohibitively expensive when processing many records. To avoid high costs, more affordable but lower quality LLMs (e.g., GPT-4o-mini, Claude Haiku) can be used to process records, but we need to ensure that the overall accuracy does not deviate substantially from that of the top-of-the-line LLMs. The model cascade framework provides a blueprint to manage this trade-off, by using the confidence of LLMs in their output (e.g., log-probabilities) to decide on which records to use the affordable LLM. However, existing solutions following this framework provide only marginal cost savings and weak theoretical guarantees because of poor estimation of the quality of the affordable LLM's outputs. We present BARGAIN, a method that judiciously uses affordable LLMs in data processing to significantly reduce cost while providing strong theoretical guarantees on the solution quality. BARGAIN employs a novel adaptive sampling strategy and statistical estimation procedure that uses data and task characteristics and builds on recent statistical tools to make accurate estimations with tight theoretical guarantees. Variants of BARGAIN can support guarantees on accuracy, precision, or recall of the output. Experimental results across 8 real-world datasets show that BARGAIN reduces cost, on average, by up to 86\% more than state-of-the-art, while providing stronger theoretical guarantees on accuracy of output, with similar gains when guaranteeing a desired level of precision or recall.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Databases},
+  note = {BARGAIN},
+  file = {/home/ender/Zotero/storage/IBPN6FCU/Zeighami et al. - 2025 - Cut Costs, Not Accuracy LLM-Powered Data Processing with Guarantees.pdf;/home/ender/Zotero/storage/HSVVGRUG/2509.html}
+}
+
 @misc{bestaGraphSeekNextGenerationGraph2026,
   title = {{{GraphSeek}}: {{Next-Generation Graph Analytics}} with {{LLMs}}},
   shorttitle = {{{GraphSeek}}},
@@ -17,7 +36,7 @@
 }
 
 @misc{boutalebSomethingsFishyData2025,
-  title = {Something's {{Fishy In The Data Lake}}: {{A Critical Re-evaluation}} of {{Table Union Search Benchmarks}}},
+  title = {Something's {{Fishy In The Data Lake}}: {{A Critical Re}}-Evaluation of {{Table Union Search Benchmarks}}},
   shorttitle = {Something's {{Fishy In The Data Lake}}},
   author = {Boutaleb, Allaa and Amann, Bernd and Naacke, Hubert and Angarita, Rafael},
   year = 2025,
@@ -70,6 +89,24 @@
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Databases},
   note = {csv},
   file = {/home/ender/Zotero/storage/B4L2I8BR/Hou et al. - 2026 - Beyond Linear LLM Invocation An Efficient and Effective Semantic Filter Paradigm.pdf;/home/ender/Zotero/storage/S3LE78YC/2603.html}
+}
+
+@misc{hePaSaLLMAgent2025,
+  title = {{{PaSa}}: {{An LLM Agent}} for {{Comprehensive Academic Paper Search}}},
+  shorttitle = {{{PaSa}}},
+  author = {He, Yichen and Huang, Guanhua and Feng, Peiyuan and Lin, Yuan and Zhang, Yuchen and Li, Hang and E, Weinan},
+  year = 2025,
+  month = may,
+  number = {arXiv:2501.10120},
+  eprint = {2501.10120},
+  primaryclass = {cs.IR},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2501.10120},
+  urldate = {2026-10-05},
+  abstract = {We introduce PaSa, an advanced Paper Search agent powered by large language models. PaSa can autonomously make a series of decisions, including invoking search tools, reading papers, and selecting relevant references, to ultimately obtain comprehensive and accurate results for complex scholar queries. We optimize PaSa using reinforcement learning with a synthetic dataset, AutoScholarQuery, which includes 35k fine-grained academic queries and corresponding papers sourced from top-tier AI conference publications. Additionally, we develop RealScholarQuery, a benchmark collecting real-world academic queries to assess PaSa performance in more realistic scenarios. Despite being trained on synthetic data, PaSa significantly outperforms existing baselines on RealScholarQuery, including Google, Google Scholar, Google with GPT-4o for paraphrased queries, ChatGPT (search-enabled GPT-4o), GPT-o1, and PaSa-GPT-4o (PaSa implemented by prompting GPT-4o). Notably, PaSa-7B surpasses the best Google-based baseline, Google with GPT-4o, by 37.78\% in recall@20 and 39.90\% in recall@50, and exceeds PaSa-GPT-4o by 30.36\% in recall and 4.25\% in precision. Model, datasets, and code are available at https://github.com/bytedance/pasa.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Information Retrieval,Computer Science - Machine Learning},
+  file = {/home/ender/Zotero/storage/JJNCULWG/He et al. - 2025 - PaSa An LLM Agent for Comprehensive Academic Paper Search.pdf;/home/ender/Zotero/storage/77QRHED3/2501.html}
 }
 
 @misc{kimFastLLMBasedSemantic2026,
@@ -161,7 +198,7 @@
 }
 
 @misc{lotus,
-  title = {Semantic {{Operators}}: {{A Declarative Model}} for {{Rich}}, {{AI-based Data Processing}}},
+  title = {Semantic {{Operators}}: {{A Declarative Model}} for {{Rich}}, {{AI}}-Based {{Data Processing}}},
   shorttitle = {Semantic {{Operators}}},
   author = {Patel, Liana and Jha, Siddharth and Pan, Melissa and Gupta, Harshit and Asawa, Parth and Guestrin, Carlos and Zaharia, Matei},
   year = 2025,
@@ -262,7 +299,7 @@ They dont touch cardinality estimation but assume it has moderate errors.},
 }
 
 @misc{qiSemaHighperformanceSystem2026,
-  title = {Sema: {{A High-performance System}} for {{LLM-based Semantic Query Processing}}},
+  title = {Sema: {{A High}}-Performance {{System}} for {{LLM}}-Based {{Semantic Query Processing}}},
   shorttitle = {Sema},
   author = {Qi, Kangkang and Xie, Dongyang and Li, Wenbo and Zhang, Hao and Zhu, Yuanyuan and Yu, Jeffrey Xu and Zhao, Kangfei},
   year = 2026,
@@ -299,6 +336,24 @@ They dont touch cardinality estimation but assume it has moderate errors.},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Databases},
   note = {Comment: To be published in VLDB'26, 14 pages, 8 figures},
   file = {/home/ender/Zotero/storage/IJMCXWLR/Russo et al. - 2026 - Abacus A Cost-Based Optimizer for Semantic Operator Systems.pdf;/home/ender/Zotero/storage/AJWXEIRI/2505.html}
+}
+
+@misc{shiSPARScholarPaper2025,
+  title = {{{SPAR}}: {{Scholar Paper Retrieval}} with {{LLM}}-Based {{Agents}} for {{Enhanced Academic Search}}},
+  shorttitle = {{{SPAR}}},
+  author = {Shi, Xiaofeng and Li, Yuduo and Kou, Qian and Yu, Longbin and Xie, Jinxin and Zhou, Hua},
+  year = 2025,
+  month = jul,
+  number = {arXiv:2507.15245},
+  eprint = {2507.15245},
+  primaryclass = {cs.IR},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2507.15245},
+  urldate = {2026-10-05},
+  abstract = {Recent advances in large language models (LLMs) have opened new opportunities for academic literature retrieval. However, existing systems often rely on rigid pipelines and exhibit limited reasoning capabilities. We introduce SPAR, a multi-agent framework that incorporates RefChain-based query decomposition and query evolution to enable more flexible and effective search. To facilitate systematic evaluation, we also construct SPARBench, a challenging benchmark with expert-annotated relevance labels. Experimental results demonstrate that SPAR substantially outperforms strong baselines, achieving up to +56\% F1 on AutoScholar and +23\% F1 on SPARBench over the best-performing baseline. Together, SPAR and SPARBench provide a scalable, interpretable, and high-performing foundation for advancing research in scholarly retrieval. Code and data will be available at: https://github.com/xiaofengShi/SPAR},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Information Retrieval},
+  file = {/home/ender/Zotero/storage/E63Y2CLL/Shi et al. - 2025 - SPAR Scholar Paper Retrieval with LLM-based Agents for Enhanced Academic Search.pdf;/home/ender/Zotero/storage/DNCJATI2/2507.html}
 }
 
 @misc{thapaliyaWhereLLMAnnotators2026,
@@ -391,7 +446,7 @@ They dont touch cardinality estimation but assume it has moderate errors.},
 }
 
 @misc{zhangLeveragingLargeLanguage2025,
-  title = {Leveraging {{Large Language Models}} for {{Effective Label-free Node Classification}} in {{Text-Attributed Graphs}}},
+  title = {Leveraging {{Large Language Models}} for {{Effective Label}}-Free {{Node Classification}} in {{Text-Attributed Graphs}}},
   author = {Zhang, Taiyan and Yang, Renchi and Lai, Yurui and Yan, Mingyu and Ye, Xiaochun and Fan, Dongrui},
   year = 2025,
   month = may,
@@ -427,7 +482,7 @@ They dont touch cardinality estimation but assume it has moderate errors.},
 }
 
 @misc{zhengMICROLightweightMiddleware2026,
-  title = {{{MICRO}}: {{A Lightweight Middleware}} for {{Optimizing Cross-store Cross-model Graph-Relation Joins}} [{{Technical Report}}]},
+  title = {{{MICRO}}: {{A Lightweight Middleware}} for {{Optimizing Cross}}-Store {{Cross}}-Model {{Graph-Relation Joins}} [{{Technical Report}}]},
   shorttitle = {{{MICRO}}},
   author = {Zheng, Xiuwen and Kumar, Arun and Gupta, Amarnath},
   year = 2026,
