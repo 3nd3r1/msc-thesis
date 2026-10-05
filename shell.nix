@@ -61,6 +61,7 @@ pkgs.mkShell {
     python3Packages.geopandas
     python3Packages.transformers
     python3Packages.torch
+    python3Packages.torch-geometric
     python3Packages.rich
     lotus-ai
   ];
