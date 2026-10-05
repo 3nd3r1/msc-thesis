@@ -23,6 +23,9 @@ Claim: {predicate}"""
 
 VERDICTS = {"true": "yes", "false": "no"}
 
+# The model the API actually served, which is not always the one we asked for.
+SERVED = set()
+
 
 def client():
     key = os.environ.get("DEEPINFRA_API_KEY")
@@ -36,7 +39,7 @@ def p_yes(verdict, p):
 
 
 def judge(api, model, predicate, row, system=SYSTEM):
-    choice = api.chat.completions.create(
+    reply = api.chat.completions.create(
         model=model,
         messages=[
             {"role": "system", "content": system},
@@ -45,7 +48,9 @@ def judge(api, model, predicate, row, system=SYSTEM):
         max_tokens=8,
         temperature=0,
         logprobs=True,
-    ).choices[0]
+    )
+    SERVED.add(reply.model)
+    choice = reply.choices[0]
 
     for t in choice.logprobs.content if choice.logprobs else []:
         word = t.token.strip().lower().strip(".")
