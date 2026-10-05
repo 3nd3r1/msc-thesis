@@ -34,8 +34,6 @@ Proxy calls in steps 2 and 3 are reported on their own, since an 8B call is not 
 
 ## Steps
 
-Each step is `python run.py <step>` and writes `results/<step>.txt`
-
 ### 1. Cora classes as predicates
 
 Use the graph's own class labels as the oracle, one predicate per class.
