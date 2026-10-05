@@ -29,7 +29,7 @@ Proxy calls in steps 2 and 3 are reported on their own, since an 8B call is not 
 
 ## Models
 
-- Llama 3.1 70B as the oracle,
+- Llama 3.1 70B Instruct Turbo as the oracle,
 - Llama 3.1 8B as the proxy
 
 ## Steps
