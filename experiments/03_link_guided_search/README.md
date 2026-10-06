@@ -34,10 +34,12 @@ Proxy calls in steps 2 and 3 are reported on their own, since an 8B call is not 
 
 ## Steps
 
+Each step is `python run.py <step>` and writes `results/<step>.txt`.
+
 ### 1. Cora classes as predicates
 
+Step `classes`, no oracle calls.
 Use the graph's own class labels as the oracle, one predicate per class.
-No LLM calls.
 This is a positive control, since Cora is a benchmark because its edges work.
 
 #### Result
@@ -66,6 +68,11 @@ Go for step 2.
 
 ### 2. Cora with an LLM oracle
 
+Step `label` and then step `predicates`.
+`label` makes 13,540 oracle calls, 2,708 papers by 5 predicates, and appends them to `labels/cora/labels.jsonl`.
+It is resumable, any row and predicate already in the file is skipped, so an interrupted run only pays for what is left.
+`predicates` replays the orders on those labels and makes no oracle calls.
+
 All 2,708 papers and five predicates, none of them a Cora topic class.
 
 | key          | kind        | claim                                                                  |
@@ -83,6 +90,11 @@ Self-citation is a real path from writing style to graph structure though, so ex
 468 of the 2,708 rows are not really abstracts, mostly empty, some reference lists and captions, and 29 rows are duplicate papers over 12 distinct texts.
 Both stay in the graph, since dropping nodes thins the citations, and the results are reported with and without them.
 A duplicate is a free hit for any embedding order, so it matters more than its count suggests.
+The two pools are all 2,708 rows, and the 2,233 rows that are a real abstract and the first copy of their text.
+The second is the induced subgraph, so there a junk row cannot be found, cannot cost a call and cannot pass link credit to its neighbours.
+
+The oracle prompt is the LOTUS sem_filter format plus the pilot's line that the claim has to be stated explicitly.
+The embedding order uses MiniLM sentence vectors, not the word features step 1 used.
 
 Ten candidates were screened on 600 papers before these five, on how often they fire, whether two wordings of the claim agree, whether a keyword rule reproduces the labels, and a read of 20 positives each, numbers in `results/pilot.txt`.
 The oracle turned out to be the weak part rather than the search, only biology is clean and the rest sit around 70 to 90% precision, which attenuates toward a null result.
