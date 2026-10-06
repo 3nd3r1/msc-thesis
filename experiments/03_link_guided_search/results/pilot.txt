@@ -1,0 +1,22 @@
+meta-llama/Meta-Llama-3.1-70B-Instruct on 600 papers, seed 0, 10 candidates
+served by meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+keep 2% to 15% positive, template overlap 70%, keyword F1 under 0.7
+
+junk rows in the full graph: 468 of 2708, no title 54, no abstract 396, caption 2, references 36
+the pilot samples clean rows only, step 2 reports with and without them
+
+   yes   rate   fit  hand   both  candidate
+    42   7.0%  0.67  0.54   0.42  proof, unstable
+    20   3.3%  0.00  0.38   0.10  language, unstable
+     5   0.8%                     survey, out of range
+    34   5.7%  0.00  0.60   0.79  biology, pass
+    24   4.0%  0.21  0.65   0.54  robotics, unstable
+    83  13.8%  0.42  0.37   0.24  real data, unstable
+   193  32.2%                     named baseline, out of range
+    18   3.0%  0.06  0.68   0.72  first person, pass
+    72  12.0%  0.33  0.54   0.22  efficiency, unstable
+    24   4.0%  0.47  0.60   0.46  preliminary, unstable
+
+passing, in order: biology, first person
+1 topical, 1 control
+the hand check in pilot_examples.md decides the rest

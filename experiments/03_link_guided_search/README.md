@@ -66,8 +66,25 @@ Go for step 2.
 
 ### 2. Cora with an LLM oracle
 
-All 2,708 papers, 5 to 6 predicates that are not its topic classes.
-Predicates go in `predicates.md` before labelling.
+All 2,708 papers and five predicates, none of them a Cora topic class.
+
+| key          | kind        | claim                                                                  |
+| ------------ | ----------- | ---------------------------------------------------------------------- |
+| proof        | non-topical | the abstract says the paper proves a theorem or derives a formal bound |
+| language     | topical     | the paper is about natural language, text or speech                    |
+| biology      | topical     | the abstract says the method is applied to biological or medical data  |
+| robotics     | topical     | the paper is about robots or controlling a physical device             |
+| first person | control     | the abstract is written in the first person singular, using I or my    |
+
+First person is the control.
+How an abstract is written has no topical neighbourhood, so if links help there as much as anywhere else, the result is an artefact.
+Self-citation is a real path from writing style to graph structure though, so expect a weak effect rather than none.
+
+Rows that are not really abstracts stay in the graph, and the results are reported with and without them.
+Cora also holds duplicate papers, two nodes with identical text, which are a free hit for any embedding order and need the same treatment.
+
+Ten candidates were screened on 600 papers before these five, on how often they fire, whether two wordings of the claim agree, whether a keyword rule reproduces the labels, and a read of 20 positives each, numbers in `results/pilot.txt`.
+The oracle turned out to be the weak part rather than the search, only biology is clean and the rest sit around 70 to 90% precision, which attenuates toward a null result.
 
 ### 3. Ordinary tables
 
