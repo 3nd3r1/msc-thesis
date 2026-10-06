@@ -24,7 +24,7 @@ Proxy calls in steps 2 and 3 are reported on their own, since an 8B call is not 
 
 ## Data
 
-- Cora
+- Cora, the Graph-COM text attributed copy, which is the LINQS graph plus titles and abstracts, verified to have the same nodes and edges
 - BIRD codebase_community, the Stack Exchange posts and comments, where the edges have to be built from the columns
 
 ## Models
@@ -80,8 +80,9 @@ First person is the control.
 How an abstract is written has no topical neighbourhood, so if links help there as much as anywhere else, the result is an artefact.
 Self-citation is a real path from writing style to graph structure though, so expect a weak effect rather than none.
 
-Rows that are not really abstracts stay in the graph, and the results are reported with and without them.
-Cora also holds duplicate papers, two nodes with identical text, which are a free hit for any embedding order and need the same treatment.
+468 of the 2,708 rows are not really abstracts, mostly empty, some reference lists and captions, and 29 rows are duplicate papers over 12 distinct texts.
+Both stay in the graph, since dropping nodes thins the citations, and the results are reported with and without them.
+A duplicate is a free hit for any embedding order, so it matters more than its count suggests.
 
 Ten candidates were screened on 600 papers before these five, on how often they fire, whether two wordings of the claim agree, whether a keyword rule reproduces the labels, and a read of 20 positives each, numbers in `results/pilot.txt`.
 The oracle turned out to be the weak part rather than the search, only biology is clean and the rest sit around 70 to 90% precision, which attenuates toward a null result.
