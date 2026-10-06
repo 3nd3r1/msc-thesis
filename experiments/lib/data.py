@@ -50,3 +50,15 @@ def load_cora():
     features = data.x.numpy()
     edges = np.unique(np.sort(data.edge_index.numpy().T, axis=1), axis=0)
     return nodes, features, edges
+
+
+def cora_junk(nodes):
+    """Rows whose text is not an abstract. Keep them in the graph, report both ways."""
+    return pd.DataFrame(
+        {
+            "no title": nodes.title.str.len() < 10,
+            "no abstract": nodes.abstract.str.len() < 200,
+            "caption": nodes.abstract.str.match(r"\s*(Figure|Fig\.|Table)\s*\d"),
+            "references": nodes.abstract.str.count(r"\[\d+\]|\(\d{4}\)") >= 3,
+        }
+    )
