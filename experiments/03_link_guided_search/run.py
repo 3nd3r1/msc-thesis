@@ -73,7 +73,7 @@ def table(out, names, vectors, neighbours):
 
 def classes():
     nodes, features, edges = load_cora()
-    out, save = report(RESULTS, "cora")
+    out, save = report(RESULTS, "classes")
 
     out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
     out(f"calls to {RECALL:.0%} recall, mean of {SEEDS} seeds")
