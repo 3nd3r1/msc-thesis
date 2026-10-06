@@ -1,0 +1,12 @@
+meta-llama/Meta-Llama-3.1-70B-Instruct on 2,708 papers, 13,540 labels
+served by meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+strict prompt, the claim has to be stated explicitly
+
+     yes  mean p   p<.5  predicate
+    5.9%   0.984   0.1%  proof
+    3.1%   0.992   0.1%  language
+    4.2%   0.991   0.0%  biology
+    4.2%   0.994   0.0%  robotics
+    2.3%   0.997   0.0%  first person
+
+0.0% of labels have no p, logprobs were dropped
