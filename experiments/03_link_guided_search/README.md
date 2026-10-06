@@ -17,7 +17,7 @@ Orders compared:
 - embedding similarity
 - small-LLM proxy score, the LOTUS and BARGAIN way, steps 2 and 3 only
 - link expansion from confirmed positives
-- links and embeddings together
+- links and embeddings together, which in practice means links first and similarity as the tiebreak, since a confirmed neighbour counts 1 and a cosine is about 0.2
 
 Every order starts with no labels, so the first positive is found at random and only then do links and similarity have anything to point at.
 Proxy calls in steps 2 and 3 are reported on their own, since an 8B call is not a 70B call.
