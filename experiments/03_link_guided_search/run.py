@@ -21,7 +21,7 @@ from llm import ORACLE, SERVED, SYSTEM, client, judge
 RESULTS = Path(__file__).resolve().parent / "results"
 LABELS = Path(__file__).resolve().parents[2] / "labels" / "cora"
 
-SEEDS = 5
+SEEDS = 50
 RECALL = 0.90
 ORDERS = ["random", "embeddings", "links", "links+embeddings"]
 
