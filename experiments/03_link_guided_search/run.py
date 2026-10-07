@@ -7,15 +7,16 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "lib"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from embed import embed
+from llm import ORACLE, SERVED, SYSTEM, client, judge
 from report import report
 from search import adjacency, search, unit
 
 from data import cora_junk, load_cora
-from embed import embed
-from llm import ORACLE, SERVED, SYSTEM, client, judge
 
 
 RESULTS = Path(__file__).resolve().parent / "results"
@@ -28,24 +29,33 @@ ORDERS = ["random", "embeddings", "links", "links+embeddings"]
 WORKERS = 8
 RETRIES = 8
 
-# The pilot's line. Without it the oracle answers on what a paper sounds like.
 STRICT = SYSTEM + (
     "\nAnswer True only if the context states the claim explicitly, "
     "otherwise answer False."
 )
 
-# Frozen by the pilot, 15,600 calls. Do not reword, the labels cannot be redone.
 PREDICATES = [
-    ("proof", "non-topical",
-     "the abstract says the paper proves a theorem or derives a formal bound"),
-    ("language", "topical",
-     "the paper is about natural language, text or speech"),
-    ("biology", "topical",
-     "the abstract says the method is applied to biological or medical data"),
-    ("robotics", "topical",
-     "the paper is about robots or controlling a physical device"),
-    ("first person", "control",
-     "the abstract is written in the first person singular, using I or my"),
+    (
+        "proof",
+        "non-topical",
+        "the abstract says the paper proves a theorem or derives a formal bound",
+    ),
+    ("language", "topical", "the paper is about natural language, text or speech"),
+    (
+        "biology",
+        "topical",
+        "the abstract says the method is applied to biological or medical data",
+    ),
+    (
+        "robotics",
+        "topical",
+        "the paper is about robots or controlling a physical device",
+    ),
+    (
+        "first person",
+        "control",
+        "the abstract is written in the first person singular, using I or my",
+    ),
 ]
 
 
@@ -103,7 +113,9 @@ def label():
         for key, _, claim in PREDICATES
         if (i, key) not in done
     ]
-    print(f"{len(nodes):,} rows, {len(PREDICATES)} predicates, {len(jobs):,} calls to make")
+    print(
+        f"{len(nodes):,} rows, {len(PREDICATES)} predicates, {len(jobs):,} calls to make"
+    )
     if done:
         print(f"resuming, {len(done):,} already in {path.name}")
 
@@ -153,7 +165,9 @@ def label():
         sub = labels[labels.predicate == key]
         if len(sub):
             yes = (sub.verdict == "yes").mean()
-            out(f"  {yes:>6.1%} {sub.p.mean():>7.3f} {(sub.p < 0.5).mean():>6.1%}  {key}")
+            out(
+                f"  {yes:>6.1%} {sub.p.mean():>7.3f} {(sub.p < 0.5).mean():>6.1%}  {key}"
+            )
 
     out(f"\n{labels.p.isna().mean():.1%} of labels have no p, logprobs were dropped")
     save()
@@ -191,8 +205,11 @@ def predicates():
         out(f"\nunlabelled rows, counted as no: {short}")
 
     for title, mask in [
-        (f"all {len(nodes):,} rows, {int(junk.sum()):,} junk and {int(repeat.sum())} "
-         "repeated texts in the pool", np.ones(len(nodes), bool)),
+        (
+            f"all {len(nodes):,} rows, {int(junk.sum()):,} junk and {int(repeat.sum())} "
+            "repeated texts in the pool",
+            np.ones(len(nodes), bool),
+        ),
         (f"{int(keep.sum()):,} rows, junk and repeated texts dropped", keep),
     ]:
         out(f"\n{title}")
