@@ -46,23 +46,30 @@ This is a positive control, since Cora is a benchmark because its edges work.
 
 Links help on all 7 classes, and links plus embeddings is the best order on every one of them.
 
-Calls to reach 90% recall, as a share of the 2,708 papers, mean of 5 seeds:
+Calls to reach 90% recall, as a share of the 2,708 papers, mean of 50 seeds:
 
 | class                  | rate  | random | embeddings | links | links+embeddings |
 | ---------------------- | ----- | ------ | ---------- | ----- | ---------------- |
-| Neural_Networks        | 30.2% | 89.8%  | 86.0%      | 57.0% | 47.3%            |
-| Probabilistic_Methods  | 15.7% | 90.2%  | 80.5%      | 43.2% | 28.3%            |
-| Genetic_Algorithms     | 15.4% | 90.5%  | 70.3%      | 17.1% | 16.4%            |
-| Theory                 | 13.0% | 90.1%  | 68.2%      | 34.3% | 29.4%            |
-| Case_Based             | 11.0% | 89.9%  | 57.7%      | 35.0% | 16.1%            |
-| Reinforcement_Learning | 8.0%  | 89.2%  | 44.2%      | 29.1% | 12.5%            |
-| Rule_Learning          | 6.6%  | 90.2%  | 59.6%      | 38.9% | 35.5%            |
+| Neural_Networks        | 30.2% | 90.1%  | 86.1%      | 56.1% | 47.3%            |
+| Probabilistic_Methods  | 15.7% | 90.0%  | 80.5%      | 39.1% | 28.1%            |
+| Genetic_Algorithms     | 15.4% | 90.1%  | 70.3%      | 17.2% | 16.5%            |
+| Theory                 | 13.0% | 89.9%  | 68.1%      | 38.5% | 29.3%            |
+| Case_Based             | 11.0% | 89.4%  | 57.4%      | 36.8% | 16.1%            |
+| Reinforcement_Learning | 8.0%  | 89.8%  | 44.7%      | 36.2% | 12.4%            |
+| Rule_Learning          | 6.6%  | 89.7%  | 60.0%      | 38.8% | 37.0%            |
 
 Random lands at 90% of the rows on every class, which is the sanity check that the metric is right.
 
-Two things to keep in mind before reading too much into it.
+Three things to keep in mind before reading too much into it.
+
 The embeddings baseline here is the binary word vector Cora ships, not a sentence embedding, and those are the same features a GNN would use to predict these classes.
-Rule_Learning, the rarest class, is also the weakest result and the noisiest, 35.5% with an sd of 10.8% against 38.9% for links alone.
+Step 2 uses MiniLM, so the embeddings columns of the two steps are not comparable.
+
+Links alone is the noisy column, sd 3 to 8 points, and it moved by up to 7 points going from 5 seeds to 50.
+Links plus embeddings barely moved, so the conclusion was never at risk, but no single number in the links column should be quoted.
+
+Rule_Learning, the rarest class, is still the weakest and the noisiest, 37.0% with an sd of 9.6% against 38.8% and an sd of 7.7% for links alone.
+Those error bars overlap, so on the rarest class adding embeddings to links cannot be shown to help.
 
 Go for step 2.
 
