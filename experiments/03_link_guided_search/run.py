@@ -56,6 +56,16 @@ PREDICATES = [
         "control",
         "the abstract is written in the first person singular, using I or my",
     ),
+    (
+        "markov",
+        "non-topical",
+        "the abstract says the paper uses a Markov model or Markov process",
+    ),
+    (
+        "unsupervised",
+        "topical",
+        "the paper is about unsupervised learning or clustering",
+    ),
 ]
 
 
