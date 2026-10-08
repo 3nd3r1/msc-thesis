@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "lib"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from embed import embed
-from llm import ORACLE, SERVED, SYSTEM, client, judge
+from llm import ORACLE, PROXY, SERVED, SYSTEM, client, judge, p_yes
 from report import report
 from search import adjacency, search, unit
 
@@ -25,6 +25,7 @@ LABELS = Path(__file__).resolve().parents[2] / "labels" / "cora"
 SEEDS = 50
 RECALL = 0.90
 ORDERS = ["random", "embeddings", "links", "links+embeddings"]
+PREDICATE_ORDERS = ORDERS + ["proxy"]
 
 WORKERS = 8
 RETRIES = 8
@@ -77,13 +78,13 @@ def subgraph(keep, edges, vectors):
     return index[inside], vectors[keep]
 
 
-def table(out, names, vectors, neighbours):
-    out("  calls% +- sd" + "".join(f"{o:>22}" for o in ORDERS))
-    for name, labels in names:
+def table(out, names, vectors, neighbours, orders=ORDERS):
+    out("  calls% +- sd" + "".join(f"{o:>22}" for o in orders))
+    for name, labels, proxy in names:
         line = f"{name:>24} {labels.mean():>5.1%}"
-        for order in ORDERS:
+        for order in orders:
             calls = [
-                search(labels, order, vectors, neighbours, s, RECALL)
+                search(labels, order, vectors, neighbours, s, RECALL, proxy)
                 for s in range(SEEDS)
             ]
             share = np.array(calls) / len(vectors)
@@ -100,16 +101,17 @@ def classes():
     out()
 
     names = [
-        (label, (nodes["label"] == label).to_numpy())
+        (label, (nodes["label"] == label).to_numpy(), None)
         for label in nodes["label"].value_counts().index
     ]
     table(out, names, unit(features), adjacency(edges, len(nodes)))
     save()
 
 
-def label():
+def collect(model, name):
+    """Ask `model` every predicate on every row, appending to labels/cora/<name>.jsonl."""
     nodes, _, _ = load_cora()
-    path = LABELS / "labels.jsonl"
+    path = LABELS / f"{name}.jsonl"
 
     done = set()
     if path.exists():
@@ -140,7 +142,7 @@ def label():
             try:
                 verdict, p = judge(
                     api,
-                    ORACLE,
+                    model,
                     claim,
                     {"title": row.title, "text": row.abstract},
                     system=STRICT,
@@ -164,9 +166,9 @@ def label():
     if failed:
         print(f"{failed:,} calls returned no verdict")
 
-    out, save = report(RESULTS, "labels")
+    out, save = report(RESULTS, name)
     labels = pd.read_json(path, lines=True)
-    out(f"{ORACLE} on {labels.row.nunique():,} papers, {len(labels):,} labels")
+    out(f"{model} on {labels.row.nunique():,} papers, {len(labels):,} labels")
     out("served by " + (", ".join(sorted(SERVED)) or "unknown, no calls made this run"))
     out("strict prompt, the claim has to be stated explicitly")
 
@@ -183,6 +185,32 @@ def label():
     save()
 
 
+def label():
+    collect(ORACLE, "labels")
+
+
+def proxy():
+    collect(PROXY, "proxy")
+
+
+def proxy_scores(n):
+    """p(yes) per predicate from the proxy, 0 where the proxy has no row."""
+    path = LABELS / "proxy.jsonl"
+    if not path.exists():
+        sys.exit(f"no {path}, run: run.py proxy")
+    scored = pd.read_json(path, lines=True)
+    out = {}
+    for key, _, _ in PREDICATES:
+        sub = scored[scored.predicate == key]
+        score = np.zeros(n)
+        score[sub.row.to_numpy()] = [
+            p_yes(v, 1.0 if pd.isna(q) else q)
+            for v, q in zip(sub.verdict, sub.p)
+        ]
+        out[key] = score
+    return out
+
+
 def predicates():
     nodes, _, edges = load_cora()
     path = LABELS / "labels.jsonl"
@@ -197,6 +225,7 @@ def predicates():
         mask[yes.row[yes.predicate == key].to_numpy()] = True
         masks[key] = mask
 
+    scores = proxy_scores(len(nodes))
     vectors = unit(embed((nodes.title + ". " + nodes.abstract).tolist()))
     junk = cora_junk(nodes).any(axis=1).to_numpy()
     repeat = (nodes.title + "\n" + nodes.abstract).duplicated().to_numpy()
@@ -207,6 +236,7 @@ def predicates():
     out(f"{len(PREDICATES)} predicates labelled by {ORACLE}, strict prompt")
     out(f"calls to {RECALL:.0%} recall, mean of {SEEDS} seeds")
     out("embeddings are all-MiniLM-L6-v2 sentence vectors, not step 1's word features")
+    out(f"proxy is p(yes) from {PROXY}, one call per row and predicate")
 
     counts = labels.groupby("predicate").size()
     gaps = len(nodes) - counts.reindex([k for k, _, _ in PREDICATES], fill_value=0)
@@ -224,13 +254,21 @@ def predicates():
     ]:
         out(f"\n{title}")
         links, rows = subgraph(mask, edges, vectors)
-        names = [(f"{k} {kind}", masks[k][mask]) for k, kind, _ in PREDICATES]
-        table(out, names, rows, adjacency(links, int(mask.sum())))
+        names = [
+            (f"{k} {kind}", masks[k][mask], scores[k][mask])
+            for k, kind, _ in PREDICATES
+        ]
+        table(out, names, rows, adjacency(links, int(mask.sum())), PREDICATE_ORDERS)
 
     save()
 
 
-STEPS = {"classes": classes, "label": label, "predicates": predicates}
+STEPS = {
+    "classes": classes,
+    "label": label,
+    "proxy": proxy,
+    "predicates": predicates,
+}
 
 if __name__ == "__main__":
     step = sys.argv[1] if len(sys.argv) > 1 else ""

@@ -14,7 +14,7 @@ def unit(features):
     return features / np.maximum(norms, 1e-9)
 
 
-def search(labels, order, vectors, neighbours, seed=0, recall=0.90):
+def search(labels, order, vectors, neighbours, seed=0, recall=0.90, proxy=None):
     """Oracle calls until `recall` of the positives are found."""
     rng = np.random.default_rng(seed)
     n = len(labels)
@@ -32,6 +32,7 @@ def search(labels, order, vectors, neighbours, seed=0, recall=0.90):
             "embeddings": mean,
             "links": link,
             "links+embeddings": link + mean,
+            "proxy": proxy,
         }[order] + 1e-9 * tie
         score[asked] = -np.inf
 
