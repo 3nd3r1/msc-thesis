@@ -1,0 +1,26 @@
+cora, 2,708 papers, 5,278 citations
+calls to 90% recall, mean of 50 seeds
+proxy is p(yes) from meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo, one call per row and predicate
+both orders pay that, so only the oracle calls below differ
+proxy+links sends the oracle to the best proxy score among the unasked
+neighbours of a confirmed positive, and to the global best when there are none
+
+all 2,708 rows, 468 junk and 17 repeated texts in the pool
+  calls% +- sd                 proxy           proxy+links
+       proof non-topical  5.9%    14.8%+-0.0%    21.9%+-0.0%
+        language topical  3.1%     4.4%+-0.0%     9.0%+-0.0%
+         biology topical  4.2%    25.0%+-0.0%    25.0%+-0.0%
+        robotics topical  4.2%     5.4%+-0.0%     9.4%+-0.0%
+    first person control  2.3%    17.8%+-0.0%    19.0%+-0.0%
+      markov non-topical  3.1%     6.5%+-0.0%     8.5%+-0.0%
+    unsupervised topical  3.8%    11.8%+-0.0%    10.8%+-0.0%
+
+2,233 rows, junk and repeated texts dropped
+  calls% +- sd                 proxy           proxy+links
+       proof non-topical  6.6%    11.8%+-0.0%    20.0%+-0.0%
+        language topical  3.2%     3.6%+-0.0%     8.2%+-0.0%
+         biology topical  4.8%    13.5%+-0.0%    15.7%+-0.0%
+        robotics topical  4.3%     5.5%+-0.0%     9.4%+-0.0%
+    first person control  2.8%    10.3%+-0.0%    14.8%+-0.0%
+      markov non-topical  3.6%     5.5%+-0.0%     9.1%+-0.0%
+    unsupervised topical  3.6%     9.2%+-0.0%     9.2%+-0.0%
