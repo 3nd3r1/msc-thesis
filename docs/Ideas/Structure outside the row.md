@@ -51,15 +51,3 @@ Papers also carry more structured columns than All Beauty does, venue, year and 
 [Tiktok Comments](Tiktok%20Comments.md) is this mechanism with the thread or the video as the link.
 
 Reading: active search on graphs (Garnett et al.), label propagation (Zhu and Ghahramani).
-
-## Scope
-
-One mechanism carries the thesis, the other two are related work or future work.
-
-## Next
-
-1. Finish 02 with the fixed replay.
-2. Run the prescreening test, since it is cheapest and answers a clear question.
-3. Email Lu with the 01 result, the 02 result and this framing, and ask which one he would back.
-
-The graph mechanism is the likeliest to interest him given the group, and also the most new work.

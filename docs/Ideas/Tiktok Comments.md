@@ -1,6 +1,6 @@
 ---
 date: 2026-09-28
 ---
-When we read Tiktok comments we usually read only the first few because they usually convey the sentiment of all the comments. We don't read every single comment to figure out some semantic predicate.
+When we read Tiktok comments we read the first few and assume they carry the sentiment of the rest.
 
-I think this is a good example to use in the seminar to convey what the correlation inside entities means.
+A good example for the seminar, to convey what correlation inside an entity means.
