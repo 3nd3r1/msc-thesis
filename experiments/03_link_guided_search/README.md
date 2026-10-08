@@ -102,6 +102,22 @@ Of the edges leaving a positive the share that land on a positive over the posit
 1.0x is no correlation.
 Also the share of positives with at least one positive neighbour, which grows with degree, and the share with no neighbour at all, which links can never reach.
 
+#### Result
+
+BLUF: positives sit next to positives on all 6 real predicates, 4.5 to 12.1x above the base rate, and the control is lower but not absent at 3.5x.
+
+From `results/lift.txt`, the pool with junk and repeated texts dropped:
+
+| predicate    | rate | edge% | lift  | nbr+  | alone |
+| ------------ | ---- | ----- | ----- | ----- | ----- |
+| language     | 3.2% | 39.1% | 12.1x | 63.9% | 1.4%  |
+| markov       | 3.6% | 32.6% | 9.0x  | 63.0% | 0.0%  |
+| robotics     | 4.3% | 38.6% | 8.9x  | 69.1% | 4.1%  |
+| unsupervised | 3.6% | 28.2% | 7.8x  | 46.9% | 2.5%  |
+| biology      | 4.8% | 36.3% | 7.5x  | 50.9% | 4.6%  |
+| proof        | 6.6% | 29.7% | 4.5x  | 56.1% | 2.7%  |
+| first person | 2.8% | 9.7%  | 3.5x  | 25.8% | 6.5%  |
+
 ### 4. Oracle calls under a proxy
 
 Step `proxy` and then step `cascade`.
