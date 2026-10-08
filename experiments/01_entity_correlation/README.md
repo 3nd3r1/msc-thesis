@@ -7,9 +7,7 @@ Go/no-go for [entity-aware cascades](../../docs/Directions/Entity-aware%20cascad
 Do LLM predicate verdicts agree inside a group more than chance explains?
 Reviews of one product should share a verdict more often than two random reviews do, because a good
 product mostly gets positive reviews.
-
-A negative answer sinks the direction. If agreement inside entities is close to chance, or
-embedding clusters match it, the cascade idea loses its core.
+If agreement inside entities sits near chance, or embedding clusters match it, the direction is dead.
 
 ## Data
 
@@ -18,17 +16,15 @@ embedding clusters match it, the cascade idea loses its core.
 
 ## Models
 
-Llama 3.1 70B as the oracle, Llama 3.1 8B as the proxy, both on DeepInfra.
-Same family as the LOTUS cascade, so the later comparison is against their setup rather than a
-reimplementation of it.
+Llama 3.1 70B on DeepInfra as the oracle, the same family as the LOTUS cascade, so the later
+comparison is against their setup rather than a reimplementation of it.
 Needs `DEEPINFRA_API_KEY`, see `.env.example` at the repo root.
 
 DeepInfra logprobs are unreliable. Support is per model and undocumented, no model returns
-top_logprobs, and on a third of calls the logprobs go missing entirely, same request every time
-and no error. We parse the verdict from the reply text on those rows and store no p.
-
-The steps here only need verdicts so that is fine, but the LOTUS cascade baseline does need
-top_logprobs, so it needs another provider or a rented GPU running vLLM.
+top_logprobs, and on 36.3% of the calls here the logprobs went missing with no error, same request
+every time. Those rows keep the verdict parsed from the reply text and store no p.
+Verdicts are all the steps below need. The LOTUS cascade baseline does need top_logprobs, so it
+needs another provider or a rented GPU running vLLM.
 
 ## Steps
 
@@ -38,8 +34,8 @@ Steps run in order, each one needs the output of the last.
 ### 1. Sizes
 
 Measure the sizes of the entity groups.
-A cascade only saves calls on groups large enough to sample a few rows and settle the rest, so
-what matters is not how many groups are large but what share of rows lives in them.
+A cascade only saves calls on groups large enough to sample a few rows and settle the rest, so what
+matters is the share of rows living in large groups.
 We check both candidate keys, the product and the reviewer.
 
 #### Result
@@ -61,9 +57,8 @@ This assumes propagation is always right, which is what the next steps test.
 
 ### 2. Sample
 
-Labeling all reviews is unnecessary.
 Take 100 products each from the 5-9, 10-49 and 50+ buckets, up to 20 reviews per product.
-Rows go to `results/sample.jsonl`.
+Rows go to `labels/all_beauty/sample.jsonl`.
 
 #### Result
 
@@ -88,19 +83,18 @@ Label the sample with these 7 predicates:
 | the review is positive                           | control |
 
 Use the LOTUS sem_filter prompt.
-It still gives 5 to 10 false positives per 100 reviews on the rare predicates, all on reviews
-with almost no text like 'Flimsy' or 'Apricot lotion'. Known limitation, noise attenuates
-agreement so it errs toward a null result.
+A hand read on 2026-09-29 still found 5 to 10 false positives per 100 reviews on the rare
+predicates, all on reviews with almost no text like 'Flimsy' or 'Apricot lotion'.
+Nothing saved that count, so take it as an impression.
+Noise attenuates agreement, so it errs toward a null result.
 
 Store the verdict and the chosen token's probability as two fields, and derive p(yes) from them:
 p if the verdict is yes, 1 - p if no.
-No model on DeepInfra returns top_logprobs, so the alternatives are not available and this is the
-only route to p(yes). We only learn how likely the model thought its own answer was, never the alternatives, so we
-treat all the leftover probability as the opposite answer.
-That is close enough when the model is sure.
-It breaks when p drops below 0.5, because then the model answers no while 1 - p comes out above
-0.5 and reads as yes.
-The step reports how often p lands below 0.5.
+Without top_logprobs we never see how likely the other answer was, so all the leftover probability
+goes to the opposite verdict.
+That breaks below p = 0.5, because then the model answers no while 1 - p comes out above 0.5 and
+reads as yes.
+The step reports how often p lands there, 0.3% of scored labels here.
 
 ### 4. Compare
 
@@ -118,8 +112,7 @@ This works like kappa or an intra-class correlation, and it handles the "a group
 For the rating check, compute the same thing only over pairs with the same star rating.
 If agreement within products stays high among, say, 3-star reviews only, the signal isn't just the rating.
 
-Also add one practical number: label k = 3 random rows per product, propagate the majority to the rest, and report the accuracy.
-That turns "correlation" into "how many calls would this save at what accuracy".
+Also label k = 3 random rows per product, propagate the majority to the rest, and report the accuracy.
 
 ## Conclusion
 
@@ -127,17 +120,16 @@ No-go for entity-aware cascades as written.
 
 Product identity carries small but real agreement, kappa 0.04 to 0.16.
 Embedding clusters beat it clearly on "doesn't work as advertised" (0.29 against 0.16) and on the positive control (0.39 against 0.16).
-The other predicates are ties within the 95% intervals.
+Clusters are clearly worse on sensitive skin, which the group size artefact below explains.
+The other four predicates are ties within the 95% intervals.
 
 Star rating explains most of what product carries on the quality predicates.
 Once the chance term knows the rating, product drops to 0.01 to 0.07 on positive, doesn't work, fake and irritation.
 It keeps 0.10 to 0.13 on gift, another person and sensitive skin.
-Product identity says little about quality beyond the rating, and something about who buys the product.
+The likeliest reason product carries so little is that the judgement is about the review text, and a
+product property only shows up in the reviews that happen to mention it.
 
 Propagating the majority of 3 sampled reviews per product loses to a constant guess on every predicate, by 0.3 to 2.5 points over 20 draws.
-
-A pilot of eight further predicates failed.
-The judgements are about the review text, so a product property only counts in reviews that mention it, and short reviews rarely do.
 
 Pairwise agreement is an imperfect proxy for what a cascade needs.
 With very unequal group sizes the largest groups dominate the pair count, so kappa goes negative when they have an above-average rate, even if many small groups are pure.
