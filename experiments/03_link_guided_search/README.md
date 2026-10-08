@@ -9,18 +9,19 @@ For a predicate, does ordering oracle calls by links between rows find the posit
 Replay on fully labelled data, so no new oracle calls.
 Each order picks the next row to send to the oracle, and what I measure is the calls needed to find 90% of the positives, per predicate and order, as a share of all rows.
 Lower is better, and random is the reference since it needs about 90% of the rows by construction.
-Mean and sd over 5 seeds, because the orders break ties at random.
+Reported as mean and sd over seeds, because the orders break ties at random.
 
 Orders compared:
 
 - random
 - embedding similarity
-- small-LLM proxy score, the LOTUS and BARGAIN way, steps 2 and 3 only
 - link expansion from confirmed positives
 - links and embeddings together, which in practice means links first and similarity as the tiebreak, since a confirmed neighbour counts 1 and a cosine is about 0.2
+- small-LLM proxy score, the LOTUS and BARGAIN way
+- the proxy score with link expansion on top
 
 Every order starts with no labels, so the first positive is found at random and only then do links and similarity have anything to point at.
-Proxy calls in steps 2 and 3 are reported on their own, since an 8B call is not a 70B call.
+The two proxy orders sit in their own step, since an 8B call on every row is a cost the others never pay, and comparing them against each other holds it fixed.
 
 ## Data
 
@@ -93,7 +94,22 @@ Calls to reach 90% recall as a share of the rows, mean of 50 seeds, from `result
 | proof        | 6.6% | 90.0%  | 74.7%      | 81.8% | 75.0%            |
 | first person | 2.8% | 88.6%  | 90.7%      | 86.6% | 90.7%            |
 
-### 3. Ordinary tables
+### 3. How much the citations correlate the positives
+
+Step `lift`
+
+Of the edges leaving a positive the share that land on a positive over the positive rate.
+1.0x is no correlation.
+Also the share of positives with at least one positive neighbour, which grows with degree, and the share with no neighbour at all, which links can never reach.
+
+### 4. Oracle calls under a proxy
+
+Step `proxy` and then step `cascade`.
+
+- `proxy` gets p(yes) on every paper and predicate from the small model.
+- `cascade` replays the proxy order and the proxy with link expansion on top, and makes no oracle calls.
+
+### 5. Ordinary tables
 
 Generate candidate edges from every non-text column, same value, close in time, or references inside the text.
 Run on All_Beauty with the existing labels, and on the posts and comments of BIRD codebase_community.
