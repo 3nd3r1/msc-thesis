@@ -2,23 +2,24 @@ cora, 2,708 papers, 5,278 citations
 7 predicates labelled by meta-llama/Meta-Llama-3.1-70B-Instruct, strict prompt
 calls to 90% recall, mean of 50 seeds
 embeddings are all-MiniLM-L6-v2 sentence vectors, not step 1's word features
+proxy is p(yes) from meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo, one call per row and predicate
 
 all 2,708 rows, 468 junk and 17 repeated texts in the pool
-  calls% +- sd                random            embeddings                 links      links+embeddings
-       proof non-topical  5.9%    89.9%+-2.1%    69.8%+-1.6%    80.8%+-4.1%    69.8%+-2.1%
-        language topical  3.1%    89.0%+-2.9%    42.2%+-3.7%    74.1%+-7.8%    34.4%+-1.6%
-         biology topical  4.2%    89.5%+-2.6%    63.1%+-0.5%    81.9%+-4.4%    62.8%+-0.8%
-        robotics topical  4.2%    89.7%+-3.1%    12.4%+-1.1%    72.0%+-6.0%    14.0%+-1.2%
-    first person control  2.3%    89.1%+-3.8%    88.4%+-0.9%    86.2%+-4.0%    88.3%+-1.5%
-      markov non-topical  3.1%    90.0%+-3.2%    18.2%+-2.1%    76.3%+-6.6%    12.8%+-1.1%
-    unsupervised topical  3.8%    90.4%+-2.9%    43.6%+-3.6%    79.6%+-5.8%    36.5%+-2.1%
+  calls% +- sd                random            embeddings                 links      links+embeddings                 proxy
+       proof non-topical  5.9%    89.9%+-2.1%    69.8%+-1.6%    80.8%+-4.1%    69.8%+-2.1%    14.8%+-0.0%
+        language topical  3.1%    89.0%+-2.9%    42.2%+-3.7%    74.1%+-7.8%    34.4%+-1.6%     4.4%+-0.0%
+         biology topical  4.2%    89.5%+-2.6%    63.1%+-0.5%    81.9%+-4.4%    62.8%+-0.8%    25.0%+-0.0%
+        robotics topical  4.2%    89.7%+-3.1%    12.4%+-1.1%    72.0%+-6.0%    14.0%+-1.2%     5.4%+-0.0%
+    first person control  2.3%    89.1%+-3.8%    88.4%+-0.9%    86.2%+-4.0%    88.3%+-1.5%    17.8%+-0.0%
+      markov non-topical  3.1%    90.0%+-3.2%    18.2%+-2.1%    76.3%+-6.6%    12.8%+-1.1%     6.5%+-0.0%
+    unsupervised topical  3.8%    90.4%+-2.9%    43.6%+-3.6%    79.6%+-5.8%    36.5%+-2.1%    11.8%+-0.0%
 
 2,233 rows, junk and repeated texts dropped
-  calls% +- sd                random            embeddings                 links      links+embeddings
-       proof non-topical  6.6%    90.0%+-2.1%    74.7%+-0.6%    81.8%+-3.7%    75.0%+-0.4%
-        language topical  3.2%    89.0%+-3.1%    39.3%+-3.7%    73.5%+-7.9%    31.0%+-0.9%
-         biology topical  4.8%    90.1%+-2.3%    64.1%+-0.7%    83.0%+-4.3%    64.1%+-1.3%
-        robotics topical  4.3%    89.4%+-3.5%    12.3%+-0.9%    74.6%+-5.7%    14.2%+-0.9%
-    first person control  2.8%    88.6%+-3.1%    90.7%+-0.6%    86.6%+-3.5%    90.7%+-0.6%
-      markov non-topical  3.6%    89.1%+-3.6%    18.5%+-2.5%    74.9%+-7.5%    13.7%+-1.0%
-    unsupervised topical  3.6%    88.8%+-3.4%    47.9%+-2.9%    81.2%+-5.2%    45.3%+-4.1%
+  calls% +- sd                random            embeddings                 links      links+embeddings                 proxy
+       proof non-topical  6.6%    90.0%+-2.1%    74.7%+-0.6%    81.8%+-3.7%    75.0%+-0.4%    11.8%+-0.0%
+        language topical  3.2%    89.0%+-3.1%    39.3%+-3.7%    73.5%+-7.9%    31.0%+-0.9%     3.6%+-0.0%
+         biology topical  4.8%    90.1%+-2.3%    64.1%+-0.7%    83.0%+-4.3%    64.1%+-1.3%    13.5%+-0.0%
+        robotics topical  4.3%    89.4%+-3.5%    12.3%+-0.9%    74.6%+-5.7%    14.2%+-0.9%     5.5%+-0.0%
+    first person control  2.8%    88.6%+-3.1%    90.7%+-0.6%    86.6%+-3.5%    90.7%+-0.6%    10.3%+-0.0%
+      markov non-topical  3.6%    89.1%+-3.6%    18.5%+-2.5%    74.9%+-7.5%    13.7%+-1.0%     5.5%+-0.0%
+    unsupervised topical  3.6%    88.8%+-3.4%    47.9%+-2.9%    81.2%+-5.2%    45.3%+-4.1%     9.2%+-0.0%
