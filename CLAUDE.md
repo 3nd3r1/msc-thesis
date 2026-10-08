@@ -21,6 +21,10 @@ itself is written in LaTeX on Overleaf; this repo holds code, results and the no
 - After a result or decision ask to add a short entry to docs/Log.
 - Keep code extremely simple by default. No useless comments.
 - Never run experiment scripts unless asked. Verifying a piece in isolation is fine.
+- A result is a BLUF line, the table, and the file it came from. Nothing else.
+- Do not explain or interpret a result unless asked. If an explanation is needed it goes in docs/Log.
+- Do not restate rows of a table in prose.
+- Do not write numbers that the code already determines, like call counts or seed counts.
 
 ## How to communicate
 
