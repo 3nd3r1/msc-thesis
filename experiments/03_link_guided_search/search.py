@@ -22,6 +22,7 @@ def search(labels, order, vectors, neighbours, seed=0, recall=0.90, proxy=None):
     tie = rng.random(n)
     link = np.zeros(n)
     similarity = np.zeros(n)
+    prior = np.zeros(n) if proxy is None else proxy
     asked = np.zeros(n, bool)
     found = 0
 
@@ -32,7 +33,10 @@ def search(labels, order, vectors, neighbours, seed=0, recall=0.90, proxy=None):
             "embeddings": mean,
             "links": link,
             "links+embeddings": link + mean,
-            "proxy": proxy,
+            "proxy": prior,
+            # A neighbour of a confirmed positive outranks every row that is not
+            # one, and the proxy orders within each of the two sets.
+            "proxy+links": prior + 2.0 * (link > 0),
         }[order] + 1e-9 * tie
         score[asked] = -np.inf
 

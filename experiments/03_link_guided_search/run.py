@@ -25,7 +25,7 @@ LABELS = Path(__file__).resolve().parents[2] / "labels" / "cora"
 SEEDS = 50
 RECALL = 0.90
 ORDERS = ["random", "embeddings", "links", "links+embeddings"]
-PREDICATE_ORDERS = ORDERS + ["proxy"]
+CASCADE_ORDERS = ["proxy", "proxy+links"]
 
 WORKERS = 8
 RETRIES = 8
@@ -70,12 +70,12 @@ PREDICATES = [
 ]
 
 
-def subgraph(keep, edges, vectors):
+def subgraph(keep, edges):
     """Induced subgraph on `keep`, reindexed. An all true mask is the identity."""
     index = -np.ones(len(keep), int)
     index[keep] = np.arange(keep.sum())
     inside = edges[keep[edges[:, 0]] & keep[edges[:, 1]]]
-    return index[inside], vectors[keep]
+    return index[inside]
 
 
 def table(out, names, vectors, neighbours, orders=ORDERS):
@@ -211,7 +211,8 @@ def proxy_scores(n):
     return out
 
 
-def predicates():
+def loaded():
+    """The oracle labels as a mask per predicate, and the two row pools."""
     nodes, _, edges = load_cora()
     path = LABELS / "labels.jsonl"
     if not path.exists():
@@ -225,18 +226,33 @@ def predicates():
         mask[yes.row[yes.predicate == key].to_numpy()] = True
         masks[key] = mask
 
-    scores = proxy_scores(len(nodes))
-    vectors = unit(embed((nodes.title + ". " + nodes.abstract).tolist()))
     junk = cora_junk(nodes).any(axis=1).to_numpy()
     repeat = (nodes.title + "\n" + nodes.abstract).duplicated().to_numpy()
     keep = ~junk & ~repeat
+    pools = [
+        (
+            f"all {len(nodes):,} rows, {int(junk.sum()):,} junk and "
+            f"{int(repeat.sum())} repeated texts in the pool",
+            np.ones(len(nodes), bool),
+        ),
+        (f"{int(keep.sum()):,} rows, junk and repeated texts dropped", keep),
+    ]
+    return nodes, edges, labels, masks, pools
+
+
+def vectors_for(nodes):
+    return unit(embed((nodes.title + ". " + nodes.abstract).tolist()))
+
+
+def predicates():
+    nodes, edges, labels, masks, pools = loaded()
+    vectors = vectors_for(nodes)
     out, save = report(RESULTS, "predicates")
 
     out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
     out(f"{len(PREDICATES)} predicates labelled by {ORACLE}, strict prompt")
     out(f"calls to {RECALL:.0%} recall, mean of {SEEDS} seeds")
     out("embeddings are all-MiniLM-L6-v2 sentence vectors, not step 1's word features")
-    out(f"proxy is p(yes) from {PROXY}, one call per row and predicate")
 
     counts = labels.groupby("predicate").size()
     gaps = len(nodes) - counts.reindex([k for k, _, _ in PREDICATES], fill_value=0)
@@ -244,21 +260,81 @@ def predicates():
         short = ", ".join(f"{k} {v:,}" for k, v in gaps[gaps > 0].items())
         out(f"\nunlabelled rows, counted as no: {short}")
 
-    for title, mask in [
-        (
-            f"all {len(nodes):,} rows, {int(junk.sum()):,} junk and {int(repeat.sum())} "
-            "repeated texts in the pool",
-            np.ones(len(nodes), bool),
-        ),
-        (f"{int(keep.sum()):,} rows, junk and repeated texts dropped", keep),
-    ]:
+    for title, mask in pools:
         out(f"\n{title}")
-        links, rows = subgraph(mask, edges, vectors)
+        links = subgraph(mask, edges)
+        names = [(f"{k} {kind}", masks[k][mask], None) for k, kind, _ in PREDICATES]
+        table(out, names, vectors[mask], adjacency(links, int(mask.sum())))
+
+    save()
+
+
+def lift():
+    """How much the citations correlate the positives. No oracle calls."""
+    nodes, edges, _, masks, pools = loaded()
+    out, save = report(RESULTS, "lift")
+
+    out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
+    out(f"{len(PREDICATES)} predicates labelled by {ORACLE}, strict prompt")
+    out()
+    out("edge%: of the edges leaving a positive, the share landing on a positive")
+    out("lift: edge% over the positive rate, so 1.0x is no correlation")
+    out("nbr+: positives with at least one positive neighbour, which grows with degree")
+    out("alone: positives with no neighbour at all, which links can never reach")
+
+    for title, mask in pools:
+        out(f"\n{title}")
+        neighbours = adjacency(subgraph(mask, edges), int(mask.sum()))
+        out(
+            f"  {'rate':>6} {'edge%':>6} {'lift':>6} {'nbr+':>6} {'alone':>6}"
+            "  predicate"
+        )
+        for key, kind, _ in PREDICATES:
+            m = masks[key][mask]
+            pos = np.where(m)[0]
+            degree = sum(len(neighbours[i]) for i in pos)
+            hits = sum(int(m[neighbours[i]].sum()) for i in pos)
+            any_hit = sum(1 for i in pos if m[neighbours[i]].any())
+            alone = sum(1 for i in pos if len(neighbours[i]) == 0)
+            rate = m.mean()
+            edge = hits / degree if degree else 0.0
+            out(
+                f"  {rate:>6.1%} {edge:>6.1%} {edge / rate:>5.1f}x "
+                f"{any_hit / len(pos):>6.1%} {alone / len(pos):>6.1%}"
+                f"  {key} {kind}"
+            )
+
+    save()
+
+
+def cascade():
+    """Oracle calls once the proxy has scored every row, which both orders pay."""
+    nodes, edges, _, masks, pools = loaded()
+    scores = proxy_scores(len(nodes))
+    vectors = vectors_for(nodes)
+    out, save = report(RESULTS, "cascade")
+
+    out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
+    out(f"calls to {RECALL:.0%} recall, mean of {SEEDS} seeds")
+    out(f"proxy is p(yes) from {PROXY}, one call per row and predicate")
+    out("both orders pay that, so only the oracle calls below differ")
+    out("proxy+links sends the oracle to the best proxy score among the unasked")
+    out("neighbours of a confirmed positive, and to the global best when there are none")
+
+    for title, mask in pools:
+        out(f"\n{title}")
+        links = subgraph(mask, edges)
         names = [
             (f"{k} {kind}", masks[k][mask], scores[k][mask])
             for k, kind, _ in PREDICATES
         ]
-        table(out, names, rows, adjacency(links, int(mask.sum())), PREDICATE_ORDERS)
+        table(
+            out,
+            names,
+            vectors[mask],
+            adjacency(links, int(mask.sum())),
+            CASCADE_ORDERS,
+        )
 
     save()
 
@@ -268,6 +344,8 @@ STEPS = {
     "label": label,
     "proxy": proxy,
     "predicates": predicates,
+    "lift": lift,
+    "cascade": cascade,
 }
 
 if __name__ == "__main__":
