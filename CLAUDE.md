@@ -9,6 +9,7 @@ itself is written in LaTeX on Overleaf; this repo holds code, results and the no
 - `docs/` - all markdown notes.
   - `docs/Thesis.md` is the way in
 - `experiments/` - one folder per experiment, `NN_short_name/run.py` plus `results/`
+- `labels/` - oracle labels per dataset, shared between experiments
 - `data/` - raw data downloads, gitignored.
 - `README.md` - repo front page.
 
