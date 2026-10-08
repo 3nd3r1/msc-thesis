@@ -5,8 +5,6 @@ Go/no-go for [entity-aware cascades](../../docs/Directions/Entity-aware%20cascad
 ## Question
 
 Do LLM predicate verdicts agree inside a group more than chance explains?
-Reviews of one product should share a verdict more often than two random reviews do, because a good
-product mostly gets positive reviews.
 If agreement inside entities sits near chance, or embedding clusters match it, the direction is dead.
 
 ## Data
@@ -20,11 +18,13 @@ Llama 3.1 70B on DeepInfra as the oracle, the same family as the LOTUS cascade, 
 comparison is against their setup rather than a reimplementation of it.
 Needs `DEEPINFRA_API_KEY`, see `.env.example` at the repo root.
 
-DeepInfra logprobs are unreliable. Support is per model and undocumented, no model returns
-top_logprobs, and on 36.3% of the calls here the logprobs went missing with no error, same request
-every time. Those rows keep the verdict parsed from the reply text and store no p.
-Verdicts are all the steps below need. The LOTUS cascade baseline does need top_logprobs, so it
-needs another provider or a rented GPU running vLLM.
+DeepInfra logprobs are unreliable.
+Support is per model and undocumented, no model returns top_logprobs, and logprobs go missing with
+no error on the same request every time.
+Those rows keep the verdict parsed from the reply text and store no p.
+Verdicts are all the steps below need.
+The LOTUS cascade baseline does need top_logprobs, so it needs another provider or a rented GPU
+running vLLM.
 
 ## Steps
 
@@ -33,27 +33,20 @@ Steps run in order, each one needs the output of the last.
 
 ### 1. Sizes
 
-Measure the sizes of the entity groups.
-A cascade only saves calls on groups large enough to sample a few rows and settle the rest, so what
-matters is the share of rows living in large groups.
-We check both candidate keys, the product and the reviewer.
+Measure the sizes of the entity groups for both candidate keys, the product and the reviewer.
 
 #### Result
 
-The product works as an entity key and the reviewer does not.
-79% of reviews are in products with at least 5 reviews, against 2% for reviewers.
-Sizes are long tailed either way, 42% of products have a single review, but those products hold
-only 7% of the rows.
+BLUF: the product works as an entity key and the reviewer does not.
 
-That gives an upper bound for savings on this dataset.
-Suppose you sample k = 3 reviews per product for products with at least 5 reviews, propagate to
-the rest and run the oracle on everything in smaller products:
+Share of rows in groups of at least n, from `results/sizes.txt`:
 
-- 146,820 rows in products under 5 get full oracle calls
-- 27,533 products * 3 = 82,599 sampled calls
-- about 229k calls against 701k, about 67% saving
-
-This assumes propagation is always right, which is what the next steps test.
+| at least | product | reviewer |
+| -------- | ------- | -------- |
+| 2        | 93.2%   | 16.8%    |
+| 5        | 79.1%   | 2.1%     |
+| 10       | 65.9%   | 1.0%     |
+| 50       | 34.5%   | 0.2%     |
 
 ### 2. Sample
 
@@ -62,17 +55,24 @@ Rows go to `labels/all_beauty/sample.jsonl`.
 
 #### Result
 
-4,235 reviews over 300 products, seed 0.
-Only 29 reviewers have more than one review in the sample, so the user ID grouping cannot be
-measured from it.
-Deferred. The author-level predicates stay in as a contrast class, they should group weakly by
-product if the metric works.
+BLUF: the sample cannot measure the reviewer key, 29 of its 4,202 reviewers have more than one review.
+
+Deferred.
+The author level predicates stay in as a contrast class, they should group weakly by product if the
+metric works.
+Numbers in `results/sample.txt`.
 
 ### 3. Label
 
-Label the sample with these 7 predicates:
+Label the sample with the LOTUS sem_filter prompt.
 
-| Predicate                                        | Level   |
+Store the verdict and the chosen token's probability as two fields, and derive p(yes) from them.
+Without top_logprobs the leftover probability all goes to the opposite verdict, which breaks below
+p = 0.5, so the step reports how often p lands there.
+
+#### Predicates
+
+| predicate                                        | level   |
 | ------------------------------------------------ | ------- |
 | reports skin irritation or an allergic reaction  | product |
 | says the product doesn't work as advertised      | product |
@@ -82,19 +82,12 @@ Label the sample with these 7 predicates:
 | mentions another person (partner, child, friend) | row     |
 | the review is positive                           | control |
 
-Use the LOTUS sem_filter prompt.
-A hand read on 2026-09-29 still found 5 to 10 false positives per 100 reviews on the rare
-predicates, all on reviews with almost no text like 'Flimsy' or 'Apricot lotion'.
-Nothing saved that count, so take it as an impression.
-Noise attenuates agreement, so it errs toward a null result.
+#### Result
 
-Store the verdict and the chosen token's probability as two fields, and derive p(yes) from them:
-p if the verdict is yes, 1 - p if no.
-Without top_logprobs we never see how likely the other answer was, so all the leftover probability
-goes to the opposite verdict.
-That breaks below p = 0.5, because then the model answers no while 1 - p comes out above 0.5 and
-reads as yes.
-The step reports how often p lands there, 0.3% of scored labels here.
+A hand read on 2026-09-29 found 5 to 10 false positives per 100 reviews on the rare predicates, all
+on reviews with almost no text like 'Flimsy' or 'Apricot lotion'.
+Nothing saved that count, so take it as an impression.
+Yes rates in `results/labels.txt`.
 
 ### 4. Compare
 
@@ -102,37 +95,34 @@ For each predicate, measure how homogeneous each grouping is:
 
 - product ID
 - user ID (where the data allows it)
-- embedding clusters, using k-means on sentence embeddings with the same number and sizes of clusters as the product groups
+- embedding clusters, k-means with the same number and sizes of clusters as the product groups
 - shuffled groups with the same sizes, as the chance baseline
+- product again, with the chance term shuffled within rating strata
 
-For the metric, use pairwise agreement corrected for chance.
-Compare the probability that two rows in the same group agree with the probability that two random rows agree.
-This works like kappa or an intra-class correlation, and it handles the "a group of two agrees half the time anyway" problem.
+The metric is pairwise agreement corrected for chance, which handles the "a group of two agrees half
+the time anyway" problem.
+Also label 3 random rows per product, propagate the majority to the rest, and report the accuracy.
 
-For the rating check, compute the same thing only over pairs with the same star rating.
-If agreement within products stays high among, say, 3-star reviews only, the signal isn't just the rating.
+#### Result
 
-Also label k = 3 random rows per product, propagate the majority to the rest, and report the accuracy.
+BLUF: embedding clusters match or beat product identity, and the rating explains most of what product carries.
+
+Agreement above chance, from `results/compare.txt`:
+
+| predicate        | product | cluster | rating | product within rating |
+| ---------------- | ------- | ------- | ------ | --------------------- |
+| irritation       | 0.04    | -0.06   | 0.51   | 0.03                  |
+| doesn't work     | 0.16    | 0.29    | 0.78   | 0.07                  |
+| fake             | 0.07    | 0.16    | 0.40   | 0.06                  |
+| sensitive skin   | 0.10    | -0.20   | -0.05  | 0.10                  |
+| gift             | 0.13    | 0.09    | -0.12  | 0.13                  |
+| another person   | 0.10    | 0.12    | -0.12  | 0.10                  |
+| positive         | 0.16    | 0.39    | 0.89   | 0.01                  |
+
+Propagating the majority of 3 sampled reviews per product loses to a constant guess on every
+predicate, by 0.3 to 2.5 points.
 
 ## Conclusion
 
 No-go for entity-aware cascades as written.
-
-Product identity carries small but real agreement, kappa 0.04 to 0.16.
-Embedding clusters beat it clearly on "doesn't work as advertised" (0.29 against 0.16) and on the positive control (0.39 against 0.16).
-Clusters are clearly worse on sensitive skin, which the group size artefact below explains.
-The other four predicates are ties within the 95% intervals.
-
-Star rating explains most of what product carries on the quality predicates.
-Once the chance term knows the rating, product drops to 0.01 to 0.07 on positive, doesn't work, fake and irritation.
-It keeps 0.10 to 0.13 on gift, another person and sensitive skin.
-The likeliest reason product carries so little is that the judgement is about the review text, and a
-product property only shows up in the reviews that happen to mention it.
-
-Propagating the majority of 3 sampled reviews per product loses to a constant guess on every predicate, by 0.3 to 2.5 points over 20 draws.
-
-Pairwise agreement is an imperfect proxy for what a cascade needs.
-With very unequal group sizes the largest groups dominate the pair count, so kappa goes negative when they have an above-average rate, even if many small groups are pure.
-That explains -0.20 for clusters on sensitive skin and -0.12 for rating on gift.
-
 Experiment 02 measures oracle calls at an accuracy target instead.
