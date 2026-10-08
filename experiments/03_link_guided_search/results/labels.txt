@@ -1,4 +1,4 @@
-meta-llama/Meta-Llama-3.1-70B-Instruct on 2,708 papers, 13,540 labels
+meta-llama/Meta-Llama-3.1-70B-Instruct on 2,708 papers, 18,956 labels
 served by meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
 strict prompt, the claim has to be stated explicitly
 
@@ -8,5 +8,7 @@ strict prompt, the claim has to be stated explicitly
     4.2%   0.991   0.0%  biology
     4.2%   0.994   0.0%  robotics
     2.3%   0.997   0.0%  first person
+    3.1%   0.991   0.1%  markov
+    3.8%   0.989   0.0%  unsupervised
 
 0.0% of labels have no p, logprobs were dropped
