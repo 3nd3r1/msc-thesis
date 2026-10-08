@@ -18946,3 +18946,5 @@
 {"row": 2707, "predicate": "first person", "verdict": "no", "p": 0.9999409948851344}
 {"row": 2707, "predicate": "markov", "verdict": "no", "p": 0.9999290755054595}
 {"row": 2707, "predicate": "unsupervised", "verdict": "no", "p": 0.9999814036965474}
+{"row": 546, "predicate": "proof", "verdict": "no", "p": 0.9914154469571175}
+{"row": 2323, "predicate": "proof", "verdict": "no", "p": 0.9998357565780523}
