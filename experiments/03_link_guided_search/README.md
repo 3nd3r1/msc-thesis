@@ -2,7 +2,7 @@
 
 ## Question
 
-For a rare predicate, does ordering oracle calls by links between rows find the positives in fewer calls than ordering by embedding similarity or by a small-LLM proxy score?
+For a predicate, does ordering oracle calls by links between rows find the positives in fewer calls than ordering by embedding similarity or by a small-LLM proxy score?
 
 ## Method
 
@@ -38,8 +38,8 @@ Each step is `python run.py <step>` and writes `results/<step>.txt`.
 
 ### 1. Cora classes as predicates
 
-Step `classes`, no oracle calls.
-Use the graph's own class labels as the oracle, one predicate per class.
+Step `classes`.
+Use the graph's own class labels as the oracle.
 This is a positive control, since Cora is a benchmark because its edges work.
 
 #### Result
@@ -58,29 +58,14 @@ Calls to reach 90% recall, as a share of the 2,708 papers, mean of 50 seeds:
 | Reinforcement_Learning | 8.0%  | 89.8%  | 44.7%      | 36.2% | 12.4%            |
 | Rule_Learning          | 6.6%  | 89.7%  | 60.0%      | 38.8% | 37.0%            |
 
-Random lands at 90% of the rows on every class, which is the sanity check that the metric is right.
-
-Three things to keep in mind before reading too much into it.
-
-The embeddings baseline here is the binary word vector Cora ships, not a sentence embedding, and those are the same features a GNN would use to predict these classes.
-Step 2 uses MiniLM, so the embeddings columns of the two steps are not comparable.
-
-Links alone is the noisy column, sd 3 to 8 points, and it moved by up to 7 points going from 5 seeds to 50.
-Links plus embeddings barely moved, so the conclusion was never at risk, but no single number in the links column should be quoted.
-
-Rule_Learning, the rarest class, is still the weakest and the noisiest, 37.0% with an sd of 9.6% against 38.8% and an sd of 7.7% for links alone.
-Those error bars overlap, so on the rarest class adding embeddings to links cannot be shown to help.
-
-Go for step 2.
-
 ### 2. Cora with an LLM oracle
 
 Step `label` and then step `predicates`.
-`label` makes 13,540 oracle calls, 2,708 papers by 5 predicates, and appends them to `labels/cora/labels.jsonl`.
-It is resumable, any row and predicate already in the file is skipped, so an interrupted run only pays for what is left.
-`predicates` replays the orders on those labels and makes no oracle calls.
 
-All 2,708 papers and five predicates, none of them a Cora topic class.
+- `label` makes gets the result of every predicate on every paper from the oracle.
+- `predicates` replays the orders on those labels and makes no oracle calls.
+
+#### Predicates
 
 | key          | kind        | claim                                                                  |
 | ------------ | ----------- | ---------------------------------------------------------------------- |
@@ -89,32 +74,26 @@ All 2,708 papers and five predicates, none of them a Cora topic class.
 | biology      | topical     | the abstract says the method is applied to biological or medical data  |
 | robotics     | topical     | the paper is about robots or controlling a physical device             |
 | first person | control     | the abstract is written in the first person singular, using I or my    |
+| markov       | non-topical | the abstract says the paper uses a Markov model or Markov process      |
+| unsupervised | topical     | the paper is about unsupervised learning or clustering                 |
 
-First person is the control.
-How an abstract is written has no topical neighbourhood, so if links help there as much as anywhere else, the result is an artefact.
-Self-citation is a real path from writing style to graph structure though, so expect a weak effect rather than none.
+#### Result
 
-468 of the 2,708 rows are not really abstracts, mostly empty, some reference lists and captions, and 29 rows are duplicate papers over 12 distinct texts.
-Both stay in the graph, since dropping nodes thins the citations, and the results are reported with and without them.
-A duplicate is a free hit for any embedding order, so it matters more than its count suggests.
-The two pools are all 2,708 rows, and the 2,233 rows that are a real abstract and the first copy of their text.
-The second is the induced subgraph, so there a junk row cannot be found, cannot cost a call and cannot pass link credit to its neighbours.
+BLUF: Links and embeddings beat embeddings alone on 2 of the 6 real predicates, markov and language.
 
-The oracle prompt is the LOTUS sem_filter format plus the pilot's line that the claim has to be stated explicitly.
-The embedding order uses MiniLM sentence vectors, not the word features step 1 used.
+Calls to reach 90% recall as a share of the rows, mean of 50 seeds, from `results/predicates.txt`:
 
-Ten candidates were screened on 600 papers before these five, on how often they fire, whether two wordings of the claim agree, whether a keyword rule reproduces the labels, and a read of 20 positives each, numbers in `results/pilot.txt`.
-The oracle turned out to be the weak part rather than the search, only biology is clean and the rest sit around 70 to 90% precision, which attenuates toward a null result.
+| predicate    | rate | random | embeddings | links | links+embeddings |
+| ------------ | ---- | ------ | ---------- | ----- | ---------------- |
+| robotics     | 4.3% | 89.4%  | 12.3%      | 74.6% | 14.2%            |
+| markov       | 3.6% | 89.1%  | 18.5%      | 74.9% | 13.7%            |
+| language     | 3.2% | 89.0%  | 39.3%      | 73.5% | 31.0%            |
+| unsupervised | 3.6% | 88.8%  | 47.9%      | 81.2% | 45.3%            |
+| biology      | 4.8% | 90.1%  | 64.1%      | 83.0% | 64.1%            |
+| proof        | 6.6% | 90.0%  | 74.7%      | 81.8% | 75.0%            |
+| first person | 2.8% | 88.6%  | 90.7%      | 86.6% | 90.7%            |
 
 ### 3. Ordinary tables
 
 Generate candidate edges from every non-text column, same value, close in time, or references inside the text.
 Run on All_Beauty with the existing labels, and on the posts and comments of BIRD codebase_community.
-
-## Reading it
-
-Stop after step 1 if links plus embeddings do not beat embeddings alone on Cora.
-
-Step 3 counts as working if links plus embeddings need at least 20% fewer oracle calls than the best baseline on at least half of the non-control predicates.
-
-Every edge type and predicate is reported, including the ones with no lift.
