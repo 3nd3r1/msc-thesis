@@ -125,6 +125,24 @@ Step `proxy` and then step `cascade`.
 - `proxy` gets p(yes) on every paper and predicate from the small model.
 - `cascade` replays the proxy order and the proxy with link expansion on top, and makes no oracle calls.
 
+Both orders pay one small-model call per row, so the column below is oracle calls alone.
+
+#### Result
+
+BLUF: the proxy beats every order in step 2, and link expansion on top of it is worse on 6 of 7 predicates.
+
+Calls to reach 90% recall as a share of the rows, from `results/cascade.txt`, the pool with junk and repeated texts dropped:
+
+| predicate    | rate | proxy | proxy+links |
+| ------------ | ---- | ----- | ----------- |
+| language     | 3.2% | 3.6%  | 8.2%        |
+| markov       | 3.6% | 5.5%  | 9.1%        |
+| robotics     | 4.3% | 5.5%  | 9.4%        |
+| unsupervised | 3.6% | 9.2%  | 9.2%        |
+| first person | 2.8% | 10.3% | 14.8%       |
+| proof        | 6.6% | 11.8% | 20.0%       |
+| biology      | 4.8% | 13.5% | 15.7%       |
+
 ### 5. Ordinary tables
 
 Generate candidate edges from every non-text column, same value, close in time, or references inside the text.
