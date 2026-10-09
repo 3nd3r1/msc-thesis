@@ -8,6 +8,7 @@ TODO
 
 ## Links
 
+- [Timeline](Timeline.md) - dates and what happens between them
 - [Log](Log/) - dated work log, newest file is the current status
 - [Meetings](Meetings/) - supervisor meetings
 - [Concepts](Concepts/) - one note per idea
