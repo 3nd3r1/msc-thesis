@@ -1,6 +1,7 @@
 import json
 import sys
 import time
+from collections import namedtuple
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -16,11 +17,11 @@ from llm import ORACLE, PROXY, SERVED, SYSTEM, client, judge, p_yes
 from report import report
 from search import adjacency, search, unit
 
-from data import cora_junk, load_cora
+from data import cora_features, cora_junk, load_cora, load_stack, stack_junk
 
 
 RESULTS = Path(__file__).resolve().parent / "results"
-LABELS = Path(__file__).resolve().parents[2] / "labels" / "cora"
+LABELS = Path(__file__).resolve().parents[2] / "labels"
 
 SEEDS = 50
 RECALLS = [0.50, 0.80, 0.90, 0.95]
@@ -35,7 +36,7 @@ STRICT = SYSTEM + (
     "otherwise answer False."
 )
 
-PREDICATES = [
+CORA_PREDICATES = [
     (
         "proof",
         "non-topical",
@@ -68,6 +69,29 @@ PREDICATES = [
         "the paper is about unsupervised learning or clustering",
     ),
 ]
+
+STACK_PREDICATES = []
+
+Dataset = namedtuple("Dataset", "name noun load predicates junk")
+
+DATASETS = {
+    "cora": Dataset("cora", "papers", load_cora, CORA_PREDICATES, cora_junk),
+    "stack": Dataset("stack", "questions", load_stack, STACK_PREDICATES, stack_junk),
+}
+
+
+def correlation(mask, neighbours):
+    """Of the edges leaving a positive, the share landing on one, and the lift on it."""
+    pos = np.where(mask)[0]
+    degree = sum(len(neighbours[i]) for i in pos)
+    hits = sum(int(mask[neighbours[i]].sum()) for i in pos)
+    edge = hits / degree if degree else 0.0
+    return {
+        "edge": edge,
+        "lift": edge / mask.mean(),
+        "nbr+": sum(1 for i in pos if mask[neighbours[i]].any()) / len(pos),
+        "alone": sum(1 for i in pos if len(neighbours[i]) == 0) / len(pos),
+    }
 
 
 def subgraph(keep, edges):
@@ -102,9 +126,21 @@ def table(out, names, vectors, neighbours, orders=ORDERS, recalls=RECALLS):
         out()
 
 
-def classes():
-    nodes, features, edges = load_cora()
-    out, save = report(RESULTS, "classes")
+def results(ds):
+    return RESULTS / ds.name
+
+
+def vectors_for(nodes):
+    return unit(embed((nodes.title + ". " + nodes.text).tolist()))
+
+
+def classes(ds):
+    """Cora's own class labels as the oracle. The positive control."""
+    if ds.name != "cora":
+        sys.exit("classes is the cora control, the other datasets have no classes")
+
+    nodes, edges = load_cora()
+    out, save = report(results(ds), "classes")
 
     out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
     recalls = [0.90]
@@ -115,14 +151,14 @@ def classes():
         (label, (nodes["label"] == label).to_numpy(), None)
         for label in nodes["label"].value_counts().index
     ]
-    table(out, names, unit(features), adjacency(edges, len(nodes)), recalls)
+    table(out, names, unit(cora_features()), adjacency(edges, len(nodes)), recalls)
     save()
 
 
-def collect(model, name):
-    """Ask `model` every predicate on every row, appending to labels/cora/<name>.jsonl."""
-    nodes, _, _ = load_cora()
-    path = LABELS / f"{name}.jsonl"
+def collect(ds, model, name):
+    """Ask `model` every predicate on every row, appending to labels/<ds>/<name>.jsonl."""
+    nodes, _ = ds.load()
+    path = LABELS / ds.name / f"{name}.jsonl"
 
     done = set()
     if path.exists():
@@ -133,11 +169,12 @@ def collect(model, name):
     jobs = [
         (i, key, claim)
         for i in range(len(nodes))
-        for key, _, claim in PREDICATES
+        for key, _, claim in ds.predicates
         if (i, key) not in done
     ]
     print(
-        f"{len(nodes):,} rows, {len(PREDICATES)} predicates, {len(jobs):,} calls to make"
+        f"{len(nodes):,} rows, {len(ds.predicates)} predicates, "
+        f"{len(jobs):,} calls to make"
     )
     if done:
         print(f"resuming, {len(done):,} already in {path.name}")
@@ -155,7 +192,7 @@ def collect(model, name):
                     api,
                     model,
                     claim,
-                    {"title": row.title, "text": row.abstract},
+                    {"title": row.title, "text": row.text},
                     system=STRICT,
                 )
                 break
@@ -164,7 +201,7 @@ def collect(model, name):
         return {"row": i, "predicate": key, "verdict": verdict, "p": p}
 
     failed = 0
-    LABELS.mkdir(parents=True, exist_ok=True)
+    path.parent.mkdir(parents=True, exist_ok=True)
     with ThreadPoolExecutor(WORKERS) as pool, path.open("a", buffering=1) as f:
         for n, rec in enumerate(pool.map(work, jobs), 1):
             if rec["verdict"] is None:
@@ -177,14 +214,14 @@ def collect(model, name):
     if failed:
         print(f"{failed:,} calls returned no verdict")
 
-    out, save = report(RESULTS, name)
+    out, save = report(results(ds), name)
     labels = pd.read_json(path, lines=True)
-    out(f"{model} on {labels.row.nunique():,} papers, {len(labels):,} labels")
+    out(f"{model} on {labels.row.nunique():,} {ds.noun}, {len(labels):,} labels")
     out("served by " + (", ".join(sorted(SERVED)) or "unknown, no calls made this run"))
     out("strict prompt, the claim has to be stated explicitly")
 
     out(f"\n  {'yes':>6} {'mean p':>7} {'p<.5':>6}  predicate")
-    for key, _, _ in PREDICATES:
+    for key, _, _ in ds.predicates:
         sub = labels[labels.predicate == key]
         if len(sub):
             yes = (sub.verdict == "yes").mean()
@@ -196,49 +233,51 @@ def collect(model, name):
     save()
 
 
-def label():
-    collect(ORACLE, "labels")
+def label(ds):
+    collect(ds, ORACLE, "labels")
 
 
-def proxy():
-    collect(PROXY, "proxy")
+def proxy(ds):
+    collect(ds, PROXY, "proxy")
 
 
-def proxy_scores(n):
+def proxy_scores(ds, n):
     """p(yes) per predicate from the proxy, 0 where the proxy has no row."""
-    path = LABELS / "proxy.jsonl"
+    path = LABELS / ds.name / "proxy.jsonl"
     if not path.exists():
-        sys.exit(f"no {path}, run: run.py proxy")
+        sys.exit(f"no {path}, run: run.py {ds.name} proxy")
     scored = pd.read_json(path, lines=True)
     out = {}
-    for key, _, _ in PREDICATES:
+    for key, _, _ in ds.predicates:
         sub = scored[scored.predicate == key]
         score = np.zeros(n)
         score[sub.row.to_numpy()] = [
-            p_yes(v, 1.0 if pd.isna(q) else q)
-            for v, q in zip(sub.verdict, sub.p)
+            p_yes(v, 1.0 if pd.isna(q) else q) for v, q in zip(sub.verdict, sub.p)
         ]
         out[key] = score
     return out
 
 
-def loaded():
+def loaded(ds):
     """The oracle labels as a mask per predicate, and the two row pools."""
-    nodes, _, edges = load_cora()
-    path = LABELS / "labels.jsonl"
+    if not ds.predicates:
+        sys.exit(f"no predicates for {ds.name} yet")
+
+    nodes, edges = ds.load()
+    path = LABELS / ds.name / "labels.jsonl"
     if not path.exists():
-        sys.exit(f"no {path}, run: run.py label")
+        sys.exit(f"no {path}, run: run.py {ds.name} label")
 
     labels = pd.read_json(path, lines=True)
     yes = labels[labels.verdict == "yes"]
     masks = {}
-    for key, _, _ in PREDICATES:
+    for key, _, _ in ds.predicates:
         mask = np.zeros(len(nodes), bool)
         mask[yes.row[yes.predicate == key].to_numpy()] = True
         masks[key] = mask
 
-    junk = cora_junk(nodes).any(axis=1).to_numpy()
-    repeat = (nodes.title + "\n" + nodes.abstract).duplicated().to_numpy()
+    junk = ds.junk(nodes).any(axis=1).to_numpy()
+    repeat = (nodes.title + "\n" + nodes.text).duplicated().to_numpy()
     keep = ~junk & ~repeat
     pools = [
         (
@@ -251,22 +290,19 @@ def loaded():
     return nodes, edges, labels, masks, pools
 
 
-def vectors_for(nodes):
-    return unit(embed((nodes.title + ". " + nodes.abstract).tolist()))
-
-
-def predicates():
-    nodes, edges, labels, masks, pools = loaded()
+def predicates(ds):
+    """Replay every order on the oracle labels. No oracle calls."""
+    nodes, edges, labels, masks, pools = loaded(ds)
     vectors = vectors_for(nodes)
-    out, save = report(RESULTS, "predicates")
+    out, save = report(results(ds), "predicates")
 
-    out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
-    out(f"{len(PREDICATES)} predicates labelled by {ORACLE}, strict prompt")
+    out(f"{ds.name}, {len(nodes):,} {ds.noun}, {len(edges):,} edges")
+    out(f"{len(ds.predicates)} predicates labelled by {ORACLE}, strict prompt")
     out(f"calls% is calls over rows, mean and sd of {SEEDS} seeds")
     out("embeddings are all-MiniLM-L6-v2 sentence vectors, not step 1's word features")
 
     counts = labels.groupby("predicate").size()
-    gaps = len(nodes) - counts.reindex([k for k, _, _ in PREDICATES], fill_value=0)
+    gaps = len(nodes) - counts.reindex([k for k, _, _ in ds.predicates], fill_value=0)
     if gaps.any():
         short = ", ".join(f"{k} {v:,}" for k, v in gaps[gaps > 0].items())
         out(f"\nunlabelled rows, counted as no: {short}")
@@ -274,19 +310,19 @@ def predicates():
     for title, mask in pools:
         out(f"\n{title}")
         links = subgraph(mask, edges)
-        names = [(f"{k} {kind}", masks[k][mask], None) for k, kind, _ in PREDICATES]
+        names = [(f"{k} {kind}", masks[k][mask], None) for k, kind, _ in ds.predicates]
         table(out, names, vectors[mask], adjacency(links, int(mask.sum())))
 
     save()
 
 
-def lift():
-    """How much the citations correlate the positives. No oracle calls."""
-    nodes, edges, _, masks, pools = loaded()
-    out, save = report(RESULTS, "lift")
+def lift(ds):
+    """How much the edges correlate the positives. No oracle calls."""
+    nodes, edges, _, masks, pools = loaded(ds)
+    out, save = report(results(ds), "lift")
 
-    out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
-    out(f"{len(PREDICATES)} predicates labelled by {ORACLE}, strict prompt")
+    out(f"{ds.name}, {len(nodes):,} {ds.noun}, {len(edges):,} edges")
+    out(f"{len(ds.predicates)} predicates labelled by {ORACLE}, strict prompt")
     out()
     out("edge%: of the edges leaving a positive, the share landing on a positive")
     out("lift: edge% over the positive rate, so 1.0x is no correlation")
@@ -300,32 +336,26 @@ def lift():
             f"  {'rate':>6} {'edge%':>6} {'lift':>6} {'nbr+':>6} {'alone':>6}"
             "  predicate"
         )
-        for key, kind, _ in PREDICATES:
+        for key, kind, _ in ds.predicates:
             m = masks[key][mask]
-            pos = np.where(m)[0]
-            degree = sum(len(neighbours[i]) for i in pos)
-            hits = sum(int(m[neighbours[i]].sum()) for i in pos)
-            any_hit = sum(1 for i in pos if m[neighbours[i]].any())
-            alone = sum(1 for i in pos if len(neighbours[i]) == 0)
-            rate = m.mean()
-            edge = hits / degree if degree else 0.0
+            c = correlation(m, neighbours)
             out(
-                f"  {rate:>6.1%} {edge:>6.1%} {edge / rate:>5.1f}x "
-                f"{any_hit / len(pos):>6.1%} {alone / len(pos):>6.1%}"
+                f"  {m.mean():>6.1%} {c['edge']:>6.1%} {c['lift']:>5.1f}x "
+                f"{c['nbr+']:>6.1%} {c['alone']:>6.1%}"
                 f"  {key} {kind}"
             )
 
     save()
 
 
-def cascade():
+def cascade(ds):
     """Oracle calls once the proxy has scored every row, which both orders pay."""
-    nodes, edges, _, masks, pools = loaded()
-    scores = proxy_scores(len(nodes))
+    nodes, edges, _, masks, pools = loaded(ds)
+    scores = proxy_scores(ds, len(nodes))
     vectors = vectors_for(nodes)
-    out, save = report(RESULTS, "cascade")
+    out, save = report(results(ds), "cascade")
 
-    out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
+    out(f"{ds.name}, {len(nodes):,} {ds.noun}, {len(edges):,} edges")
     out(f"calls% is calls over rows, mean and sd of {SEEDS} seeds")
     out(f"proxy is p(yes) from {PROXY}, one call per row and predicate")
     out("both orders pay that, so only the oracle calls below differ")
@@ -337,7 +367,7 @@ def cascade():
         links = subgraph(mask, edges)
         names = [
             (f"{k} {kind}", masks[k][mask], scores[k][mask])
-            for k, kind, _ in PREDICATES
+            for k, kind, _ in ds.predicates
         ]
         table(
             out,
@@ -360,7 +390,7 @@ STEPS = {
 }
 
 if __name__ == "__main__":
-    step = sys.argv[1] if len(sys.argv) > 1 else ""
-    if step not in STEPS:
-        sys.exit(f"usage: run.py [{'|'.join(STEPS)}]")
-    STEPS[step]()
+    args = sys.argv[1:]
+    if len(args) != 2 or args[0] not in DATASETS or args[1] not in STEPS:
+        sys.exit(f"usage: run.py [{'|'.join(DATASETS)}] [{'|'.join(STEPS)}]")
+    STEPS[args[1]](DATASETS[args[0]])

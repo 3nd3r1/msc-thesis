@@ -28,7 +28,7 @@ The two proxy orders sit in their own step, since an 8B call on every row is a c
 ## Data
 
 - Cora, the Graph-COM text attributed copy, which is the LINQS graph plus titles and abstracts, verified to have the same nodes and edges
-- BIRD codebase_community, the Stack Exchange posts and comments, where the edges have to be built from the columns
+- BIRD codebase_community, which is Cross Validated rather than Code Review, where the edges come from the postLinks table
 
 ## Models
 
@@ -37,7 +37,8 @@ The two proxy orders sit in their own step, since an 8B call on every row is a c
 
 ## Steps
 
-Each step is `python run.py <step>` and writes `results/<step>.txt`.
+Each step is `python run.py <dataset> <step>` and writes `results/<dataset>/<step>.txt`.
+Datasets are `cora` and `stack`. Every loader returns rows with a title and a text column plus the edges, so only `classes` is tied to one dataset.
 
 ### 1. Cora classes as predicates
 
@@ -84,7 +85,7 @@ Step `label` and then step `predicates`.
 
 BLUF: links and embeddings beat embeddings alone on 2 of the 6 real predicates at a 90% target and on 3 at 95%, and which ones changes with the target.
 
-Calls to reach 90% recall as a share of the rows, mean of 50 seeds, from `results/predicates.txt`:
+Calls to reach 90% recall as a share of the rows, mean of 50 seeds, from `results/cora/predicates.txt`:
 
 | predicate    | rate | random | embeddings | links | links+embeddings |
 | ------------ | ---- | ------ | ---------- | ----- | ---------------- |
@@ -120,7 +121,7 @@ Also the share of positives with at least one positive neighbour, which grows wi
 
 BLUF: positives sit next to positives on all 6 real predicates, 4.5 to 12.1x above the base rate, and the control is lower but not absent at 3.5x.
 
-From `results/lift.txt`, the pool with junk and repeated texts dropped:
+From `results/cora/lift.txt`, the pool with junk and repeated texts dropped:
 
 | predicate    | rate | edge% | lift  | nbr+  | alone |
 | ------------ | ---- | ----- | ----- | ----- | ----- |
@@ -145,7 +146,7 @@ Both orders pay one small-model call per row, so the column below is oracle call
 
 BLUF: the proxy beats every order in step 2, and link expansion on top of it is worse on every predicate except language at a 95% target.
 
-Calls to reach 90% recall as a share of the rows, from `results/cascade.txt`, the pool with junk and repeated texts dropped:
+Calls to reach 90% recall as a share of the rows, from `results/cora/cascade.txt`, the pool with junk and repeated texts dropped:
 
 | predicate    | rate | proxy | proxy+links |
 | ------------ | ---- | ----- | ----------- |
@@ -169,7 +170,21 @@ proxy+links minus proxy at each target, from the same file:
 | proof        | +6.9 | +9.4 | +8.2 | +7.1 |
 | biology      | +3.8 | +3.8 | +2.2 | +3.5 |
 
-### 5. Ordinary tables
+### 5. Stack Exchange
+
+The pool is the 5,243 Cross Validated questions in the postLinks giant component, 6,460 edges, mean degree 2.46 against Cora's 3.90.
+Over all 42,912 questions the degree is 0.47 and only a quarter have any neighbour, so a random sample would have almost no edges left.
+
+Edge sets to compare:
+
+- postLinks, where a human marked two questions as related
+- same author, 6,295 edges at degree 2.40, which is the entity key the direction note is about
+
+Shared tag edges are out. A tag is a topic label, so they leak any topical predicate the way Cora's classes do.
+
+Predicates are not picked yet.
+
+### 6. Ordinary tables
 
 Generate candidate edges from every non-text column, same value, close in time, or references inside the text.
-Run on All_Beauty with the existing labels, and on the posts and comments of BIRD codebase_community.
+Run on All_Beauty with the existing labels.
