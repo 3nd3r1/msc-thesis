@@ -14,11 +14,12 @@ def unit(features):
     return features / np.maximum(norms, 1e-9)
 
 
-def search(labels, order, vectors, neighbours, seed=0, recall=0.90, proxy=None):
-    """Oracle calls until `recall` of the positives are found."""
+def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=None):
+    """Oracle calls until each of `recalls` of the positives are found, lowest first."""
     rng = np.random.default_rng(seed)
     n = len(labels)
-    target = int(np.ceil(recall * labels.sum()))
+    targets = [int(np.ceil(r * labels.sum())) for r in recalls]
+    hit = []
     tie = rng.random(n)
     link = np.zeros(n)
     similarity = np.zeros(n)
@@ -46,6 +47,8 @@ def search(labels, order, vectors, neighbours, seed=0, recall=0.90, proxy=None):
             found += 1
             similarity += vectors @ vectors[i]
             link[neighbours[i]] += 1
-            if found >= target:
-                return calls
-    return n
+            while len(hit) < len(targets) and found >= targets[len(hit)]:
+                hit.append(calls)
+            if len(hit) == len(targets):
+                return hit
+    return hit + [n] * (len(targets) - len(hit))

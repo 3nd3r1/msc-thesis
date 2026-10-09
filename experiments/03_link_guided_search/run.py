@@ -23,7 +23,7 @@ RESULTS = Path(__file__).resolve().parent / "results"
 LABELS = Path(__file__).resolve().parents[2] / "labels" / "cora"
 
 SEEDS = 50
-RECALL = 0.90
+RECALLS = [0.50, 0.80, 0.90, 0.95]
 ORDERS = ["random", "embeddings", "links", "links+embeddings"]
 CASCADE_ORDERS = ["proxy", "proxy+links"]
 
@@ -78,18 +78,28 @@ def subgraph(keep, edges):
     return index[inside]
 
 
-def table(out, names, vectors, neighbours, orders=ORDERS):
-    out("  calls% +- sd" + "".join(f"{o:>22}" for o in orders))
+def table(out, names, vectors, neighbours, orders=ORDERS, recalls=RECALLS):
+    """One block per recall target. Targets are nested, so one search covers them all."""
+    cells = {}
     for name, labels, proxy in names:
-        line = f"{name:>24} {labels.mean():>5.1%}"
         for order in orders:
-            calls = [
-                search(labels, order, vectors, neighbours, s, RECALL, proxy)
-                for s in range(SEEDS)
-            ]
-            share = np.array(calls) / len(vectors)
-            line += f"   {share.mean():>6.1%}+-{share.std():.1%}"
-        out(line)
+            runs = np.array(
+                [
+                    search(labels, order, vectors, neighbours, s, recalls, proxy)
+                    for s in range(SEEDS)
+                ]
+            ) / len(vectors)
+            cells[name, order] = (runs.mean(axis=0), runs.std(axis=0))
+
+    for j, recall in enumerate(recalls):
+        out(f"  {recall:.0%} recall" + "".join(f"{o:>22}" for o in orders))
+        for name, labels, _ in names:
+            line = f"{name:>24} {labels.mean():>5.1%}"
+            for order in orders:
+                mean, sd = cells[name, order]
+                line += f"   {mean[j]:>6.1%}+-{sd[j]:.1%}"
+            out(line)
+        out()
 
 
 def classes():
@@ -97,14 +107,15 @@ def classes():
     out, save = report(RESULTS, "classes")
 
     out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
-    out(f"calls to {RECALL:.0%} recall, mean of {SEEDS} seeds")
+    recalls = [0.90]
+    out(f"calls to {recalls[0]:.0%} recall, mean of {SEEDS} seeds")
     out()
 
     names = [
         (label, (nodes["label"] == label).to_numpy(), None)
         for label in nodes["label"].value_counts().index
     ]
-    table(out, names, unit(features), adjacency(edges, len(nodes)))
+    table(out, names, unit(features), adjacency(edges, len(nodes)), recalls)
     save()
 
 
@@ -251,7 +262,7 @@ def predicates():
 
     out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
     out(f"{len(PREDICATES)} predicates labelled by {ORACLE}, strict prompt")
-    out(f"calls to {RECALL:.0%} recall, mean of {SEEDS} seeds")
+    out(f"calls% is calls over rows, mean and sd of {SEEDS} seeds")
     out("embeddings are all-MiniLM-L6-v2 sentence vectors, not step 1's word features")
 
     counts = labels.groupby("predicate").size()
@@ -315,7 +326,7 @@ def cascade():
     out, save = report(RESULTS, "cascade")
 
     out(f"cora, {len(nodes):,} papers, {len(edges):,} citations")
-    out(f"calls to {RECALL:.0%} recall, mean of {SEEDS} seeds")
+    out(f"calls% is calls over rows, mean and sd of {SEEDS} seeds")
     out(f"proxy is p(yes) from {PROXY}, one call per row and predicate")
     out("both orders pay that, so only the oracle calls below differ")
     out("proxy+links sends the oracle to the best proxy score among the unasked")
