@@ -7,8 +7,10 @@ For a predicate, does ordering oracle calls by links between rows find the posit
 ## Method
 
 Replay on fully labelled data, so no new oracle calls.
-Each order picks the next row to send to the oracle, and what I measure is the calls needed to find 90% of the positives, per predicate and order, as a share of all rows.
-Lower is better, and random is the reference since it needs about 90% of the rows by construction.
+Each order picks the next row to send to the oracle, and what I measure is the calls needed to find a target share of the positives, per predicate and order, as a share of all rows.
+Lower is better, and random is the reference since it needs about the target share of the rows by construction.
+Targets are 50, 80, 90 and 95% in steps 2 and 4, since links can only matter once the proxy has used up its good rows.
+Above 95% the predicates have too few positives for one more to mean less than a percent of recall.
 Reported as mean and sd over seeds, because the orders break ties at random.
 
 Orders compared:
@@ -80,7 +82,7 @@ Step `label` and then step `predicates`.
 
 #### Result
 
-BLUF: Links and embeddings beat embeddings alone on 2 of the 6 real predicates, markov and language.
+BLUF: links and embeddings beat embeddings alone on 2 of the 6 real predicates at a 90% target and on 3 at 95%, and which ones changes with the target.
 
 Calls to reach 90% recall as a share of the rows, mean of 50 seeds, from `results/predicates.txt`:
 
@@ -93,6 +95,18 @@ Calls to reach 90% recall as a share of the rows, mean of 50 seeds, from `result
 | biology      | 4.8% | 90.1%  | 64.1%      | 83.0% | 64.1%            |
 | proof        | 6.6% | 90.0%  | 74.7%      | 81.8% | 75.0%            |
 | first person | 2.8% | 88.6%  | 90.7%      | 86.6% | 90.7%            |
+
+Links and embeddings minus embeddings at each target, from the same file, so negative means links help:
+
+| predicate    | 50%  | 80%  | 90%  | 95%   |
+| ------------ | ---- | ---- | ---- | ----- |
+| robotics     | +1.7 | +1.4 | +1.9 | -11.5 |
+| markov       | +0.5 | +0.1 | -4.8 | -0.2  |
+| language     | -1.0 | -3.1 | -8.3 | -4.4  |
+| unsupervised | -1.8 | -7.0 | -2.6 | -3.0  |
+| biology      | -5.1 | +1.0 | 0.0  | -8.0  |
+| proof        | +0.3 | +2.6 | +0.3 | +0.5  |
+| first person | -0.4 | +0.3 | 0.0  | 0.0   |
 
 ### 3. How much the citations correlate the positives
 
@@ -129,7 +143,7 @@ Both orders pay one small-model call per row, so the column below is oracle call
 
 #### Result
 
-BLUF: the proxy beats every order in step 2, and link expansion on top of it is worse on 6 of 7 predicates.
+BLUF: the proxy beats every order in step 2, and link expansion on top of it is worse on every predicate except language at a 95% target.
 
 Calls to reach 90% recall as a share of the rows, from `results/cascade.txt`, the pool with junk and repeated texts dropped:
 
@@ -142,6 +156,18 @@ Calls to reach 90% recall as a share of the rows, from `results/cascade.txt`, th
 | first person | 2.8% | 10.3% | 14.8%       |
 | proof        | 6.6% | 11.8% | 20.0%       |
 | biology      | 4.8% | 13.5% | 15.7%       |
+
+proxy+links minus proxy at each target, from the same file:
+
+| predicate    | 50%  | 80%  | 90%  | 95%  |
+| ------------ | ---- | ---- | ---- | ---- |
+| language     | +1.6 | +4.4 | +4.6 | -2.2 |
+| markov       | +2.9 | +4.1 | +3.6 | +4.3 |
+| robotics     | +2.0 | +3.3 | +3.9 | +4.0 |
+| unsupervised | +1.7 | +3.0 | 0.0  | +1.2 |
+| first person | +6.2 | +6.9 | +4.5 | +1.4 |
+| proof        | +6.9 | +9.4 | +8.2 | +7.1 |
+| biology      | +3.8 | +3.8 | +2.2 | +3.5 |
 
 ### 5. Ordinary tables
 
