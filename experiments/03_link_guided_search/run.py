@@ -17,7 +17,14 @@ from llm import ORACLE, PROXY, SERVED, SYSTEM, client, judge, p_yes
 from report import report
 from search import adjacency, search, unit
 
-from data import cora_features, cora_junk, load_cora, load_stack, stack_junk
+from data import (
+    cora_features,
+    cora_junk,
+    load_cora,
+    load_stack,
+    load_stack_author,
+    stack_junk,
+)
 
 
 RESULTS = Path(__file__).resolve().parent / "results"
@@ -70,13 +77,64 @@ CORA_PREDICATES = [
     ),
 ]
 
-STACK_PREDICATES = []
+STACK_PREDICATES = [
+    ("spss", "lexical", "the question mentions SPSS or Stata"),
+    ("rcode", "lexical", "the question includes R code"),
+    (
+        "choose",
+        "high rate",
+        "the question asks which statistical method or test to use",
+    ),
+    (
+        "assumptions",
+        "topical",
+        "the question is about whether an assumption of a statistical method is "
+        "violated",
+    ),
+    (
+        "interaction",
+        "topical",
+        "the question is about an interaction or moderation effect between variables",
+    ),
+    (
+        "interpret",
+        "row local",
+        "the question asks how to interpret output that a statistics program produced",
+    ),
+    (
+        "ownstudy",
+        "author",
+        "the question describes data that the asker collected themselves",
+    ),
+    ("econ", "field", "the question is about data from economics or finance"),
+    (
+        "survey",
+        "field",
+        "the question is about data from a questionnaire or survey of people",
+    ),
+    ("biomed", "field", "the question is about data from biology or medicine"),
+    (
+        "we",
+        "control",
+        "the question is written in the first person plural, using we or our",
+    ),
+]
 
-Dataset = namedtuple("Dataset", "name noun load predicates junk")
+Dataset = namedtuple("Dataset", "name noun load predicates junk labels")
 
 DATASETS = {
-    "cora": Dataset("cora", "papers", load_cora, CORA_PREDICATES, cora_junk),
-    "stack": Dataset("stack", "questions", load_stack, STACK_PREDICATES, stack_junk),
+    "cora": Dataset("cora", "papers", load_cora, CORA_PREDICATES, cora_junk, "cora"),
+    "stack": Dataset(
+        "stack", "questions", load_stack, STACK_PREDICATES, stack_junk, "stack"
+    ),
+    "stack_author": Dataset(
+        "stack_author",
+        "questions",
+        load_stack_author,
+        STACK_PREDICATES,
+        stack_junk,
+        "stack",
+    ),
 }
 
 
@@ -158,7 +216,7 @@ def classes(ds):
 def collect(ds, model, name):
     """Ask `model` every predicate on every row, appending to labels/<ds>/<name>.jsonl."""
     nodes, _ = ds.load()
-    path = LABELS / ds.name / f"{name}.jsonl"
+    path = LABELS / ds.labels / f"{name}.jsonl"
 
     done = set()
     if path.exists():
@@ -243,7 +301,7 @@ def proxy(ds):
 
 def proxy_scores(ds, n):
     """p(yes) per predicate from the proxy, 0 where the proxy has no row."""
-    path = LABELS / ds.name / "proxy.jsonl"
+    path = LABELS / ds.labels / "proxy.jsonl"
     if not path.exists():
         sys.exit(f"no {path}, run: run.py {ds.name} proxy")
     scored = pd.read_json(path, lines=True)
@@ -264,7 +322,7 @@ def loaded(ds):
         sys.exit(f"no predicates for {ds.name} yet")
 
     nodes, edges = ds.load()
-    path = LABELS / ds.name / "labels.jsonl"
+    path = LABELS / ds.labels / "labels.jsonl"
     if not path.exists():
         sys.exit(f"no {path}, run: run.py {ds.name} label")
 
@@ -360,7 +418,9 @@ def cascade(ds):
     out(f"proxy is p(yes) from {PROXY}, one call per row and predicate")
     out("both orders pay that, so only the oracle calls below differ")
     out("proxy+links sends the oracle to the best proxy score among the unasked")
-    out("neighbours of a confirmed positive, and to the global best when there are none")
+    out(
+        "neighbours of a confirmed positive, and to the global best when there are none"
+    )
 
     for title, mask in pools:
         out(f"\n{title}")
