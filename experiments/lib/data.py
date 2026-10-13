@@ -135,6 +135,18 @@ def load_stack():
     return nodes, edges
 
 
+def load_stack_author():
+    """The same questions, with an edge between two asked by the same person."""
+    nodes, _ = load_stack()
+    pairs = set()
+    for group in nodes.groupby("owner").groups.values():
+        g = np.asarray(group)
+        for a in range(len(g)):
+            for b in range(a + 1, len(g)):
+                pairs.add((int(min(g[a], g[b])), int(max(g[a], g[b]))))
+    return nodes, np.array(sorted(pairs))
+
+
 def stack_junk(nodes):
     """Questions with too little text to judge."""
     return pd.DataFrame({"short": nodes.text.str.len() < 200})
