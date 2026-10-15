@@ -1,73 +1,47 @@
 # Entity-aware cascades for semantic filters
 
-## Problem
+Partition rows by an entity key, like the product a review is about, and spend the oracle budget per entity instead of per row, settling an entity's remaining rows from the verdicts already confirmed inside it.
 
-A semantic filter runs an LLM predicate on every row, so a million rows means a million
-calls. A cascade cuts that down. A cheap proxy scores every row, only uncertain rows go to
-the oracle, and the thresholds are calibrated to an accuracy target.
+Set aside after [01](../../experiments/01_entity_correlation) came out a no-go on 2026-10-01.
 
-Cascades score each row on its own text and treat rows as independent. Real rows belong to
-entities, like reviews of one product, and verdicts correlate inside an entity, so once a few
-reviews of a product are confirmed the rest are close to decided. The cascade still pays full
-price for them.
+## Angle
+
+A cascade scores every row on its own text and treats rows as independent.
+Rows belong to entities, like the reviews of one product, and verdicts should correlate inside an entity, so once a few reviews of a product are confirmed the rest are close to decided.
+
+Mechanisms to try were per-entity sampling and voting, neighbour verdicts as a feature of the proxy, and per-entity calibration thresholds.
 
 ## Gap
 
-CSV [@csv] and adaptive Two-Phase [@kimFastLLMBasedSemantic2026] already exploit similarity
-between rows, but they infer the groups from embeddings because they target corpora with no
-schema. Dataframes and SQL already carry entity keys, grouping by them is exact and free, and I
-have not found a method that uses them.
-
-## Idea
-
-Partition rows by an entity key and spend the oracle budget per entity instead of per row,
-then settle an entity's remaining rows from the verdicts already confirmed inside it.
-
-Mechanisms to try:
-
-- per-entity sampling and voting
-- neighbour verdicts as a feature of the proxy
-- per-entity calibration thresholds
-
-Embedding clustering stays as the fallback when there is no useful key. The scope is single
-entity keys, with foreign keys and graph edges left as an extension.
+CSV [@csv] and adaptive Two-Phase [@kimFastLLMBasedSemantic2026] already exploit similarity between rows, but they infer the groups from embeddings because they target corpora with no schema.
+Dataframes and SQL already carry entity keys, grouping by them is exact and free, and I have not found a method that uses them.
 
 ## Research questions
 
-1. How strongly do verdicts correlate inside entities, and how does that compare with
-   embedding clusters?
+1. How strongly do verdicts correlate inside entities, and how does that compare with embedding clusters?
 2. How many oracle calls does entity-aware cascading save at a fixed accuracy target?
 3. Do accuracy guarantees survive when evidence is shared inside an entity?
 4. Can weak grouping be detected early enough that the method never loses to the baselines?
 
 ## Evaluation
 
-Two or three datasets with entity keys, several predicates each. Each dataset gets labelled
-once with the oracle, logprobs recorded, so the later comparisons can run offline.
+Amazon Reviews 2023 All Beauty [@amazonReviews2023], labelled once in [01](../../experiments/01_entity_correlation) so later comparisons run offline.
 
 - Metric: oracle calls at a fixed accuracy target
-- Baselines: full oracle, LOTUS cascade, CSV, Two-Phase
+- Baselines: full oracle, LOTUS cascade [@lotus], CSV, Two-Phase
 - Implementation: extends the LOTUS cascade
 
-## Risks
+## Why it was set aside
 
-- Verdicts may correlate only weakly inside entities.
-- Embedding clusters may already capture the same structure.
-- Entity sizes are long tailed, so most entities are too small to sample and vote on.
+01 answered question 1 and the answer was no.
+Embedding clusters match or beat product identity, and the star rating explains most of what the product key carries.
+02 then replayed CSV from a structured column instead of k-means, and only the two predicates the rating partly defines won.
 
-Experiment 01 measures all three before I commit to the method.
+The question of what information outside a row's own text helps moved to links between rows, in [Link-guided oracle ordering for semantic filters](Link-guided%20oracle%20ordering%20for%20semantic%20filters.md).
 
 ## References
 
 - csv - CSV, clusters rows by embedding and propagates a sampled label
-- kimFastLLMBasedSemantic2026 - adaptive Two-Phase, clustering first, then a trained proxy
+- kimFastLLMBasedSemantic2026 - adaptive Two-Phase, clustering then a trained proxy
 - lotus - LOTUS, semantic operators and the cascade this extends
-- zimmererSemCEBCardinalityEstimation2026 - SemCEB, cardinality estimation benchmark for semantic operators
-- xuBridgingGapCardinality2026 - cardinality estimation for semantic queries on unstructured data
-- urbanSelectivityEstimationSemantic2026 - selectivity estimation for semantic filters on images
-- mangPLOPCostBasedPlacement2026 - PLOP, cost-based placement of semantic operators
-- zhaoLarchLearnedQuery2026 - Larch, learned ordering of semantic predicates
-- russoAbacusCostBasedOptimizer2026 - Abacus, cost-based optimizer for semantic operator systems
-- qiSemaHighperformanceSystem2026 - Sema, system for LLM-based semantic query processing
-- kumarasingheIPDBOptimizingSemantic2026 - iPDB, optimizing semantic SQL queries
-- liuOptimizingLLMQueries2025 - prefix caching and dedup for LLM queries over relational data
+- amazonReviews2023 - Amazon Reviews 2023, McAuley Lab
