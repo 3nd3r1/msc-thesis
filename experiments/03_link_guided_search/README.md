@@ -28,7 +28,11 @@ The two proxy orders sit in their own step, since an 8B call on every row is a c
 ## Data
 
 - Cora, the Graph-COM text attributed copy, which is the LINQS graph plus titles and abstracts, verified to have the same nodes and edges
-- BIRD codebase_community, which is Cross Validated rather than Code Review, where the edges come from the postLinks table
+- Stack Exchange, the Cross Validated dump from BIRD `codebase_community` as the datasets `stack` and `stack_author`, which are 5,243 questions with two edge sets that share the labels, postLinks where a human marked two questions as related at 6,460 edges and same author at 6,295
+
+The pool is the postLinks giant component, mean degree 2.46 against Cora's 3.90.
+Over all 42,912 questions the degree is 0.47 and only a quarter have any neighbour, so a random sample would have almost no edges left.
+Shared tag edges are out. A tag is a topic label, so they leak any topical predicate the way Cora's classes do.
 
 ## Models
 
@@ -38,7 +42,7 @@ The two proxy orders sit in their own step, since an 8B call on every row is a c
 ## Steps
 
 Each step is `python run.py <dataset> <step>` and writes `results/<dataset>/<step>.txt`.
-Datasets are `cora` and `stack`. Every loader returns rows with a title and a text column plus the edges, so only `classes` is tied to one dataset.
+Datasets are `cora`, `stack` and `stack_author`. Every loader returns rows with a title and a text column plus the edges, so only `classes` is tied to one dataset.
 
 ### 1. Cora classes as predicates
 
@@ -62,14 +66,16 @@ Calls to reach 90% recall, as a share of the 2,708 papers, mean of 50 seeds:
 | Reinforcement_Learning | 8.0%  | 89.8%  | 44.7%      | 36.2% | 12.4%            |
 | Rule_Learning          | 6.6%  | 89.7%  | 60.0%      | 38.8% | 37.0%            |
 
-### 2. Cora with an LLM oracle
+### 2. Predicates with an LLM oracle
 
 Step `label` and then step `predicates`.
 
-- `label` makes gets the result of every predicate on every paper from the oracle.
+- `label` gets the verdict of every predicate on every row from the oracle.
 - `predicates` replays the orders on those labels and makes no oracle calls.
 
 #### Predicates
+
+##### Cora
 
 | key          | kind        | claim                                                                  |
 | ------------ | ----------- | ---------------------------------------------------------------------- |
@@ -81,7 +87,25 @@ Step `label` and then step `predicates`.
 | markov       | non-topical | the abstract says the paper uses a Markov model or Markov process      |
 | unsupervised | topical     | the paper is about unsupervised learning or clustering                 |
 
+##### Stack
+
+| key         | role      | claim                                                               |
+| ----------- | --------- | ------------------------------------------------------------------- |
+| spss        | lexical   | the question mentions SPSS or Stata                                 |
+| rcode       | lexical   | the question includes R code                                        |
+| choose      | high rate | the question asks which statistical method or test to use           |
+| assumptions | topical   | the question is about whether an assumption of a method is violated |
+| interaction | topical   | the question is about an interaction or moderation effect           |
+| interpret   | row local | the question asks how to interpret output a statistics program made |
+| ownstudy    | author    | the question describes data that the asker collected themselves     |
+| econ        | field     | the question is about data from economics or finance                |
+| survey      | field     | the question is about data from a questionnaire or survey of people |
+| biomed      | field     | the question is about data from biology or medicine                 |
+| we          | control   | the question is written in the first person plural, using we or our |
+
 #### Result
+
+##### Cora
 
 BLUF: links and embeddings beat embeddings alone on 2 of the 6 real predicates at a 90% target and on 3 at 95%, and which ones changes with the target.
 
@@ -109,7 +133,22 @@ Links and embeddings minus embeddings at each target, from the same file, so neg
 | proof        | +0.3 | +2.6 | +0.3 | +0.5  |
 | first person | -0.4 | +0.3 | 0.0  | 0.0   |
 
-### 3. How much the citations correlate the positives
+##### Stack
+
+BLUF: the four labelled predicates land between 2.7 and 10.4%, close to what the 400 row screen said, so none of them turned out rare enough to be unusable.
+
+Positive rate on the full pool, from `results/stack/labels.txt`, with the screen rate for comparison:
+
+| predicate   | role    | rate  | screen |
+| ----------- | ------- | ----- | ------ |
+| biomed      | field   | 10.4% | 12.0%  |
+| assumptions | topical | 8.8%  | 8.2%   |
+| spss        | lexical | 3.6%  | 4.5%   |
+| we          | control | 2.7%  | 1.8%   |
+
+The replay is not run yet.
+
+### 3. How much the links correlate the positives
 
 Step `lift`
 
@@ -118,6 +157,8 @@ Of the edges leaving a positive the share that land on a positive over the posit
 Also the share of positives with at least one positive neighbour, which grows with degree, and the share with no neighbour at all, which links can never reach.
 
 #### Result
+
+##### Cora
 
 BLUF: positives sit next to positives on all 6 real predicates, 4.5 to 12.1x above the base rate, and the control is lower but not absent at 3.5x.
 
@@ -133,16 +174,34 @@ From `results/cora/lift.txt`, the pool with junk and repeated texts dropped:
 | proof        | 6.6% | 29.7% | 4.5x  | 56.1% | 2.7%  |
 | first person | 2.8% | 9.7%  | 3.5x  | 25.8% | 6.5%  |
 
+##### Stack
+
+BLUF: the two edge sets split by predicate kind, postLinks wins on the topical one and same author on the field and tool ones, but both are far below Cora and over half the positives have no same author neighbour at all.
+
+From `results/stack/lift.txt` and `results/stack_author/lift.txt`, the pool with junk and repeated texts dropped:
+
+| predicate   | rate  | postLinks | author | alone, postLinks | alone, author |
+| ----------- | ----- | --------- | ------ | ---------------- | ------------- |
+| assumptions | 8.7%  | 4.8x      | 2.2x   | 2.8%             | 54.1%         |
+| spss        | 3.7%  | 2.3x      | 4.1x   | 2.8%             | 61.9%         |
+| biomed      | 11.0% | 1.8x      | 2.7x   | 2.6%             | 55.7%         |
+| we          | 2.7%  | 2.2x      | 1.0x   | 3.1%             | 58.8%         |
+
+The control is 2.2x on postLinks, so spss and biomed sit at or below what an uncorrelated predicate gets on that graph.
+On same author the control is 1.0x.
+
 ### 4. Oracle calls under a proxy
 
 Step `proxy` and then step `cascade`.
 
-- `proxy` gets p(yes) on every paper and predicate from the small model.
+- `proxy` gets p(yes) on every row and predicate from the small model.
 - `cascade` replays the proxy order and the proxy with link expansion on top, and makes no oracle calls.
 
 Both orders pay one small-model call per row, so the column below is oracle calls alone.
 
 #### Result
+
+##### Cora
 
 BLUF: the proxy beats every order in step 2, and link expansion on top of it is worse on every predicate except language at a 95% target.
 
@@ -169,22 +228,3 @@ proxy+links minus proxy at each target, from the same file:
 | first person | +6.2 | +6.9 | +4.5 | +1.4 |
 | proof        | +6.9 | +9.4 | +8.2 | +7.1 |
 | biology      | +3.8 | +3.8 | +2.2 | +3.5 |
-
-### 5. Stack Exchange
-
-The pool is the 5,243 Cross Validated questions in the postLinks giant component, 6,460 edges, mean degree 2.46 against Cora's 3.90.
-Over all 42,912 questions the degree is 0.47 and only a quarter have any neighbour, so a random sample would have almost no edges left.
-
-Edge sets to compare:
-
-- postLinks, where a human marked two questions as related
-- same author, 6,295 edges at degree 2.40, which is the entity key the direction note is about
-
-Shared tag edges are out. A tag is a topic label, so they leak any topical predicate the way Cora's classes do.
-
-Predicates are not picked yet.
-
-### 6. Ordinary tables
-
-Generate candidate edges from every non-text column, same value, close in time, or references inside the text.
-Run on All_Beauty with the existing labels.
