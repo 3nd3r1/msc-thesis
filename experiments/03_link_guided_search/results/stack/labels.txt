@@ -1,0 +1,11 @@
+meta-llama/Meta-Llama-3.1-70B-Instruct on 5,243 questions, 26,972 labels
+served by unknown, no calls made this run
+strict prompt, the claim has to be stated explicitly
+
+     yes  mean p   p<.5  predicate
+    3.6%   0.993   0.1%  spss
+    8.8%   0.975   0.3%  assumptions
+   10.4%   0.985   0.1%  biomed
+    2.7%   0.984   0.1%  we
+
+0.0% of labels have no p, logprobs were dropped
