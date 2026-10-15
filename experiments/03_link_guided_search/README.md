@@ -32,7 +32,8 @@ The two proxy orders sit in their own step, since an 8B call on every row is a c
 
 The pool is the postLinks giant component, mean degree 2.46 against Cora's 3.90.
 Over all 42,912 questions the degree is 0.47 and only a quarter have any neighbour, so a random sample would have almost no edges left.
-Shared tag edges are out. A tag is a topic label, so they leak any topical predicate the way Cora's classes do.
+Shared tag edges are out.
+A tag is a topic label, so they leak any topical predicate the way Cora's classes do.
 
 ## Models
 
@@ -42,7 +43,8 @@ Shared tag edges are out. A tag is a topic label, so they leak any topical predi
 ## Steps
 
 Each step is `python run.py <dataset> <step>` and writes `results/<dataset>/<step>.txt`.
-Datasets are `cora`, `stack` and `stack_author`. Every loader returns rows with a title and a text column plus the edges, so only `classes` is tied to one dataset.
+Datasets are `cora`, `stack` and `stack_author`.
+Every loader returns rows with a title and a text column plus the edges, so only `classes` is tied to one dataset.
 
 ### 1. Cora classes as predicates
 
@@ -135,18 +137,32 @@ Links and embeddings minus embeddings at each target, from the same file, so neg
 
 ##### Stack
 
-BLUF: the four labelled predicates land between 2.7 and 10.4%, close to what the 400 row screen said, so none of them turned out rare enough to be unusable.
+BLUF: links and embeddings beat embeddings alone on one predicate out of four, assumptions on postLinks, and same author saves nothing anywhere.
 
-Positive rate on the full pool, from `results/stack/labels.txt`, with the screen rate for comparison:
+Calls to reach 90% recall as a share of the rows, pool with junk and repeated texts dropped, from `results/stack/predicates.txt` and `results/stack_author/predicates.txt`:
 
-| predicate   | role    | rate  | screen |
-| ----------- | ------- | ----- | ------ |
-| biomed      | field   | 10.4% | 12.0%  |
-| assumptions | topical | 8.8%  | 8.2%   |
-| spss        | lexical | 3.6%  | 4.5%   |
-| we          | control | 2.7%  | 1.8%   |
+| predicate   | rate  | random | embeddings | links, postLinks | links+emb, postLinks | links, author | links+emb, author |
+| ----------- | ----- | ------ | ---------- | ---------------- | -------------------- | ------------- | ----------------- |
+| spss        | 3.7%  | 89.8%  | 33.8%      | 88.8%            | 34.2%                | 88.7%         | 32.7%             |
+| assumptions | 8.7%  | 90.0%  | 54.7%      | 83.0%            | 50.7%                | 88.8%         | 56.5%             |
+| biomed      | 11.0% | 89.9%  | 51.8%      | 88.2%            | 53.8%                | 88.2%         | 51.9%             |
+| we          | 2.7%  | 88.8%  | 87.9%      | 88.3%            | 88.2%                | 88.6%         | 88.4%             |
 
-The replay is not run yet.
+Links and embeddings minus embeddings at each target, so negative means links help:
+
+| predicate   | edges     | 50%  | 80%  | 90%  | 95%  |
+| ----------- | --------- | ---- | ---- | ---- | ---- |
+| spss        | postLinks | +2.5 | +2.5 | +0.4 | -1.2 |
+| assumptions | postLinks | +0.6 | -5.4 | -4.0 | 0.0  |
+| biomed      | postLinks | +1.7 | +1.8 | +2.0 | +0.4 |
+| we          | postLinks | +1.7 | +0.3 | +0.3 | +0.3 |
+| spss        | author    | +0.8 | +0.6 | -1.1 | -1.9 |
+| assumptions | author    | +3.1 | -1.5 | +1.8 | +1.7 |
+| biomed      | author    | +0.1 | +0.2 | +0.1 | -0.6 |
+| we          | author    | +1.0 | +0.2 | +0.5 | +0.2 |
+
+Links alone never beats embeddings, on either edge set, on any predicate or target.
+Every same author entry is within one sd of embeddings alone, so the field predicate the two edge sets were built to decide moves on neither.
 
 ### 3. How much the links correlate the positives
 
