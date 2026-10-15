@@ -1,0 +1,21 @@
+stack, 5,243 questions, 6,460 edges
+4 predicates labelled by meta-llama/Meta-Llama-3.1-70B-Instruct, strict prompt
+
+edge%: of the edges leaving a positive, the share landing on a positive
+lift: edge% over the positive rate, so 1.0x is no correlation
+nbr+: positives with at least one positive neighbour, which grows with degree
+alone: positives with no neighbour at all, which links can never reach
+
+all 5,243 rows, 331 junk and 0 repeated texts in the pool
+    rate  edge%   lift   nbr+  alone  predicate
+    3.6%   8.9%   2.5x  18.1%   0.0%  spss lexical
+    8.8%  43.7%   5.0x  54.9%   0.0%  assumptions topical
+   10.4%  19.6%   1.9x  31.4%   0.0%  biomed field
+    2.7%   6.7%   2.5x  12.9%   0.0%  we control
+
+4,912 rows, junk and repeated texts dropped
+    rate  edge%   lift   nbr+  alone  predicate
+    3.7%   8.4%   2.3x  15.5%   2.8%  spss lexical
+    8.7%  41.5%   4.8x  52.5%   2.8%  assumptions topical
+   11.0%  20.1%   1.8x  31.2%   2.6%  biomed field
+    2.7%   5.8%   2.2x   9.9%   3.1%  we control
