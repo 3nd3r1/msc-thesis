@@ -79,39 +79,39 @@ CORA_PREDICATES = [
 
 STACK_PREDICATES = [
     ("spss", "lexical", "the question mentions SPSS or Stata"),
-    # ("rcode", "lexical", "the question includes R code"),
-    # (
-    #     "choose",
-    #     "high rate",
-    #     "the question asks which statistical method or test to use",
-    # ),
+    ("rcode", "lexical", "the question includes R code"),
+    (
+        "choose",
+        "high rate",
+        "the question asks which statistical method or test to use",
+    ),
     (
         "assumptions",
         "topical",
         "the question is about whether an assumption of a statistical method is "
         "violated",
     ),
-    # (
-    #     "interaction",
-    #     "topical",
-    #     "the question is about an interaction or moderation effect between variables",
-    # ),
-    # (
-    #     "interpret",
-    #     "row local",
-    #     "the question asks how to interpret output that a statistics program produced",
-    # ),
-    # (
-    #     "ownstudy",
-    #     "author",
-    #     "the question describes data that the asker collected themselves",
-    # ),
-    # ("econ", "field", "the question is about data from economics or finance"),
-    # (
-    #     "survey",
-    #     "field",
-    #     "the question is about data from a questionnaire or survey of people",
-    # ),
+    (
+        "interaction",
+        "topical",
+        "the question is about an interaction or moderation effect between variables",
+    ),
+    (
+        "interpret",
+        "row local",
+        "the question asks how to interpret output that a statistics program produced",
+    ),
+    (
+        "ownstudy",
+        "author",
+        "the question describes data that the asker collected themselves",
+    ),
+    ("econ", "field", "the question is about data from economics or finance"),
+    (
+        "survey",
+        "field",
+        "the question is about data from a questionnaire or survey of people",
+    ),
     ("biomed", "field", "the question is about data from biology or medicine"),
     (
         "we",
