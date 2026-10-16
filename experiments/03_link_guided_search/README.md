@@ -137,32 +137,52 @@ Links and embeddings minus embeddings at each target, from the same file, so neg
 
 ##### Stack
 
-BLUF: links and embeddings beat embeddings alone on one predicate out of four, assumptions on postLinks, and same author saves nothing anywhere.
+BLUF: links and embeddings beat embeddings alone on 3 of the 10 real predicates on postLinks, assumptions, rcode and econ, and on none of them at every target.
 
-Calls to reach 90% recall as a share of the rows, pool with junk and repeated texts dropped, from `results/stack/predicates.txt` and `results/stack_author/predicates.txt`:
+Calls to reach 90% recall as a share of the rows, postLinks edges, pool with junk and repeated texts dropped, from `results/stack/predicates.txt`:
 
-| predicate   | rate  | random | embeddings | links, postLinks | links+emb, postLinks | links, author | links+emb, author |
-| ----------- | ----- | ------ | ---------- | ---------------- | -------------------- | ------------- | ----------------- |
-| spss        | 3.7%  | 89.8%  | 33.8%      | 88.8%            | 34.2%                | 88.7%         | 32.7%             |
-| assumptions | 8.7%  | 90.0%  | 54.7%      | 83.0%            | 50.7%                | 88.8%         | 56.5%             |
-| biomed      | 11.0% | 89.9%  | 51.8%      | 88.2%            | 53.8%                | 88.2%         | 51.9%             |
-| we          | 2.7%  | 88.8%  | 87.9%      | 88.3%            | 88.2%                | 88.6%         | 88.4%             |
+| predicate   | rate  | random | embeddings | links | links+embeddings |
+| ----------- | ----- | ------ | ---------- | ----- | ---------------- |
+| spss        | 3.7%  | 89.8%  | 33.8%      | 88.8% | 34.2%            |
+| rcode       | 12.5% | 89.8%  | 38.2%      | 85.6% | 37.9%            |
+| choose      | 13.7% | 90.1%  | 38.5%      | 83.5% | 41.0%            |
+| assumptions | 8.7%  | 90.0%  | 54.7%      | 83.0% | 50.7%            |
+| interaction | 3.2%  | 89.3%  | 14.8%      | 84.2% | 14.4%            |
+| interpret   | 10.4% | 89.6%  | 30.5%      | 84.0% | 32.5%            |
+| ownstudy    | 5.8%  | 90.0%  | 62.4%      | 88.9% | 61.9%            |
+| econ        | 7.0%  | 89.5%  | 60.0%      | 87.8% | 59.4%            |
+| survey      | 9.3%  | 89.7%  | 40.0%      | 84.0% | 39.8%            |
+| biomed      | 11.0% | 89.9%  | 51.8%      | 88.2% | 53.8%            |
+| we          | 2.7%  | 88.8%  | 87.9%      | 88.3% | 88.2%            |
 
 Links and embeddings minus embeddings at each target, so negative means links help:
 
-| predicate   | edges     | 50%  | 80%  | 90%  | 95%  |
-| ----------- | --------- | ---- | ---- | ---- | ---- |
-| spss        | postLinks | +2.5 | +2.5 | +0.4 | -1.2 |
-| assumptions | postLinks | +0.6 | -5.4 | -4.0 | 0.0  |
-| biomed      | postLinks | +1.7 | +1.8 | +2.0 | +0.4 |
-| we          | postLinks | +1.7 | +0.3 | +0.3 | +0.3 |
-| spss        | author    | +0.8 | +0.6 | -1.1 | -1.9 |
-| assumptions | author    | +3.1 | -1.5 | +1.8 | +1.7 |
-| biomed      | author    | +0.1 | +0.2 | +0.1 | -0.6 |
-| we          | author    | +1.0 | +0.2 | +0.5 | +0.2 |
+| predicate   | 50%  | 80%  | 90%  | 95%  |
+| ----------- | ---- | ---- | ---- | ---- |
+| spss        | +2.5 | +2.5 | +0.4 | -1.2 |
+| rcode       | +3.1 | +4.2 | -0.3 | -6.7 |
+| choose      | +2.5 | +1.0 | +2.5 | +1.1 |
+| assumptions | +0.6 | -5.4 | -4.0 | 0.0  |
+| interaction | +0.7 | +0.3 | -0.4 | -0.3 |
+| interpret   | +2.2 | +2.7 | +2.0 | +1.0 |
+| ownstudy    | +1.5 | -0.5 | -0.5 | +0.3 |
+| econ        | +0.2 | -3.3 | -0.6 | -2.7 |
+| survey      | +1.4 | +0.6 | -0.2 | +1.7 |
+| biomed      | +1.7 | +1.8 | +2.0 | +0.4 |
+| we          | +1.7 | +0.3 | +0.3 | +0.3 |
 
-Links alone never beats embeddings, on either edge set, on any predicate or target.
-Every same author entry is within one sd of embeddings alone, so the field predicate the two edge sets were built to decide moves on neither.
+Links alone never beats embeddings on any predicate or target.
+
+Same author, from `results/stack_author/predicates.txt`, is still the 4 predicate run:
+
+| predicate   | 50%  | 80%  | 90%  | 95%  |
+| ----------- | ---- | ---- | ---- | ---- |
+| spss        | +0.8 | +0.6 | -1.1 | -1.9 |
+| assumptions | +3.1 | -1.5 | +1.8 | +1.7 |
+| biomed      | +0.1 | +0.2 | +0.1 | -0.6 |
+| we          | +1.0 | +0.2 | +0.5 | +0.2 |
+
+Every same author entry is within one sd of embeddings alone.
 
 ### 3. How much the links correlate the positives
 
