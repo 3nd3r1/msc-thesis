@@ -4,7 +4,9 @@ MSc thesis, computer science, University of Helsinki. Supervised by Prof. Jiahen
 
 ## Research questions
 
-TODO
+- RQ1: Which kinds of semantic predicates correlate along links between rows, and how strongly?
+- RQ2: When they do, does ordering LLM calls by links reach a recall target in fewer calls than ordering by embeddings or by a small-model score?
+- RQ3: Can the system tell cheaply whether links will help, and fall back to the default order when they will not?
 
 ## Links
 
