@@ -212,19 +212,28 @@ From `results/cora/lift.txt`, the pool with junk and repeated texts dropped:
 
 ##### Stack
 
-BLUF: the two edge sets split by predicate kind, postLinks wins on the topical one and same author on the field and tool ones, but both are far below Cora and over half the positives have no same author neighbour at all.
+BLUF: the control sits mid table on postLinks at 2.2x and only interaction, assumptions and survey clear it, while on same author the control is 1.0x and the field and tool predicates correlate but 44 to 65% of positives have no neighbour at all.
 
-From `results/stack/lift.txt` and `results/stack_author/lift.txt`, the pool with junk and repeated texts dropped:
+From `results/stack/lift.txt` and `results/stack_author/lift.txt`, the pool with junk and repeated texts dropped, sorted by postLinks:
 
 | predicate   | rate  | postLinks | author | alone, postLinks | alone, author |
 | ----------- | ----- | --------- | ------ | ---------------- | ------------- |
+| interaction | 3.2%  | 10.2x     | 3.0x   | 6.3%             | 58.9%         |
 | assumptions | 8.7%  | 4.8x      | 2.2x   | 2.8%             | 54.1%         |
+| survey      | 9.3%  | 4.1x      | 3.7x   | 1.8%             | 59.4%         |
+| interpret   | 10.4% | 3.4x      | 1.6x   | 2.9%             | 57.1%         |
+| choose      | 13.7% | 2.8x      | 1.2x   | 3.0%             | 59.9%         |
+| rcode       | 12.5% | 2.4x      | 3.3x   | 2.0%             | 44.5%         |
 | spss        | 3.7%  | 2.3x      | 4.1x   | 2.8%             | 61.9%         |
-| biomed      | 11.0% | 1.8x      | 2.7x   | 2.6%             | 55.7%         |
+| econ        | 7.0%  | 2.3x      | 3.2x   | 5.5%             | 60.3%         |
 | we          | 2.7%  | 2.2x      | 1.0x   | 3.1%             | 58.8%         |
+| biomed      | 11.0% | 1.8x      | 2.7x   | 2.6%             | 55.7%         |
+| ownstudy    | 5.8%  | 1.6x      | 2.4x   | 3.8%             | 64.8%         |
 
-The control is 2.2x on postLinks, so spss and biomed sit at or below what an uncorrelated predicate gets on that graph.
-On same author the control is 1.0x.
+Six of the eleven postLinks lifts are at or below the control.
+Cora's weakest real predicate is 4.5x against a 3.5x control, so only interaction stands clear of its own control by that margin.
+Lift does not order the step 2 winners.
+interaction has the highest lift here and gains nothing, and rcode and econ win there while sitting at the control.
 
 ### 4. Oracle calls under a proxy
 
