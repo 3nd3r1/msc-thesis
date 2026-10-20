@@ -177,16 +177,24 @@ Links and embeddings minus embeddings at each target, so negative means links he
 
 Links alone never beats embeddings on any predicate or target.
 
-Same author, from `results/stack_author/predicates.txt`, is still the 4 predicate run:
+Same author, from `results/stack_author/predicates.txt`:
 
 | predicate   | 50%  | 80%  | 90%  | 95%  |
 | ----------- | ---- | ---- | ---- | ---- |
 | spss        | +0.8 | +0.6 | -1.1 | -1.9 |
+| rcode       | +1.6 | +0.6 | -0.1 | -3.9 |
+| choose      | +3.6 | +3.3 | +3.2 | +2.8 |
 | assumptions | +3.1 | -1.5 | +1.8 | +1.7 |
+| interaction | +2.7 | +3.4 | +3.4 | +2.9 |
+| interpret   | +4.0 | +3.9 | +3.9 | +3.3 |
+| ownstudy    | +0.3 | -0.5 | -1.2 | +0.6 |
+| econ        | -1.7 | -3.2 | -0.1 | -1.5 |
+| survey      | +1.7 | +2.0 | +1.6 | +0.8 |
 | biomed      | +0.1 | +0.2 | +0.1 | -0.6 |
 | we          | +1.0 | +0.2 | +0.5 | +0.2 |
 
-Every same author entry is within one sd of embeddings alone.
+econ is the only predicate negative at every target, and it clears one sd at 80 and 95%.
+The other entries that clear one sd are ownstudy at 90% and spss and rcode at 95%.
 
 ### 3. How much the links correlate the positives
 
