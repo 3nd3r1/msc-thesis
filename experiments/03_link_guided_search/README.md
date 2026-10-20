@@ -19,10 +19,14 @@ Orders compared:
 - embedding similarity
 - link expansion from confirmed positives
 - links and embeddings together, which in practice means links first and similarity as the tiebreak, since a confirmed neighbour counts 1 and a cosine is about 0.2
+- positive minus negative confirmed neighbours, since the three orders above drop every negative the oracle returns
+- `blend a`, which is `a * (positive - negative neighbours) + mean cosine`, for a in 1.0, 0.3 and 0.1, so the two signals sit on one scale instead of links deciding
 - small-LLM proxy score, the LOTUS and BARGAIN way
 - the proxy score with link expansion on top
 
 Every order starts with no labels, so the first positive is found at random and only then do links and similarity have anything to point at.
+`blend 1.0` isolates the negatives and `blend 0.3` and `blend 0.1` isolate the scaling, so each order differs from the one above it by one thing.
+With no edges `blend 1.0` is the same order as links and embeddings together.
 The two proxy orders sit in their own step, since an 8B call on every row is a cost the others never pay, and comparing them against each other holds it fixed.
 
 ## Data
