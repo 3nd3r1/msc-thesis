@@ -21,7 +21,8 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
     targets = [int(np.ceil(r * labels.sum())) for r in recalls]
     hit = []
     tie = rng.random(n)
-    link = np.zeros(n)
+    pos = np.zeros(n)
+    neg = np.zeros(n)
     similarity = np.zeros(n)
     prior = np.zeros(n) if proxy is None else proxy
     asked = np.zeros(n, bool)
@@ -29,16 +30,19 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
 
     for calls in range(1, n + 1):
         mean = similarity / max(found, 1)
+        # Lazy, so one search evaluates one order rather than all of them.
         score = {
-            "random": tie,
-            "embeddings": mean,
-            "links": link,
-            "links+embeddings": link + mean,
-            "proxy": prior,
+            "random": lambda: tie,
+            "embeddings": lambda: mean,
+            "links": lambda: pos,
+            "links+embeddings": lambda: pos + mean,
+            "links+-": lambda: pos - neg,
+            "proxy": lambda: prior,
             # A neighbour of a confirmed positive outranks every row that is not
             # one, and the proxy orders within each of the two sets.
-            "proxy+links": prior + 2.0 * (link > 0),
-        }[order] + 1e-9 * tie
+            "proxy+links": lambda: prior + 2.0 * (pos > 0),
+        }.get(order, lambda: float(order.split()[1]) * (pos - neg) + mean)()
+        score = score + 1e-9 * tie
         score[asked] = -np.inf
 
         i = int(np.argmax(score))
@@ -46,9 +50,11 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
         if labels[i]:
             found += 1
             similarity += vectors @ vectors[i]
-            link[neighbours[i]] += 1
+            pos[neighbours[i]] += 1
             while len(hit) < len(targets) and found >= targets[len(hit)]:
                 hit.append(calls)
             if len(hit) == len(targets):
                 return hit
+        else:
+            neg[neighbours[i]] += 1
     return hit + [n] * (len(targets) - len(hit))

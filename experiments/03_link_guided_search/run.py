@@ -32,7 +32,10 @@ LABELS = Path(__file__).resolve().parents[2] / "labels"
 
 SEEDS = 50
 RECALLS = [0.50, 0.80, 0.90, 0.95]
-ORDERS = ["random", "embeddings", "links", "links+embeddings"]
+BLENDS = (1.0, 0.3, 0.1)
+ORDERS = ["random", "embeddings", "links", "links+embeddings", "links+-"] + [
+    f"blend {a}" for a in BLENDS
+]
 CASCADE_ORDERS = ["proxy", "proxy+links"]
 
 WORKERS = 24
