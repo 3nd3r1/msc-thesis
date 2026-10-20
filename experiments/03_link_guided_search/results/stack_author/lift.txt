@@ -1,5 +1,5 @@
 stack_author, 5,243 questions, 6,295 edges
-4 predicates labelled by meta-llama/Meta-Llama-3.1-70B-Instruct, strict prompt
+11 predicates labelled by meta-llama/Meta-Llama-3.1-70B-Instruct, strict prompt
 
 edge%: of the edges leaving a positive, the share landing on a positive
 lift: edge% over the positive rate, so 1.0x is no correlation
@@ -9,13 +9,27 @@ alone: positives with no neighbour at all, which links can never reach
 all 5,243 rows, 331 junk and 0 repeated texts in the pool
     rate  edge%   lift   nbr+  alone  predicate
     3.6%  15.1%   4.2x  16.5%  60.1%  spss lexical
+   11.7%  39.9%   3.4x  38.6%  44.0%  rcode lexical
+   13.5%  17.5%   1.3x  18.6%  59.2%  choose high rate
     8.8%  20.1%   2.3x  22.8%  53.1%  assumptions topical
+    3.1%   9.8%   3.1x  14.1%  58.9%  interaction topical
+   10.0%  16.0%   1.6x  18.7%  55.6%  interpret row local
+    5.5%  13.7%   2.5x  12.8%  64.9%  ownstudy author
+    6.8%  22.5%   3.3x  21.4%  59.2%  econ field
+    8.9%  33.9%   3.8x  21.7%  59.8%  survey field
    10.4%  28.8%   2.8x  26.5%  54.4%  biomed field
     2.7%   3.2%   1.2x   5.7%  59.3%  we control
 
 4,912 rows, junk and repeated texts dropped
     rate  edge%   lift   nbr+  alone  predicate
     3.7%  15.1%   4.1x  16.6%  61.9%  spss lexical
+   12.5%  41.5%   3.3x  38.8%  44.5%  rcode lexical
+   13.7%  16.7%   1.2x  18.1%  59.9%  choose high rate
     8.7%  18.9%   2.2x  21.3%  54.1%  assumptions topical
+    3.2%   9.7%   3.0x  13.3%  58.9%  interaction topical
+   10.4%  16.5%   1.6x  18.0%  57.1%  interpret row local
+    5.8%  14.2%   2.4x  12.9%  64.8%  ownstudy author
+    7.0%  22.6%   3.2x  21.3%  60.3%  econ field
+    9.3%  34.6%   3.7x  22.1%  59.4%  survey field
    11.0%  30.1%   2.7x  26.2%  55.7%  biomed field
     2.7%   2.7%   1.0x   4.6%  58.8%  we control
