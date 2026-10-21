@@ -1,9 +1,17 @@
 import json
+import os
 import sys
 import time
 from collections import namedtuple
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from multiprocessing import get_context
 from pathlib import Path
+
+
+# One BLAS thread per process, set before numpy loads. Without it the workers
+# below each start a thread team and fight over the cores, 20x slower.
+for _var in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
+    os.environ.setdefault(_var, "1")
 
 import numpy as np
 import pandas as pd
@@ -40,6 +48,7 @@ CASCADE_ORDERS = ["proxy", "proxy+links"]
 
 WORKERS = 24
 RETRIES = 8
+SEARCHERS = os.cpu_count()
 
 STRICT = SYSTEM + (
     "\nAnswer True only if the context states the claim explicitly, "
@@ -163,26 +172,46 @@ def subgraph(keep, edges):
     return index[inside]
 
 
+SHARED = {}
+
+
+def one(job):
+    """One search, in a worker. Fork hands it SHARED, so no job carries the data."""
+    k, order, seed = job
+    _, labels, proxy = SHARED["names"][k]
+    return search(
+        labels,
+        order,
+        SHARED["vectors"],
+        SHARED["neighbours"],
+        seed,
+        SHARED["recalls"],
+        proxy,
+    )
+
+
 def table(out, names, vectors, neighbours, orders=ORDERS, recalls=RECALLS):
     """One block per recall target. Targets are nested, so one search covers them all."""
-    cells = {}
-    for name, labels, proxy in names:
-        for order in orders:
-            runs = np.array(
-                [
-                    search(labels, order, vectors, neighbours, s, recalls, proxy)
-                    for s in range(SEEDS)
-                ]
-            ) / len(vectors)
-            cells[name, order] = (runs.mean(axis=0), runs.std(axis=0))
+    jobs = [(k, o, s) for k in range(len(names)) for o in orders for s in range(SEEDS)]
+    SHARED.update(names=names, vectors=vectors, neighbours=neighbours, recalls=recalls)
+    hits = []
+    with ProcessPoolExecutor(SEARCHERS, mp_context=get_context("fork")) as pool:
+        for n, hit in enumerate(pool.map(one, jobs, chunksize=1), 1):
+            hits.append(hit)
+            if n % 200 == 0:
+                print(f"  {n:,}/{len(jobs):,} searches")
+
+    calls = np.array(hits, float).reshape(
+        len(names), len(orders), SEEDS, len(recalls)
+    ) / len(vectors)
 
     for j, recall in enumerate(recalls):
         out(f"  {recall:.0%} recall" + "".join(f"{o:>22}" for o in orders))
-        for name, labels, _ in names:
+        for k, (name, labels, _) in enumerate(names):
             line = f"{name:>24} {labels.mean():>5.1%}"
-            for order in orders:
-                mean, sd = cells[name, order]
-                line += f"   {mean[j]:>6.1%}+-{sd[j]:.1%}"
+            for i, order in enumerate(orders):
+                runs = calls[k, i, :, j]
+                line += f"   {runs.mean():>6.1%}+-{runs.std():.1%}"
             out(line)
         out()
 
@@ -212,7 +241,13 @@ def classes(ds):
         (label, (nodes["label"] == label).to_numpy(), None)
         for label in nodes["label"].value_counts().index
     ]
-    table(out, names, unit(cora_features()), adjacency(edges, len(nodes)), recalls)
+    table(
+        out,
+        names,
+        unit(cora_features()),
+        adjacency(edges, len(nodes)),
+        recalls=recalls,
+    )
     save()
 
 
