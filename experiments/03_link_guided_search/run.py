@@ -49,6 +49,8 @@ CASCADE_ORDERS = ["proxy", "proxy+links"]
 WORKERS = 24
 RETRIES = 8
 SEARCHERS = os.cpu_count()
+FOLDS = 5
+SPLITS = 10
 
 STRICT = SYSTEM + (
     "\nAnswer True only if the context states the claim explicitly, "
@@ -412,6 +414,56 @@ def predicates(ds):
     save()
 
 
+def ranked(scores, labels, recalls):
+    """Calls to each recall target when the rows go to the oracle in score order."""
+    found = np.cumsum(labels[np.argsort(-scores)])
+    targets = [int(np.ceil(r * labels.sum())) for r in recalls]
+    return [int(np.searchsorted(found, t)) + 1 for t in targets]
+
+
+def ceiling(ds):
+    """What a learned order converges to once it has every label. No oracle calls."""
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import StratifiedKFold
+
+    nodes, _, _, masks, pools = loaded(ds)
+    vectors = vectors_for(nodes)
+    out, save = report(results(ds), "ceiling")
+
+    out(f"{ds.name}, {len(nodes):,} {ds.noun}")
+    out(f"{len(ds.predicates)} predicates labelled by {ORACLE}, strict prompt")
+    out(f"calls% is calls over rows, mean and sd of {SPLITS} fold splits")
+    out(f"logistic regression on the embeddings, {FOLDS} folds, scored out of fold")
+    out("it trains on every label, so no order that learns from verdicts can do better")
+
+    for title, mask in pools:
+        out(f"\n{title}")
+        v = vectors[mask]
+        out(
+            f"  {'rate':>6}"
+            + "".join(f"{r:>15.0%}" for r in RECALLS)
+            + "  predicate"
+        )
+        for key, kind, _ in ds.predicates:
+            labels = masks[key][mask]
+            runs = []
+            for seed in range(SPLITS):
+                score = np.zeros(len(labels))
+                folds = StratifiedKFold(FOLDS, shuffle=True, random_state=seed)
+                for train, test in folds.split(v, labels):
+                    fit = LogisticRegression(max_iter=1000)
+                    fit.fit(v[train], labels[train])
+                    score[test] = fit.decision_function(v[test])
+                runs.append(ranked(score, labels, RECALLS))
+            runs = np.array(runs) / len(labels)
+            line = f"  {labels.mean():>6.1%}"
+            for j in range(len(RECALLS)):
+                line += f"   {runs[:, j].mean():>6.1%}+-{runs[:, j].std():.1%}"
+            out(line + f"  {key} {kind}")
+
+    save()
+
+
 def lift(ds):
     """How much the edges correlate the positives. No oracle calls."""
     nodes, edges, _, masks, pools = loaded(ds)
@@ -484,6 +536,7 @@ STEPS = {
     "proxy": proxy,
     "predicates": predicates,
     "lift": lift,
+    "ceiling": ceiling,
     "cascade": cascade,
 }
 
