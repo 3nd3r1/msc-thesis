@@ -288,3 +288,41 @@ proxy+links minus proxy at each target, from the same file:
 | first person | +6.2 | +6.9 | +4.5 | +1.4 |
 | proof        | +6.9 | +9.4 | +8.2 | +7.1 |
 | biology      | +3.8 | +3.8 | +2.2 | +3.5 |
+
+##### Stack
+
+BLUF: the proxy beats every order in step 2 on all 11 predicates at every target, and link expansion on top of it is worse except on assumptions and econ at a 95% target.
+
+Calls to reach 90% recall as a share of the rows, from `results/stack/cascade.txt`, the pool with junk and repeated texts dropped:
+
+| predicate   | rate  | proxy | proxy+links |
+| ----------- | ----- | ----- | ----------- |
+| interaction | 3.2%  | 4.7%  | 7.1%        |
+| spss        | 3.7%  | 6.0%  | 11.5%       |
+| rcode       | 12.5% | 12.2% | 24.5%       |
+| biomed      | 11.0% | 22.8% | 28.5%       |
+| interpret   | 10.4% | 22.9% | 27.7%       |
+| survey      | 9.3%  | 23.7% | 26.6%       |
+| assumptions | 8.7%  | 25.4% | 25.4%       |
+| econ        | 7.0%  | 25.5% | 29.9%       |
+| ownstudy    | 5.8%  | 26.0% | 29.5%       |
+| we          | 2.7%  | 26.4% | 26.5%       |
+| choose      | 13.7% | 27.6% | 32.5%       |
+
+proxy+links minus proxy at each target, from the same file:
+
+| predicate   | 50%  | 80%   | 90%   | 95%   |
+| ----------- | ---- | ----- | ----- | ----- |
+| spss        | +3.3 | +5.1  | +5.5  | +5.3  |
+| rcode       | +7.1 | +11.0 | +12.3 | +12.4 |
+| choose      | +5.5 | +6.1  | +4.9  | +3.4  |
+| assumptions | +2.3 | +1.3  | 0.0   | -4.2  |
+| interaction | +1.3 | +2.1  | +2.4  | +2.9  |
+| interpret   | +4.4 | +5.2  | +4.8  | +4.1  |
+| ownstudy    | +4.3 | +4.1  | +3.5  | +1.7  |
+| econ        | +4.2 | +5.2  | +4.4  | -0.4  |
+| survey      | +3.2 | +3.0  | +2.9  | +1.0  |
+| biomed      | +6.8 | +9.6  | +5.7  | +5.1  |
+| we          | +2.1 | +2.6  | +0.1  | +3.5  |
+
+Both orders are deterministic once the proxy has scored the rows, so the sd is zero and the seeds buy nothing in this step.
