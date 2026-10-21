@@ -34,7 +34,7 @@ The classifier then learns per predicate whether links matter, which is the fall
 Cheap to test, one new order in 03 replayed on the existing labels.
 
 This is continuous active learning from e-discovery and systematic review screening, with an LLM as the reviewer.
-LOTUS and BARGAIN use a fixed proxy, CSV trains nothing during the query, and adaptive Two-Phase trains once and targets accuracy.
+SemViews already does it for `sem_filter`, see below.
 
 ## Trick 2, remember other predicates
 
@@ -52,9 +52,17 @@ Pitch: semantic operators made LLM screening declarative but took their ordering
 The fields that have done recall targeted screening for a decade learn from every verdict and know when to stop.
 The thesis brings that loop into `sem_filter`, and the graph becomes one optional feature.
 
+## SemViews covers both tricks
+
+Read on 2026-10-21, Hassanzadeh and Subramanian, IBM, arXiv 2610.12768, posted Oct 8 2026.
+Its CertifiedFilter fits a logistic score on an embedding projection, the helper score and past predicates' labels, then labels the rows closest to 0.5, refits and replans in rounds.
+That is trick 1 and trick 2 in one operator, built as a LOTUS optimizer.
+It then certifies precision and recall with fresh stratified samples, so a useless feature costs calls but never accuracy.
+It leaves open links between rows, joins and ranking, real tables of millions of rows, and it cites nothing from technology assisted review.
+Its certification floor means a rare predicate on a table of a few thousand rows costs most of exact evaluation whatever the score, which the calls to recall metric in 03 does not see.
+
 ## Risks
 
-- SemViews, arXiv 2610.12768, refines its order with the labels it pays for and reuses labels from earlier queries as views. Read it first, it may already cover both tricks.
 - The proxy is already a high bar, step 4 of [03](../../experiments/03_link_guided_search). A tie on topical predicates and a win on the non topical ones would still be a result.
 
 Related: [Structure outside the row](Structure%20outside%20the%20row.md), [Oracle quality](Oracle%20quality.md), [Link-guided oracle ordering for semantic filters](../Directions/Link-guided%20oracle%20ordering%20for%20semantic%20filters.md).
