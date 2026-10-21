@@ -141,7 +141,7 @@ Links and embeddings minus embeddings at each target, from the same file, so neg
 
 ##### Stack
 
-BLUF: links and embeddings beat embeddings alone on 3 of the 10 real predicates on postLinks, assumptions, rcode and econ, and on none of them at every target.
+BLUF: links and embeddings beat embeddings alone on 3 of the 10 real predicates on postLinks, assumptions, rcode and econ, and on none of them at every target, and putting the two signals on one scale never beats embeddings on postLinks and beats it only on the control on same author.
 
 Calls to reach 90% recall as a share of the rows, postLinks edges, pool with junk and repeated texts dropped, from `results/stack/predicates.txt`:
 
@@ -176,6 +176,7 @@ Links and embeddings minus embeddings at each target, so negative means links he
 | we          | +1.7 | +0.3 | +0.3 | +0.3 |
 
 Links alone never beats embeddings on any predicate or target.
+`blend 0.1`, the best of the three blends and the smallest a in the grid, loses in 43 of the 44 postLinks cells, by +0.1 to +42.9 points.
 
 Same author, from `results/stack_author/predicates.txt`:
 
@@ -195,6 +196,8 @@ Same author, from `results/stack_author/predicates.txt`:
 
 econ is the only predicate negative at every target, and it clears one sd at 80 and 95%.
 The other entries that clear one sd are ownstudy at 90% and spss and rcode at 95%.
+
+On same author `blend 0.1` clears one sd only on we at 80 and 90% and on biomed at 50%, so the predicate it helps most is the control.
 
 ### 3. How much the links correlate the positives
 
