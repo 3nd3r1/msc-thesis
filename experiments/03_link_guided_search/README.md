@@ -291,7 +291,7 @@ proxy+links minus proxy at each target, from the same file:
 
 ##### Stack
 
-BLUF: the proxy beats every order in step 2 on all 11 predicates at every target, and link expansion on top of it is worse except on assumptions and econ at a 95% target.
+BLUF: the proxy beats every order in step 2 on all 11 predicates at every target, and link expansion on top of it helps in only 2 of the 44 cells on each edge set.
 
 Calls to reach 90% recall as a share of the rows, from `results/stack/cascade.txt`, the pool with junk and repeated texts dropped:
 
@@ -325,4 +325,21 @@ proxy+links minus proxy at each target, from the same file:
 | biomed      | +6.8 | +9.6  | +5.7  | +5.1  |
 | we          | +2.1 | +2.6  | +0.1  | +3.5  |
 
+Same author, from `results/stack_author/cascade.txt`:
+
+| predicate   | 50%  | 80%  | 90%  | 95%  |
+| ----------- | ---- | ---- | ---- | ---- |
+| spss        | +1.3 | +2.7 | +2.6 | +0.8 |
+| rcode       | +4.5 | +6.9 | +7.8 | +7.9 |
+| choose      | +4.8 | +6.2 | +5.1 | +6.3 |
+| assumptions | +3.7 | +6.1 | +5.5 | +0.3 |
+| interaction | +2.7 | +3.7 | +4.6 | +4.6 |
+| interpret   | +3.7 | +5.0 | +4.9 | +4.6 |
+| ownstudy    | +1.9 | +1.8 | +0.2 | +2.0 |
+| econ        | +2.6 | +3.3 | +3.0 | -2.4 |
+| survey      | +2.6 | +1.8 | +0.7 | +0.3 |
+| biomed      | +3.2 | +4.1 | +2.3 | +3.0 |
+| we          | +2.0 | +2.9 | -0.9 | +2.2 |
+
+The proxy column is the same on both edge sets, since the two datasets share the labels and the proxy never reads an edge.
 Both orders are deterministic once the proxy has scored the rows, so the sd is zero and the seeds buy nothing in this step.
