@@ -1,0 +1,18 @@
+meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo on 5,243 questions, 57,672 labels
+served by meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
+strict prompt, the claim has to be stated explicitly
+
+     yes  mean p   p<.5  predicate
+    1.0%   0.996   0.0%  spss
+   16.4%   0.970   0.3%  rcode
+    4.6%   0.966   0.3%  choose
+    9.8%   0.922   0.8%  assumptions
+    4.0%   0.988   0.2%  interaction
+   10.2%   0.944   0.6%  interpret
+    8.7%   0.953   0.4%  ownstudy
+    6.5%   0.969   0.3%  econ
+    8.2%   0.973   0.3%  survey
+    8.8%   0.967   0.5%  biomed
+    4.3%   0.968   0.3%  we
+
+0.0% of labels have no p, logprobs were dropped
