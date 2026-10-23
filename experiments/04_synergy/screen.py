@@ -2,6 +2,7 @@
 
 import csv
 import json
+import os
 import sys
 import time
 import urllib.parse
@@ -33,7 +34,8 @@ def chunk(ids):
     q = urllib.parse.urlencode({
         "filter": "openalex_id:" + "|".join(ids),
         "select": "id,title,abstract_inverted_index,referenced_works",
-        "per-page": 50, "mailto": MAIL})
+        "per-page": 50, "mailto": MAIL,
+        **({"api_key": k} if (k := os.environ.get("OPENALEX_API_KEY")) else {})})
     for attempt in range(5):
         try:
             with urllib.request.urlopen(
@@ -41,7 +43,7 @@ def chunk(ids):
                 return json.load(r)["results"]
         except Exception:
             time.sleep(2 * (attempt + 1))
-    return []
+    raise RuntimeError(f"OpenAlex failed on {ids[0]}, likely the daily budget")
 
 
 def fetch(ids, workers=8):
