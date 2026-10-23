@@ -14,4 +14,5 @@ refs.bib         bibliography, exported from Zotero
 data/            raw data (gitignored)
 labels/          oracle labels per dataset, shared between experiments
 experiments/     NN_short_name/run.py + results/
+playground/      exploration before it becomes an experiment
 ```
