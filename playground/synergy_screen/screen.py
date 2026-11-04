@@ -1,104 +1,23 @@
 """Screen every SYNERGY review. One pool per _ids.csv, abstracts only."""
 
-import csv
-import json
-import os
 import sys
-import time
-import urllib.parse
-import urllib.request
 from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
-DATA = ROOT / "data/synergy"
 sys.path.insert(0, str(ROOT / "experiments/lib"))
 sys.path.insert(0, str(ROOT / "experiments/03_link_guided_search"))
 
+from data import SYNERGY_REPO, synergy_citations, synergy_pool
 from embed import embed
 from run import correlation
 from search import adjacency, unit
 
-REPO = DATA / "repo/datasets"
-CACHE = DATA / "cache"
-MAIL = "ender.spam.guru@gmail.com"
 CAP = 20
 SEEDS = 20
 MAX_PAIRS = 4_000_000
-
-
-def chunk(ids):
-    q = urllib.parse.urlencode({
-        "filter": "openalex_id:" + "|".join(ids),
-        "select": "id,title,abstract_inverted_index,referenced_works",
-        "per-page": 50, "mailto": MAIL,
-        **({"api_key": k} if (k := os.environ.get("OPENALEX_API_KEY")) else {})})
-    for attempt in range(5):
-        try:
-            with urllib.request.urlopen(
-                    f"https://api.openalex.org/works?{q}", timeout=60) as r:
-                return json.load(r)["results"]
-        except Exception:
-            time.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"OpenAlex failed on {ids[0]}, likely the daily budget")
-
-
-def fetch(ids, workers=8):
-    out = {}
-    parts = [ids[i:i + 50] for i in range(0, len(ids), 50)]
-    with ThreadPoolExecutor(workers) as pool:
-        for n, works in enumerate(pool.map(chunk, parts), 1):
-            for w in works:
-                out[w["id"].rsplit("/", 1)[-1]] = w
-            if n % 40 == 0:
-                print(f"    {min(n * 50, len(ids)):,}/{len(ids):,}", flush=True)
-    return out
-
-
-def abstract(w):
-    inv = w.get("abstract_inverted_index")
-    if not inv:
-        return ""
-    pos = {p: word for word, places in inv.items() for p in places}
-    return " ".join(pos[k] for k in sorted(pos))
-
-
-def review(path):
-    CACHE.mkdir(exist_ok=True)
-    out = CACHE / f"{path.stem}.json"
-    if out.exists():
-        return json.loads(out.read_text())
-    rows = [r for r in csv.DictReader(open(path)) if r.get("openalex_id")]
-    if not rows:
-        out.write_text("[]")
-        return []
-    ids = [r["openalex_id"].rsplit("/", 1)[-1] for r in rows]
-    print(f"  fetching {len(ids):,}", flush=True)
-    works = fetch(ids)
-    data = [{"title": w.get("title") or "", "abstract": abstract(w), "id": k,
-             "refs": [x.rsplit("/", 1)[-1] for x in (w.get("referenced_works") or [])],
-             "included": int(r["label_included"])}
-            for r, k in zip(rows, ids) if (w := works.get(k))]
-    out.write_text(json.dumps(data))
-    return data
-
-
-def pool(path):
-    return [r for r in review(path) if len(r["abstract"]) > 50]
-
-
-def citations(data):
-    at = {r["id"]: i for i, r in enumerate(data)}
-    cite = {(min(i, j), max(i, j)) for i, r in enumerate(data)
-            for x in r["refs"] if (j := at.get(x)) is not None and j != i}
-    return np.array(sorted(cite)) if cite else np.empty((0, 2), int)
-
-
-def embedded(data):
-    return unit(embed([f"{r['title']}. {r['abstract']}" for r in data]))
 
 
 def knn(vectors, k, block=2048):
@@ -152,13 +71,13 @@ def line(name, n, rate, label, e, mask, cos=None):
 
 
 if __name__ == "__main__":
-    files = sorted(REPO.glob("*/*_ids.csv"), key=lambda p: p.stat().st_size)
+    files = sorted((SYNERGY_REPO / "datasets").glob("*/*_ids.csv"), key=lambda p: p.stat().st_size)
     print(f"{'review':>34} {'rows':>6} {'rate':>6} {'graph':>13} {'edges':>8} "
           f"{'lift':>6} {'ctrl':>6} {'nbr+':>6} {'reach':>6} {'jacc':>6} {'far':>6}", flush=True)
 
     for path in files:
-        data = pool(path)
         name = path.stem.replace("_ids", "")
+        data = synergy_pool(name)
         if len(data) < 100 or not (sum(r["included"] for r in data)) >= 10:
             print(f"{name:>34} {len(data):>6,}   skipped, too small", flush=True)
             continue
@@ -166,14 +85,14 @@ if __name__ == "__main__":
         mask = np.array([bool(r["included"]) for r in data])
         rate = mask.mean()
 
-        cite = citations(data)
+        cite = synergy_citations(data)
         by_ref = defaultdict(list)
         for i, r in enumerate(data):
             for x in r["refs"]:
                 by_ref[x].append(i)
         coupling = pairs_from(by_ref.values())
 
-        vectors = embedded(data)
+        vectors = unit(embed([f"{r['title']}. {r['abstract']}" for r in data]))
 
         for label, e in [("citation", cite), ("bib-coupling", coupling)]:
             if e is None:
