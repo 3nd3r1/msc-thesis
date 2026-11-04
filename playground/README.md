@@ -9,4 +9,4 @@ Exploratory work that isn't an experiment yet, like screening a dataset before d
 
 ## Contents
 
-- `synergy_screen/` - screens the SYNERGY reviews for citation and coupling graphs against a matched cosine kNN, see the 2026-10-22 and 2026-10-23 logs.
+- `synergy_screen/` - screens the SYNERGY reviews for citation and coupling graphs against a matched cosine kNN, picks the replay reviews and checks whether citation reaches the positives the embedding order finds last, see the 2026-10-22, 2026-10-23 and 2026-11-04 logs.
