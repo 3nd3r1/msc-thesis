@@ -1,0 +1,17 @@
+embeddings order, mean of 10 seeds
+tail is the positives found between 80% and 95% recall
+linked: tail positives with a citation edge to a positive found before them
+cited: tail positives with a citation edge to any positive
+calls: share of rows asked to reach each target, and the share spent on the tail
+
+              review   pos  tail  linked  cited    80%    95%  spent
+       Leenaars_2020   560    84   52.4%  54.8%  50.1%  73.0%  22.9%
+         Walker_2018   463    69   17.8%  20.3%  19.5%  42.3%  22.8%
+          Muthu_2021   282    42   33.1%  40.2%  49.8%  71.9%  22.1%
+           Hall_2012   103    15   72.0%  73.3%   2.6%   4.1%   1.6%
+      Jeyaraman_2020    84    12   88.3%  91.7%  43.2%  66.3%  23.1%
+      Wassenaar_2017    67    10   62.0%  62.0%  14.3%  25.5%  11.2%
+   van_der_Valk_2021    58     9   66.7%  66.7%  27.7%  41.6%  13.9%
+         Nelson_2002    51     8   53.8%  57.5%  44.0%  62.0%  18.0%
+     Radjenovic_2013    48     7  100.0% 100.0%   4.7%  10.1%   5.4%
+        van_Dis_2020    43     6   45.0%  45.0%  16.6%  31.8%  15.2%
