@@ -5,8 +5,9 @@ from pathlib import Path
 import numpy as np
 
 from pick import picked
+from data import load_synergy
 from report import report
-from screen import REPO, citations, embedded, pool
+from run import vectors_for
 from search import adjacency
 
 SEEDS = 10
@@ -46,10 +47,10 @@ if __name__ == "__main__":
         f"{HEAD:>6.0%} {TAIL:>6.0%} {'spent':>6}")
 
     for name, n, pos, _ in picked():
-        data = pool(REPO / name / f"{name}_ids.csv")
-        labels = np.array([bool(r["included"]) for r in data])
-        neighbours = adjacency(citations(data), n)
-        vectors = embedded(data)
+        nodes, edges = load_synergy(name)
+        labels = nodes.included.to_numpy()
+        neighbours = adjacency(edges, n)
+        vectors = vectors_for(nodes)
         head = int(np.ceil(HEAD * pos))
 
         linked, cited, at_head, at_tail = [], [], [], []
