@@ -1,7 +1,13 @@
+import csv
 import html
 import json
+import os
 import re
 import sqlite3
+import time
+import urllib.parse
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -149,4 +155,118 @@ def load_stack_author():
 
 def stack_junk(nodes):
     """Questions with too little text to judge."""
+    return pd.DataFrame({"short": nodes.text.str.len() < 200})
+
+
+SYNERGY = Path(__file__).resolve().parents[2] / "data" / "synergy"
+SYNERGY_REPO = SYNERGY / "repo"
+OPENALEX = "https://api.openalex.org/works"
+MAIL = "ender.spam.guru@gmail.com"
+
+
+def synergy_meta():
+    """Each review's entry in the SYNERGY datasets.toml, by key."""
+    import tomllib
+
+    with open(SYNERGY_REPO / "datasets.toml", "rb") as f:
+        return {d["key"]: d for d in tomllib.load(f)["datasets"]}
+
+
+def openalex_chunk(ids):
+    query = {
+        "filter": "openalex_id:" + "|".join(ids),
+        "select": "id,title,abstract_inverted_index,referenced_works",
+        "per-page": 50,
+        "mailto": MAIL,
+    }
+    if key := os.environ.get("OPENALEX_API_KEY"):
+        query["api_key"] = key
+    url = f"{OPENALEX}?{urllib.parse.urlencode(query)}"
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(url, timeout=60) as r:
+                return json.load(r)["results"]
+        except Exception:
+            time.sleep(2 * (attempt + 1))
+    raise RuntimeError(f"OpenAlex failed on {ids[0]}, likely the daily budget")
+
+
+def openalex(ids, workers=8):
+    out = {}
+    parts = [ids[i : i + 50] for i in range(0, len(ids), 50)]
+    with ThreadPoolExecutor(workers) as pool:
+        for n, works in enumerate(pool.map(openalex_chunk, parts), 1):
+            for w in works:
+                out[w["id"].rsplit("/", 1)[-1]] = w
+            if n % 40 == 0:
+                print(f"    {min(n * 50, len(ids)):,}/{len(ids):,}", flush=True)
+    return out
+
+
+def abstract(work):
+    inverted = work.get("abstract_inverted_index")
+    if not inverted:
+        return ""
+    at = {p: word for word, places in inverted.items() for p in places}
+    return " ".join(at[k] for k in sorted(at))
+
+
+def synergy_review(name):
+    """Every paper of one review file with its OpenAlex record, cached in data/synergy."""
+    cache = SYNERGY / "cache" / f"{name}_ids.json"
+    if cache.exists():
+        return json.loads(cache.read_text())
+
+    path = next((SYNERGY_REPO / "datasets").glob(f"*/{name}_ids.csv"))
+    rows = [r for r in csv.DictReader(open(path)) if r.get("openalex_id")]
+    ids = [r["openalex_id"].rsplit("/", 1)[-1] for r in rows]
+    print(f"  fetching {len(ids):,}", flush=True)
+    works = openalex(ids) if ids else {}
+    data = [
+        {
+            "title": w.get("title") or "",
+            "abstract": abstract(w),
+            "id": k,
+            "refs": [x.rsplit("/", 1)[-1] for x in (w.get("referenced_works") or [])],
+            "included": int(r["label_included"]),
+        }
+        for r, k in zip(rows, ids)
+        if (w := works.get(k))
+    ]
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    cache.write_text(json.dumps(data))
+    return data
+
+
+def synergy_pool(name):
+    """The papers with an abstract, which is all the embeddings and the proxy read."""
+    return [r for r in synergy_review(name) if len(r["abstract"]) > 50]
+
+
+def synergy_citations(data):
+    at = {r["id"]: i for i, r in enumerate(data)}
+    pairs = {
+        (min(i, j), max(i, j))
+        for i, r in enumerate(data)
+        for x in r["refs"]
+        if (j := at.get(x)) is not None and j != i
+    }
+    return np.array(sorted(pairs)) if pairs else np.empty((0, 2), int)
+
+
+def load_synergy(name):
+    """One review's pool with the human inclusion label, and the citations inside it."""
+    data = synergy_pool(name)
+    nodes = pd.DataFrame(
+        {
+            "title": [r["title"] for r in data],
+            "text": [r["abstract"] for r in data],
+            "included": [bool(r["included"]) for r in data],
+        }
+    )
+    return nodes, synergy_citations(data)
+
+
+def synergy_junk(nodes):
+    """Abstracts too short to judge, the same cut as Stack."""
     return pd.DataFrame({"short": nodes.text.str.len() < 200})
