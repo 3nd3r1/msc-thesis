@@ -39,6 +39,14 @@ Over all 42,912 questions the degree is 0.47 and only a quarter have any neighbo
 Shared tag edges are out.
 A tag is a topic label, so they leak any topical predicate the way Cora's classes do.
 
+- SYNERGY, systematic review screening data with the screeners' own inclusion labels, as one dataset per review named `synergy/<review>`, with titles, abstracts and citations from OpenAlex
+
+Each review is one predicate, its eligibility criteria, over the pool its own search returned.
+The labels are human, so the label is not a function of the row text the way an oracle verdict is.
+They are final inclusion after full text, so some positives can't be told from the abstract by any order.
+The reviews are the ones `playground/synergy_screen/pick.py` keeps, fixed in `SYNERGY_REVIEWS` in `run.py`.
+Only papers with an abstract are in the pool.
+
 ## Models
 
 - Llama 3.1 70B Instruct Turbo as the oracle,
@@ -47,7 +55,7 @@ A tag is a topic label, so they leak any topical predicate the way Cora's classe
 ## Steps
 
 Each step is `python run.py <dataset> <step>` and writes `results/<dataset>/<step>.txt`.
-Datasets are `cora`, `stack` and `stack_author`.
+Datasets are `cora`, `stack`, `stack_author` and `synergy/<review>`.
 Every loader returns rows with a title and a text column plus the edges, so only `classes` is tied to one dataset.
 
 ### 1. Cora classes as predicates
@@ -77,6 +85,7 @@ Calls to reach 90% recall, as a share of the 2,708 papers, mean of 50 seeds:
 Step `label` and then step `predicates`.
 
 - `label` gets the verdict of every predicate on every row from the oracle.
+- `human` takes the place of `label` on SYNERGY and writes the screeners' labels in the same format, so every later step reads them the same way.
 - `predicates` replays the orders on those labels and makes no oracle calls.
 
 #### Predicates
