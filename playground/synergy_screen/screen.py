@@ -86,6 +86,21 @@ def review(path):
     return data
 
 
+def pool(path):
+    return [r for r in review(path) if len(r["abstract"]) > 50]
+
+
+def citations(data):
+    at = {r["id"]: i for i, r in enumerate(data)}
+    cite = {(min(i, j), max(i, j)) for i, r in enumerate(data)
+            for x in r["refs"] if (j := at.get(x)) is not None and j != i}
+    return np.array(sorted(cite)) if cite else np.empty((0, 2), int)
+
+
+def embedded(data):
+    return unit(embed([f"{r['title']}. {r['abstract']}" for r in data]))
+
+
 def knn(vectors, k, block=2048):
     """Top k by cosine, in row blocks so the full matrix is never held."""
     n = len(vectors)
@@ -136,40 +151,38 @@ def line(name, n, rate, label, e, mask, cos=None):
           f"{1 - s['alone']:>6.1%} {j} {f}", flush=True)
 
 
-files = sorted(REPO.glob("*/*_ids.csv"), key=lambda p: p.stat().st_size)
-print(f"{'review':>34} {'rows':>6} {'rate':>6} {'graph':>13} {'edges':>8} "
-      f"{'lift':>6} {'ctrl':>6} {'nbr+':>6} {'reach':>6} {'jacc':>6} {'far':>6}", flush=True)
+if __name__ == "__main__":
+    files = sorted(REPO.glob("*/*_ids.csv"), key=lambda p: p.stat().st_size)
+    print(f"{'review':>34} {'rows':>6} {'rate':>6} {'graph':>13} {'edges':>8} "
+          f"{'lift':>6} {'ctrl':>6} {'nbr+':>6} {'reach':>6} {'jacc':>6} {'far':>6}", flush=True)
 
-for path in files:
-    data = [r for r in review(path) if len(r["abstract"]) > 50]
-    name = path.stem.replace("_ids", "")
-    if len(data) < 100 or not (sum(r["included"] for r in data)) >= 10:
-        print(f"{name:>34} {len(data):>6,}   skipped, too small", flush=True)
-        continue
-    n = len(data)
-    at = {r["id"]: i for i, r in enumerate(data)}
-    mask = np.array([bool(r["included"]) for r in data])
-    rate = mask.mean()
-
-    cite = {(min(i, j), max(i, j)) for i, r in enumerate(data)
-            for x in r["refs"] if (j := at.get(x)) is not None and j != i}
-    cite = np.array(sorted(cite)) if cite else np.empty((0, 2), int)
-    by_ref = defaultdict(list)
-    for i, r in enumerate(data):
-        for x in r["refs"]:
-            by_ref[x].append(i)
-    coupling = pairs_from(by_ref.values())
-
-    vectors = unit(embed([f"{r['title']}. {r['abstract']}" for r in data]))
-
-    for label, e in [("citation", cite), ("bib-coupling", coupling)]:
-        if e is None:
-            print(f"{name:>34} {n:>6,} {rate:>6.1%} {label:>13}   too dense", flush=True)
+    for path in files:
+        data = pool(path)
+        name = path.stem.replace("_ids", "")
+        if len(data) < 100 or not (sum(r["included"] for r in data)) >= 10:
+            print(f"{name:>34} {len(data):>6,}   skipped, too small", flush=True)
             continue
-        if not len(e):
-            continue
-        k = max(1, round(len(e) / n))
-        cos = set(map(tuple, knn(vectors, k)))
-        line(name, n, rate, label, e, mask, cos)
-        line(name, n, rate, f"cosine k={k}", np.array(sorted(cos)), mask)
-    print(flush=True)
+        n = len(data)
+        mask = np.array([bool(r["included"]) for r in data])
+        rate = mask.mean()
+
+        cite = citations(data)
+        by_ref = defaultdict(list)
+        for i, r in enumerate(data):
+            for x in r["refs"]:
+                by_ref[x].append(i)
+        coupling = pairs_from(by_ref.values())
+
+        vectors = embedded(data)
+
+        for label, e in [("citation", cite), ("bib-coupling", coupling)]:
+            if e is None:
+                print(f"{name:>34} {n:>6,} {rate:>6.1%} {label:>13}   too dense", flush=True)
+                continue
+            if not len(e):
+                continue
+            k = max(1, round(len(e) / n))
+            cos = set(map(tuple, knn(vectors, k)))
+            line(name, n, rate, label, e, mask, cos)
+            line(name, n, rate, f"cosine k={k}", np.array(sorted(cos)), mask)
+        print(flush=True)
