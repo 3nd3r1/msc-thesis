@@ -31,7 +31,10 @@ from data import (
     load_cora,
     load_stack,
     load_stack_author,
+    load_synergy,
     stack_junk,
+    synergy_junk,
+    synergy_meta,
 )
 
 
@@ -134,7 +137,43 @@ STACK_PREDICATES = [
     ),
 ]
 
-Dataset = namedtuple("Dataset", "name noun load predicates junk labels")
+# From playground/synergy_screen/pick.py, fixed here so the design does not move.
+SYNERGY_REVIEWS = [
+    "Leenaars_2020",
+    "Walker_2018",
+    "Muthu_2021",
+    "Hall_2012",
+    "Jeyaraman_2020",
+    "Wassenaar_2017",
+    "van_der_Valk_2021",
+    "Nelson_2002",
+    "Radjenovic_2013",
+    "van_Dis_2020",
+]
+
+ORACLE_SOURCE = f"{ORACLE}, strict prompt"
+HUMAN_SOURCE = "the review's own screeners, final inclusion after full text"
+
+Dataset = namedtuple(
+    "Dataset",
+    "name noun load predicates junk labels source",
+    defaults=(ORACLE_SOURCE,),
+)
+
+
+def synergy(review):
+    criteria = synergy_meta()[review]["publication"]["eligibility_criteria"].strip()
+    claim = "the paper meets these eligibility criteria of a systematic review\n" + criteria
+    return Dataset(
+        f"synergy/{review}",
+        "papers",
+        lambda: load_synergy(review),
+        [("included", "human", claim)],
+        synergy_junk,
+        f"synergy/{review}",
+        HUMAN_SOURCE,
+    )
+
 
 DATASETS = {
     "cora": Dataset("cora", "papers", load_cora, CORA_PREDICATES, cora_junk, "cora"),
@@ -149,7 +188,7 @@ DATASETS = {
         stack_junk,
         "stack",
     ),
-}
+} | {f"synergy/{r}": synergy(r) for r in SYNERGY_REVIEWS}
 
 
 def correlation(mask, neighbours):
@@ -332,7 +371,24 @@ def collect(ds, model, name):
 
 
 def label(ds):
+    if ds.source == HUMAN_SOURCE:
+        sys.exit(f"{ds.name} has human labels, run: run.py {ds.name} human")
     collect(ds, ORACLE, "labels")
+
+
+def human(ds):
+    """The human labels in the oracle's format, so every replay step reads them the same."""
+    if ds.source != HUMAN_SOURCE:
+        sys.exit(f"{ds.name} has no human labels, run: run.py {ds.name} label")
+    nodes, _ = ds.load()
+    (key, _, _), = ds.predicates
+    path = LABELS / ds.labels / "labels.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w") as f:
+        for i, yes in enumerate(nodes.included):
+            verdict = "yes" if yes else "no"
+            f.write(json.dumps({"row": i, "predicate": key, "verdict": verdict}) + "\n")
+    print(f"wrote {path}, {int(nodes.included.sum()):,} of {len(nodes):,} included")
 
 
 def proxy(ds):
@@ -395,7 +451,7 @@ def predicates(ds):
     out, save = report(results(ds), "predicates")
 
     out(f"{ds.name}, {len(nodes):,} {ds.noun}, {len(edges):,} edges")
-    out(f"{len(ds.predicates)} predicates labelled by {ORACLE}, strict prompt")
+    out(f"{len(ds.predicates)} predicates labelled by {ds.source}")
     out(f"calls% is calls over rows, mean and sd of {SEEDS} seeds")
     out("embeddings are all-MiniLM-L6-v2 sentence vectors, not step 1's word features")
 
@@ -431,7 +487,7 @@ def ceiling(ds):
     out, save = report(results(ds), "ceiling")
 
     out(f"{ds.name}, {len(nodes):,} {ds.noun}")
-    out(f"{len(ds.predicates)} predicates labelled by {ORACLE}, strict prompt")
+    out(f"{len(ds.predicates)} predicates labelled by {ds.source}")
     out(f"calls% is calls over rows, mean and sd of {SPLITS} fold splits")
     out(f"logistic regression on the embeddings, {FOLDS} folds, scored out of fold")
     out("it trains on every label, so no order that learns from verdicts can do better")
@@ -470,7 +526,7 @@ def lift(ds):
     out, save = report(results(ds), "lift")
 
     out(f"{ds.name}, {len(nodes):,} {ds.noun}, {len(edges):,} edges")
-    out(f"{len(ds.predicates)} predicates labelled by {ORACLE}, strict prompt")
+    out(f"{len(ds.predicates)} predicates labelled by {ds.source}")
     out()
     out("edge%: of the edges leaving a positive, the share landing on a positive")
     out("lift: edge% over the positive rate, so 1.0x is no correlation")
@@ -533,6 +589,7 @@ def cascade(ds):
 STEPS = {
     "classes": classes,
     "label": label,
+    "human": human,
     "proxy": proxy,
     "predicates": predicates,
     "lift": lift,
