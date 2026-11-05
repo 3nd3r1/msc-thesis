@@ -1,0 +1,15 @@
+synergy/Wassenaar_2017, 4,168 papers, 15,400 edges
+1 predicates labelled by the review's own screeners, final inclusion after full text
+
+edge%: of the edges leaving a positive, the share landing on a positive
+lift: edge% over the positive rate, so 1.0x is no correlation
+nbr+: positives with at least one positive neighbour, which grows with degree
+alone: positives with no neighbour at all, which links can never reach
+
+all 4,168 rows, 21 junk and 0 repeated texts in the pool
+    rate  edge%   lift   nbr+  alone  predicate
+    1.6%  25.3%  15.8x  82.1%   6.0%  included human
+
+4,147 rows, junk and repeated texts dropped
+    rate  edge%   lift   nbr+  alone  predicate
+    1.6%  25.6%  16.3x  84.6%   4.6%  included human

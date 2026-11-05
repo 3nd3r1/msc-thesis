@@ -1,0 +1,13 @@
+synergy/Walker_2018, 33,932 papers
+1 predicates labelled by the review's own screeners, final inclusion after full text
+calls% is calls over rows, mean and sd of 10 fold splits
+logistic regression on the embeddings, 5 folds, scored out of fold
+it trains on every label, so no order that learns from verdicts can do better
+
+all 33,932 rows, 176 junk and 0 repeated texts in the pool
+    rate            50%            80%            90%            95%  predicate
+    1.4%     2.4%+-0.1%     8.5%+-0.2%    18.3%+-0.6%    27.7%+-0.9%  included human
+
+33,756 rows, junk and repeated texts dropped
+    rate            50%            80%            90%            95%  predicate
+    1.4%     2.5%+-0.1%     8.3%+-0.3%    17.9%+-0.7%    27.9%+-1.8%  included human

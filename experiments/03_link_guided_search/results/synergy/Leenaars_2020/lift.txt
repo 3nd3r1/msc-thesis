@@ -1,0 +1,15 @@
+synergy/Leenaars_2020, 4,658 papers, 22,489 edges
+1 predicates labelled by the review's own screeners, final inclusion after full text
+
+edge%: of the edges leaving a positive, the share landing on a positive
+lift: edge% over the positive rate, so 1.0x is no correlation
+nbr+: positives with at least one positive neighbour, which grows with degree
+alone: positives with no neighbour at all, which links can never reach
+
+all 4,658 rows, 24 junk and 0 repeated texts in the pool
+    rate  edge%   lift   nbr+  alone  predicate
+    9.1%  18.5%   2.0x  69.6%  12.2%  included human
+
+4,634 rows, junk and repeated texts dropped
+    rate  edge%   lift   nbr+  alone  predicate
+    9.2%  18.6%   2.0x  69.6%  12.2%  included human
