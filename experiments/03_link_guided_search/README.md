@@ -208,6 +208,55 @@ The other entries that clear one sd are ownstudy at 90% and spss and rcode at 95
 
 On same author `blend 0.1` clears one sd only on we at 80 and 90% and on biomed at 50%, so the predicate it helps most is the control.
 
+##### SYNERGY
+
+BLUF: at a 90% target links and embeddings beat embeddings alone on 3 of the 10 reviews and lose on 3, and links alone loses on 8.
+
+Calls to reach 90% recall as a share of the rows, pool with junk and repeated texts dropped, from `results/synergy/<review>/predicates.txt`:
+
+| review            | rate  | random | embeddings | links | links+embeddings |
+| ----------------- | ----- | ------ | ---------- | ----- | ---------------- |
+| Walker_2018       | 1.4%  | 90.2%  | 29.2%      | 84.3% | 28.1%            |
+| Leenaars_2020     | 9.2%  | 90.2%  | 60.7%      | 83.8% | 66.8%            |
+| Muthu_2021        | 15.2% | 89.3%  | 59.5%      | 79.0% | 54.0%            |
+| Hall_2012         | 1.2%  | 89.0%  | 3.5%       | 28.3% | 3.7%             |
+| Jeyaraman_2020    | 9.0%  | 89.1%  | 63.3%      | 54.0% | 50.5%            |
+| Wassenaar_2017    | 1.6%  | 89.4%  | 16.5%      | 49.9% | 15.5%            |
+| van_der_Valk_2021 | 12.5% | 90.4%  | 35.1%      | 59.7% | 38.6%            |
+| Nelson_2002       | 21.4% | 88.3%  | 52.8%      | 81.0% | 58.8%            |
+| Radjenovic_2013   | 0.8%  | 89.4%  | 6.8%       | 7.4%  | 6.2%             |
+| van_Dis_2020      | 0.8%  | 89.0%  | 19.7%      | 64.4% | 19.9%            |
+
+Links and embeddings minus embeddings at each target, from the same files, so negative means links help, in brackets where the gap is inside one sd:
+
+| review            | 50%    | 80%    | 90%    | 95%    |
+| ----------------- | ------ | ------ | ------ | ------ |
+| Walker_2018       | (-0.5) | -3.8   | -1.1   | (-0.1) |
+| Leenaars_2020     | +14.5  | +9.0   | +6.1   | +4.3   |
+| Muthu_2021        | -2.5   | -2.1   | -5.5   | -3.3   |
+| Hall_2012         | (+0.1) | (-0.1) | (+0.2) | (-0.4) |
+| Jeyaraman_2020    | +7.5   | -3.0   | -12.8  | -3.5   |
+| Wassenaar_2017    | (-4.7) | (-3.5) | (-1.0) | (-5.0) |
+| van_der_Valk_2021 | -3.8   | -1.6   | +3.5   | +3.2   |
+| Nelson_2002       | (+0.3) | +3.5   | +6.0   | +6.9   |
+| Radjenovic_2013   | (-0.6) | (-0.3) | (-0.6) | -2.8   |
+| van_Dis_2020      | (-0.7) | -2.9   | (+0.2) | (-1.8) |
+
+Links alone minus embeddings, from the same files:
+
+| review            | 50%    | 80%    | 90%    | 95%    |
+| ----------------- | ------ | ------ | ------ | ------ |
+| Walker_2018       | +20.3  | +47.9  | +55.1  | +51.1  |
+| Leenaars_2020     | +15.4  | +22.1  | +23.1  | +20.7  |
+| Muthu_2021        | -1.9   | +15.3  | +19.5  | +20.0  |
+| Hall_2012         | (+0.3) | (+0.3) | +24.8  | +51.5  |
+| Jeyaraman_2020    | +9.9   | (-2.1) | -9.3   | (+5.1) |
+| Wassenaar_2017    | (-4.5) | (-3.2) | +33.4  | +44.0  |
+| van_der_Valk_2021 | -3.6   | (+0.0) | +24.6  | +36.1  |
+| Nelson_2002       | +5.6   | +21.9  | +28.2  | +27.5  |
+| Radjenovic_2013   | (-0.4) | (+0.2) | (+0.6) | -2.7   |
+| van_Dis_2020      | (+0.4) | +25.1  | +44.7  | +46.8  |
+
 ### 3. How much the links correlate the positives
 
 Step `lift`
