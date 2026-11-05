@@ -139,8 +139,8 @@ STACK_PREDICATES = [
 
 # From playground/synergy_screen/pick.py, fixed here so the design does not move.
 SYNERGY_REVIEWS = [
-    "Leenaars_2020",
     "Walker_2018",
+    "Leenaars_2020",
     "Muthu_2021",
     "Hall_2012",
     "Jeyaraman_2020",
