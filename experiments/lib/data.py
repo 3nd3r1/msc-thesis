@@ -211,11 +211,22 @@ def abstract(work):
     return " ".join(at[k] for k in sorted(at))
 
 
+def merged(data):
+    """One row per work. A work some files list twice is included if either row is."""
+    out = {}
+    for r in data:
+        if r["id"] in out:
+            out[r["id"]]["included"] |= r["included"]
+        else:
+            out[r["id"]] = dict(r)
+    return list(out.values())
+
+
 def synergy_review(name):
-    """Every paper of one review file with its OpenAlex record, cached in data/synergy."""
+    """Every work of one review file with its OpenAlex record, cached in data/synergy."""
     cache = SYNERGY / "cache" / f"{name}_ids.json"
     if cache.exists():
-        return json.loads(cache.read_text())
+        return merged(json.loads(cache.read_text()))
 
     path = next((SYNERGY_REPO / "datasets").glob(f"*/{name}_ids.csv"))
     rows = [r for r in csv.DictReader(open(path)) if r.get("openalex_id")]
@@ -235,7 +246,7 @@ def synergy_review(name):
     ]
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.write_text(json.dumps(data))
-    return data
+    return merged(data)
 
 
 def synergy_pool(name):
