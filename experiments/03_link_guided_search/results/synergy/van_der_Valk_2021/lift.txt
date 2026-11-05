@@ -1,0 +1,15 @@
+synergy/van_der_Valk_2021, 469 papers, 948 edges
+1 predicates labelled by the review's own screeners, final inclusion after full text
+
+edge%: of the edges leaving a positive, the share landing on a positive
+lift: edge% over the positive rate, so 1.0x is no correlation
+nbr+: positives with at least one positive neighbour, which grows with degree
+alone: positives with no neighbour at all, which links can never reach
+
+all 469 rows, 13 junk and 0 repeated texts in the pool
+    rate  edge%   lift   nbr+  alone  predicate
+   12.4%  43.8%   3.5x  82.8%   5.2%  included human
+
+456 rows, junk and repeated texts dropped
+    rate  edge%   lift   nbr+  alone  predicate
+   12.5%  44.0%   3.5x  84.2%   3.5%  included human

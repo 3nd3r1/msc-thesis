@@ -1,0 +1,13 @@
+synergy/Leenaars_2020, 4,658 papers
+1 predicates labelled by the review's own screeners, final inclusion after full text
+calls% is calls over rows, mean and sd of 10 fold splits
+logistic regression on the embeddings, 5 folds, scored out of fold
+it trains on every label, so no order that learns from verdicts can do better
+
+all 4,658 rows, 24 junk and 0 repeated texts in the pool
+    rate            50%            80%            90%            95%  predicate
+    9.1%     8.5%+-0.2%    19.4%+-0.3%    26.8%+-0.5%    35.8%+-0.9%  included human
+
+4,634 rows, junk and repeated texts dropped
+    rate            50%            80%            90%            95%  predicate
+    9.2%     8.4%+-0.2%    19.3%+-0.4%    27.3%+-0.4%    36.0%+-0.9%  included human

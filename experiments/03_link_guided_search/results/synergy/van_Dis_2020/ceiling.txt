@@ -1,0 +1,13 @@
+synergy/van_Dis_2020, 5,635 papers
+1 predicates labelled by the review's own screeners, final inclusion after full text
+calls% is calls over rows, mean and sd of 10 fold splits
+logistic regression on the embeddings, 5 folds, scored out of fold
+it trains on every label, so no order that learns from verdicts can do better
+
+all 5,635 rows, 13 junk and 0 repeated texts in the pool
+    rate            50%            80%            90%            95%  predicate
+    0.8%     3.9%+-0.4%    10.4%+-1.1%    18.0%+-2.2%    26.6%+-2.2%  included human
+
+5,622 rows, junk and repeated texts dropped
+    rate            50%            80%            90%            95%  predicate
+    0.8%     3.9%+-0.2%    10.1%+-0.9%    17.7%+-2.5%    26.3%+-2.3%  included human
