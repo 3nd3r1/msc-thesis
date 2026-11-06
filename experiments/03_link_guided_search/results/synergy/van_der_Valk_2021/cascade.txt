@@ -1,0 +1,34 @@
+synergy/van_der_Valk_2021, 469 papers, 948 edges
+calls% is calls over rows, mean and sd of 50 seeds
+proxy is p(yes) from meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo, one call per row and predicate
+both orders pay that, so only the oracle calls below differ
+proxy+links sends the oracle to the best proxy score among the unasked
+neighbours of a confirmed positive, and to the global best when there are none
+
+all 469 rows, 13 junk and 0 repeated texts in the pool
+  50% recall                 proxy           proxy+links
+          included human 12.4%    62.6%+-0.1%    31.6%+-0.0%
+
+  80% recall                 proxy           proxy+links
+          included human 12.4%    87.0%+-0.0%    40.7%+-0.0%
+
+  90% recall                 proxy           proxy+links
+          included human 12.4%    91.3%+-0.0%    67.6%+-0.0%
+
+  95% recall                 proxy           proxy+links
+          included human 12.4%    92.3%+-0.0%    83.6%+-0.0%
+
+
+456 rows, junk and repeated texts dropped
+  50% recall                 proxy           proxy+links
+          included human 12.5%    62.3%+-0.0%    30.3%+-0.0%
+
+  80% recall                 proxy           proxy+links
+          included human 12.5%    86.8%+-0.0%    39.5%+-0.0%
+
+  90% recall                 proxy           proxy+links
+          included human 12.5%    91.2%+-0.0%    66.9%+-0.0%
+
+  95% recall                 proxy           proxy+links
+          included human 12.5%    92.3%+-0.0%    83.3%+-0.0%
+

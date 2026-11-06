@@ -1,0 +1,34 @@
+synergy/Radjenovic_2013, 5,872 papers, 4,941 edges
+calls% is calls over rows, mean and sd of 50 seeds
+proxy is p(yes) from meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo, one call per row and predicate
+both orders pay that, so only the oracle calls below differ
+proxy+links sends the oracle to the best proxy score among the unasked
+neighbours of a confirmed positive, and to the global best when there are none
+
+all 5,872 rows, 18 junk and 5 repeated texts in the pool
+  50% recall                 proxy           proxy+links
+          included human  0.8%    35.0%+-0.0%     2.8%+-0.0%
+
+  80% recall                 proxy           proxy+links
+          included human  0.8%    62.4%+-0.0%     5.2%+-0.0%
+
+  90% recall                 proxy           proxy+links
+          included human  0.8%    81.6%+-0.0%     6.1%+-0.0%
+
+  95% recall                 proxy           proxy+links
+          included human  0.8%    85.5%+-0.0%     6.8%+-0.0%
+
+
+5,849 rows, junk and repeated texts dropped
+  50% recall                 proxy           proxy+links
+          included human  0.8%    34.9%+-0.0%     2.8%+-0.0%
+
+  80% recall                 proxy           proxy+links
+          included human  0.8%    62.3%+-0.0%     5.2%+-0.0%
+
+  90% recall                 proxy           proxy+links
+          included human  0.8%    81.5%+-0.0%     6.2%+-0.0%
+
+  95% recall                 proxy           proxy+links
+          included human  0.8%    85.4%+-0.0%     6.9%+-0.0%
+
