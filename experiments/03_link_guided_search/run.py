@@ -292,7 +292,7 @@ def classes(ds):
     save()
 
 
-def collect(ds, model, name):
+def collect(ds, model, name, system):
     """Ask `model` every predicate on every row, appending to labels/<ds>/<name>.jsonl."""
     nodes, _ = ds.load()
     path = LABELS / ds.labels / f"{name}.jsonl"
@@ -330,7 +330,7 @@ def collect(ds, model, name):
                     model,
                     claim,
                     {"title": row.title, "text": row.text},
-                    system=STRICT,
+                    system=system,
                 )
                 break
             except Exception:
@@ -355,7 +355,11 @@ def collect(ds, model, name):
     labels = pd.read_json(path, lines=True)
     out(f"{model} on {labels.row.nunique():,} {ds.noun}, {len(labels):,} labels")
     out("served by " + (", ".join(sorted(SERVED)) or "unknown, no calls made this run"))
-    out("strict prompt, the claim has to be stated explicitly")
+    out(
+        "strict prompt, the claim has to be stated explicitly"
+        if system == STRICT
+        else "plain LOTUS prompt"
+    )
 
     out(f"\n  {'yes':>6} {'mean p':>7} {'p<.5':>6}  predicate")
     for key, _, _ in ds.predicates:
@@ -373,7 +377,7 @@ def collect(ds, model, name):
 def label(ds):
     if ds.source == HUMAN_SOURCE:
         sys.exit(f"{ds.name} has human labels, run: run.py {ds.name} human")
-    collect(ds, ORACLE, "labels")
+    collect(ds, ORACLE, "labels", STRICT)
 
 
 def human(ds):
@@ -392,7 +396,8 @@ def human(ds):
 
 
 def proxy(ds):
-    collect(ds, PROXY, "proxy")
+    # Human labels have no oracle prompt to match, so the proxy gets plain LOTUS.
+    collect(ds, PROXY, "proxy", SYSTEM if ds.source == HUMAN_SOURCE else STRICT)
 
 
 def proxy_scores(ds, n):
