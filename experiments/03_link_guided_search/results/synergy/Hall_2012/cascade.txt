@@ -7,28 +7,28 @@ neighbours of a confirmed positive, and to the global best when there are none
 
 all 8,689 rows, 31 junk and 5 repeated texts in the pool
   50% recall                 proxy           proxy+links
-          included human  1.2%    29.8%+-0.0%     1.5%+-0.0%
+          included human  1.2%    30.0%+-0.0%     1.5%+-0.0%
 
   80% recall                 proxy           proxy+links
-          included human  1.2%    73.5%+-0.0%     2.4%+-0.0%
+          included human  1.2%    74.1%+-0.0%     2.4%+-0.0%
 
   90% recall                 proxy           proxy+links
-          included human  1.2%    82.7%+-0.0%     4.7%+-0.0%
+          included human  1.2%    83.3%+-0.0%     4.7%+-0.0%
 
   95% recall                 proxy           proxy+links
-          included human  1.2%    87.8%+-0.0%    34.2%+-0.0%
+          included human  1.2%    88.5%+-0.0%    34.4%+-0.0%
 
 
 8,653 rows, junk and repeated texts dropped
   50% recall                 proxy           proxy+links
-          included human  1.2%    29.6%+-0.0%     1.5%+-0.0%
+          included human  1.2%    29.8%+-0.0%     1.5%+-0.0%
 
   80% recall                 proxy           proxy+links
-          included human  1.2%    73.4%+-0.0%     2.4%+-0.0%
+          included human  1.2%    74.0%+-0.0%     2.4%+-0.0%
 
   90% recall                 proxy           proxy+links
-          included human  1.2%    82.7%+-0.0%     4.6%+-0.0%
+          included human  1.2%    83.3%+-0.0%     4.6%+-0.0%
 
   95% recall                 proxy           proxy+links
-          included human  1.2%    87.8%+-0.0%    34.0%+-0.0%
+          included human  1.2%    88.5%+-0.0%    34.2%+-0.0%
 
