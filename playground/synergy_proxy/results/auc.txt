@@ -1,0 +1,8 @@
+AUC against the human labels, all rows, plain LOTUS prompt
+cosine is the short claim against each paper, no LLM call
+
+              review   rate  cosine  8B full  8B short  70B full
+         Nelson_2002  21.2%    0.695    0.502    0.794    0.542
+   van_der_Valk_2021  12.4%    0.838    0.342    0.595    0.610
+      Jeyaraman_2020   9.0%    0.683    0.416    0.531    0.510
+       Leenaars_2020   9.1%    0.799    0.422    0.587    0.895
