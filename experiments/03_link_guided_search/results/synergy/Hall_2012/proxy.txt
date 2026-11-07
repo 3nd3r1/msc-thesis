@@ -1,4 +1,4 @@
-meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo on 8,630 papers, 8,630 labels
+meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo on 8,688 papers, 8,688 labels
 served by meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
 plain LOTUS prompt
 

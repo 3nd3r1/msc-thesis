@@ -1,8 +1,8 @@
-meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo on 449 papers, 449 labels
+meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo on 468 papers, 468 labels
 served by meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
 plain LOTUS prompt
 
      yes  mean p   p<.5  predicate
-    2.0%   0.988   0.2%  included
+    1.9%   0.987   0.4%  included
 
 0.0% of labels have no p, logprobs were dropped
