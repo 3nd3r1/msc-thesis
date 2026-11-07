@@ -1,0 +1,32 @@
+embedding 23,417 texts with all-MiniLM-L6-v2
+CAD v1.1, 23,417 entries, excluded splits dropped
+lift: edges leaving a positive that land on one, over the rate, ctrl is shuffled labels
+far: lift on the graph edges that are not in the matched cosine kNN
+ap: out of fold logistic regression, emb alone, + share of positive kNN neighbours,
+    + share of positive graph neighbours, neighbour labels are true labels so an upper bound
+
+     IdentityDirectedAbuse 2,305   9.8%   30.6% need the previous post
+  AffiliationDirectedAbuse 1,199   5.1%   28.3% need the previous post
+       PersonDirectedAbuse 1,054   4.5%   34.7% need the previous post
+             CounterSpeech   217   0.9%  100.0% need the previous post
+                      Slur   127   0.5%    1.6% need the previous post
+
+   graph    edges  reach   jacc                  predicate   lift   ctrl    far    knn  ap emb    +knn  +graph
+   reply   12,836  69.7%  0.049      IdentityDirectedAbuse   3.3x   1.0x   3.3x   3.2x   0.376   0.408   0.436
+   reply   12,836  69.7%  0.049   AffiliationDirectedAbuse   5.7x   0.9x   5.5x   5.5x   0.360   0.376   0.400
+   reply   12,836  69.7%  0.049        PersonDirectedAbuse   5.4x   1.0x   5.3x   4.5x   0.273   0.285   0.311
+   reply   12,836  69.7%  0.049              CounterSpeech   2.8x   0.8x   2.4x   7.9x   0.057   0.079   0.084
+   reply   12,836  69.7%  0.049                       Slur  27.0x   1.0x  26.3x  39.1x   0.206   0.235   0.248
+
+  thread  730,708  99.6%  0.039      IdentityDirectedAbuse   1.8x   1.0x   1.7x   2.3x   0.376   0.442   0.476
+  thread  730,708  99.6%  0.039   AffiliationDirectedAbuse   2.6x   1.0x   2.4x   3.8x   0.360   0.397   0.433
+  thread  730,708  99.6%  0.039        PersonDirectedAbuse   2.0x   1.0x   1.9x   2.8x   0.273   0.290   0.312
+  thread  730,708  99.6%  0.039              CounterSpeech   4.5x   1.0x   4.1x   3.2x   0.057   0.059   0.065
+  thread  730,708  99.6%  0.039                       Slur   5.0x   1.0x   3.1x  14.2x   0.206   0.235   0.254
+
+  author   53,606  67.6%  0.014      IdentityDirectedAbuse   2.1x   1.0x   2.1x   3.1x   0.376   0.427   0.441
+  author   53,606  67.6%  0.014   AffiliationDirectedAbuse   3.5x   1.0x   3.5x   5.2x   0.360   0.382   0.392
+  author   53,606  67.6%  0.014        PersonDirectedAbuse   2.1x   1.0x   2.0x   4.2x   0.273   0.303   0.306
+  author   53,606  67.6%  0.014              CounterSpeech   9.1x   1.1x   6.9x   7.3x   0.057   0.097   0.115
+  author   53,606  67.6%  0.014                       Slur   4.5x   1.1x   1.5x  33.5x   0.206   0.256   0.271
+
