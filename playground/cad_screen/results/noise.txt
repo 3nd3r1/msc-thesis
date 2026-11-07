@@ -1,0 +1,22 @@
+AP gain over emb + kNN neighbours, mean and sd of 5 fold seeds
+shuffled keeps every row's degree and connects it to random rows
+
+   graph                  predicate    +knn     graph gain  shuffled gain
+   reply      IdentityDirectedAbuse   0.408  +0.028+-0.001  -0.000+-0.001
+   reply   AffiliationDirectedAbuse   0.378  +0.024+-0.002  +0.000+-0.001
+   reply        PersonDirectedAbuse   0.284  +0.025+-0.001  -0.001+-0.001
+   reply              CounterSpeech   0.079  +0.006+-0.002  -0.001+-0.002
+   reply                       Slur   0.246  +0.007+-0.004  -0.001+-0.002
+
+  thread      IdentityDirectedAbuse   0.442  +0.035+-0.001  -0.001+-0.001
+  thread   AffiliationDirectedAbuse   0.400  +0.034+-0.001  -0.001+-0.001
+  thread        PersonDirectedAbuse   0.289  +0.022+-0.001  +0.003+-0.001
+  thread              CounterSpeech   0.059  +0.008+-0.001  +0.001+-0.001
+  thread                       Slur   0.234  +0.007+-0.010  +0.004+-0.002
+
+  author      IdentityDirectedAbuse   0.428  +0.014+-0.000  +0.000+-0.000
+  author   AffiliationDirectedAbuse   0.388  +0.006+-0.003  +0.000+-0.001
+  author        PersonDirectedAbuse   0.301  +0.005+-0.001  -0.000+-0.001
+  author              CounterSpeech   0.095  +0.022+-0.003  +0.000+-0.001
+  author                       Slur   0.261  +0.014+-0.006  +0.005+-0.005
+
