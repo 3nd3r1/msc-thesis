@@ -21,6 +21,8 @@ Orders compared:
 - links and embeddings together, which in practice means links first and similarity as the tiebreak, since a confirmed neighbour counts 1 and a cosine is about 0.2
 - positive minus negative confirmed neighbours, since the three orders above drop every negative the oracle returns
 - `blend a`, which is `a * (positive - negative neighbours) + mean cosine`, for a in 1.0, 0.3 and 0.1, so the two signals sit on one scale instead of links deciding
+- `blend/deg`, which is `blend 1.0` with positive minus negative neighbours over the degree, so a row is not pushed down only because it has more edges to collect negatives on
+- degree, the rows with the most edges first, a control that reads no labels and shows how much of what links do is degree alone
 - small-LLM proxy score, the LOTUS and BARGAIN way
 - the proxy score with link expansion on top
 

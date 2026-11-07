@@ -46,7 +46,7 @@ RECALLS = [0.50, 0.80, 0.90, 0.95]
 BLENDS = (1.0, 0.3, 0.1)
 ORDERS = ["random", "embeddings", "links", "links+embeddings", "links+-"] + [
     f"blend {a}" for a in BLENDS
-]
+] + ["blend/deg", "degree"]
 CASCADE_ORDERS = ["proxy", "proxy+links"]
 
 WORKERS = 24

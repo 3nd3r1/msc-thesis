@@ -27,6 +27,7 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
     mean = np.zeros(n)
     prior = np.zeros(n) if proxy is None else proxy
     asked = np.zeros(n, bool)
+    degree = np.array([len(x) for x in neighbours], float)
     found = 0
 
     # Lazy, so one search evaluates one order rather than all of them.
@@ -36,13 +37,15 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
         "links": lambda: pos,
         "links+embeddings": lambda: pos + mean,
         "links+-": lambda: pos - neg,
+        "degree": lambda: degree,
+        "blend/deg": lambda: (pos - neg) / np.maximum(degree, 1) + mean,
         "proxy": lambda: prior,
         # A neighbour of a confirmed positive outranks every row that is not
         # one, and the proxy orders within each of the two sets.
         "proxy+links": lambda: prior + 2.0 * (pos > 0),
     }.get(order, lambda: float(order.split()[1]) * (pos - neg) + mean)
     # The matvec behind `mean` is almost the whole cost, so skip it where unread.
-    similar = order.split()[0] in ("embeddings", "links+embeddings", "blend")
+    similar = order.split()[0] in ("embeddings", "links+embeddings", "blend", "blend/deg")
 
     for calls in range(1, n + 1):
         current = score() + 1e-9 * tie
