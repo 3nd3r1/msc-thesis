@@ -103,6 +103,14 @@ def giant(pairs, n):
     return label == np.bincount(label).argmax()
 
 
+def cliques(groups):
+    pairs = set()
+    for group in groups:
+        g = sorted(group)
+        pairs.update((g[a], g[b]) for a in range(len(g)) for b in range(a + 1, len(g)))
+    return np.array(sorted(pairs))
+
+
 def load_stack():
     """Cross Validated questions in the postLinks giant component, and those links.
 
@@ -144,13 +152,7 @@ def load_stack():
 def load_stack_author():
     """The same questions, with an edge between two asked by the same person."""
     nodes, _ = load_stack()
-    pairs = set()
-    for group in nodes.groupby("owner").groups.values():
-        g = np.asarray(group)
-        for a in range(len(g)):
-            for b in range(a + 1, len(g)):
-                pairs.add((int(min(g[a], g[b])), int(max(g[a], g[b]))))
-    return nodes, np.array(sorted(pairs))
+    return nodes, cliques(nodes.groupby("owner").groups.values())
 
 
 def stack_junk(nodes):
@@ -281,3 +283,61 @@ def load_synergy(name):
 def synergy_junk(nodes):
     """Abstracts too short to judge, the same cut as Stack."""
     return pd.DataFrame({"short": nodes.text.str.len() < 200})
+
+
+CAD = Path(__file__).resolve().parents[2] / "data" / "cad" / "raw" / "data" / "cad_v1_1.tsv"
+CAD_CATEGORIES = {
+    "identity": "IdentityDirectedAbuse",
+    "affiliation": "AffiliationDirectedAbuse",
+    "person": "PersonDirectedAbuse",
+    "counterspeech": "CounterSpeech",
+    "slur": "Slur",
+}
+
+
+def cad_rows():
+    """One row per CAD entry, excluded splits dropped, with every category any annotator gave."""
+    d = pd.read_csv(CAD, sep="\t", dtype=str, keep_default_na=False)
+    d = d[~d.split.str.startswith("exclude")]
+    rows = d.groupby("info_id", sort=True).agg(
+        parent=("info_id.parent", "first"),
+        thread=("info_thread.id", "first"),
+        author=("meta_author", "first"),
+        text=("meta_text", "first"),
+        labels=("annotation_Primary", set),
+    )
+    rows = rows.reset_index()
+    nodes = pd.DataFrame({"title": "", "text": rows.text})
+    for key, category in CAD_CATEGORIES.items():
+        nodes[key] = rows.labels.map(lambda s: category in s)
+    return rows, nodes
+
+
+def load_cad():
+    """CAD entries with their category labels, and an edge from each reply to its parent."""
+    rows, nodes = cad_rows()
+    index = {k: i for i, k in enumerate(rows.info_id)}
+    pairs = {
+        (min(i, index[p]), max(i, index[p]))
+        for i, p in enumerate(rows.parent)
+        if p in index and index[p] != i
+    }
+    return nodes, np.array(sorted(pairs))
+
+
+def load_cad_thread():
+    """The same entries, with an edge between two in the same thread."""
+    rows, nodes = cad_rows()
+    return nodes, cliques(rows.groupby("thread").groups.values())
+
+
+def load_cad_author():
+    """The same entries, with an edge between two by the same author."""
+    rows, nodes = cad_rows()
+    known = rows[~rows.author.isin(["", "[deleted]"])]
+    return nodes, cliques(known.groupby("author").groups.values())
+
+
+def cad_junk(nodes):
+    """Entries with no text."""
+    return pd.DataFrame({"empty": nodes.text.str.len() == 0})

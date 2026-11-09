@@ -49,6 +49,12 @@ They are final inclusion after full text, so some positives can't be told from t
 The reviews are the ones `playground/synergy_screen/pick.py` keeps, fixed in `SYNERGY_REVIEWS` in `run.py`.
 Only papers with an abstract are in the pool.
 
+- CAD, the Contextual Abuse Dataset, Reddit entries labelled by annotators who saw the thread, as the datasets `cad`, `cad_thread` and `cad_author`, which share the labels and differ in the edges, reply to parent, same thread and same author
+
+Each abuse category is one predicate, and an entry is positive if any annotator gave it that category.
+The excluded splits are dropped.
+Deleted and empty authors get no author edges.
+
 ## Models
 
 - Llama 3.1 70B Instruct Turbo as the oracle,
@@ -57,7 +63,7 @@ Only papers with an abstract are in the pool.
 ## Steps
 
 Each step is `python run.py <dataset> <step>` and writes `results/<dataset>/<step>.txt`.
-Datasets are `cora`, `stack`, `stack_author` and `synergy/<review>`.
+Datasets are `cora`, `stack`, `stack_author`, `synergy/<review>`, `cad`, `cad_thread` and `cad_author`.
 Every loader returns rows with a title and a text column plus the edges, so only `classes` is tied to one dataset.
 
 ### 1. Cora classes as predicates
@@ -87,7 +93,7 @@ Calls to reach 90% recall, as a share of the 2,708 papers, mean of 50 seeds:
 Step `label` and then step `predicates`.
 
 - `label` gets the verdict of every predicate on every row from the oracle.
-- `human` takes the place of `label` on SYNERGY and writes the screeners' labels in the same format, so every later step reads them the same way.
+- `human` takes the place of `label` on SYNERGY and CAD and writes the human labels in the same format, so every later step reads them the same way.
 - `predicates` replays the orders on those labels and makes no oracle calls.
 
 #### Predicates
@@ -119,6 +125,18 @@ Step `label` and then step `predicates`.
 | survey      | field     | the question is about data from a questionnaire or survey of people |
 | biomed      | field     | the question is about data from biology or medicine                 |
 | we          | control   | the question is written in the first person plural, using we or our |
+
+##### CAD
+
+The labels come from the annotators, so the claim is only what the proxy is asked.
+
+| key           | CAD category             | claim                                                              |
+| ------------- | ------------------------ | ------------------------------------------------------------------ |
+| identity      | IdentityDirectedAbuse    | the post is abusive toward an identity group                       |
+| affiliation   | AffiliationDirectedAbuse | the post is abusive toward people because of a group they joined   |
+| person        | PersonDirectedAbuse      | the post is abusive toward a specific person                       |
+| counterspeech | CounterSpeech            | the post challenges or argues against abuse                        |
+| slur          | Slur                     | the post uses a slur                                               |
 
 #### Result
 

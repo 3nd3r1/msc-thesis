@@ -26,8 +26,12 @@ from report import report
 from search import adjacency, search, unit
 
 from data import (
+    cad_junk,
     cora_features,
     cora_junk,
+    load_cad,
+    load_cad_author,
+    load_cad_thread,
     load_cora,
     load_stack,
     load_stack_author,
@@ -151,8 +155,32 @@ SYNERGY_REVIEWS = [
     "van_Dis_2020",
 ]
 
+CAD_PREDICATES = [
+    (
+        "identity",
+        "human",
+        "the post is abusive toward an identity group, such as a gender, race, "
+        "religion or sexuality",
+    ),
+    (
+        "affiliation",
+        "human",
+        "the post is abusive toward people because of a group they chose to join, "
+        "such as a political party or a community",
+    ),
+    (
+        "person",
+        "human",
+        "the post is abusive toward a specific person, in the conversation or named",
+    ),
+    ("counterspeech", "human", "the post challenges or argues against abuse"),
+    ("slur", "human", "the post uses a slur"),
+]
+
 ORACLE_SOURCE = f"{ORACLE}, strict prompt"
-HUMAN_SOURCE = "the review's own screeners, final inclusion after full text"
+SYNERGY_SOURCE = "the review's own screeners, final inclusion after full text"
+CAD_SOURCE = "CAD's annotators, who saw the thread"
+HUMAN_SOURCES = (SYNERGY_SOURCE, CAD_SOURCE)
 
 Dataset = namedtuple(
     "Dataset",
@@ -171,8 +199,12 @@ def synergy(review):
         [("included", "human", claim)],
         synergy_junk,
         f"synergy/{review}",
-        HUMAN_SOURCE,
+        SYNERGY_SOURCE,
     )
+
+
+def cad(name, load):
+    return Dataset(name, "entries", load, CAD_PREDICATES, cad_junk, "cad", CAD_SOURCE)
 
 
 DATASETS = {
@@ -188,6 +220,9 @@ DATASETS = {
         stack_junk,
         "stack",
     ),
+    "cad": cad("cad", load_cad),
+    "cad_thread": cad("cad_thread", load_cad_thread),
+    "cad_author": cad("cad_author", load_cad_author),
 } | {f"synergy/{r}": synergy(r) for r in SYNERGY_REVIEWS}
 
 
@@ -375,29 +410,30 @@ def collect(ds, model, name, system):
 
 
 def label(ds):
-    if ds.source == HUMAN_SOURCE:
+    if ds.source in HUMAN_SOURCES:
         sys.exit(f"{ds.name} has human labels, run: run.py {ds.name} human")
     collect(ds, ORACLE, "labels", STRICT)
 
 
 def human(ds):
     """The human labels in the oracle's format, so every replay step reads them the same."""
-    if ds.source != HUMAN_SOURCE:
+    if ds.source not in HUMAN_SOURCES:
         sys.exit(f"{ds.name} has no human labels, run: run.py {ds.name} label")
     nodes, _ = ds.load()
-    (key, _, _), = ds.predicates
     path = LABELS / ds.labels / "labels.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w") as f:
-        for i, yes in enumerate(nodes.included):
-            verdict = "yes" if yes else "no"
-            f.write(json.dumps({"row": i, "predicate": key, "verdict": verdict}) + "\n")
-    print(f"wrote {path}, {int(nodes.included.sum()):,} of {len(nodes):,} included")
+        for key, _, _ in ds.predicates:
+            for i, yes in enumerate(nodes[key]):
+                verdict = "yes" if yes else "no"
+                f.write(json.dumps({"row": i, "predicate": key, "verdict": verdict}) + "\n")
+            print(f"{key}: {int(nodes[key].sum()):,} of {len(nodes):,} yes")
+    print(f"wrote {path}")
 
 
 def proxy(ds):
     # Human labels have no oracle prompt to match, so the proxy gets plain LOTUS.
-    collect(ds, PROXY, "proxy", SYSTEM if ds.source == HUMAN_SOURCE else STRICT)
+    collect(ds, PROXY, "proxy", SYSTEM if ds.source in HUMAN_SOURCES else STRICT)
 
 
 def proxy_scores(ds, n):
