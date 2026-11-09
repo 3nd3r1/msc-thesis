@@ -30,39 +30,46 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
     degree = np.array([len(x) for x in neighbours], float)
     found = 0
 
-    # Lazy, so one search evaluates one order rather than all of them.
+    # Scores of the rows in `ix`, so a step can rescore only the rows it changed.
     score = {
-        "random": lambda: tie,
-        "embeddings": lambda: mean,
-        "links": lambda: pos,
-        "links+embeddings": lambda: pos + mean,
-        "links+-": lambda: pos - neg,
-        "degree": lambda: degree,
-        "blend/deg": lambda: (pos - neg) / np.maximum(degree, 1) + mean,
-        "proxy": lambda: prior,
+        "random": lambda ix: tie[ix],
+        "embeddings": lambda ix: mean[ix],
+        "links": lambda ix: pos[ix],
+        "links+embeddings": lambda ix: pos[ix] + mean[ix],
+        "links+-": lambda ix: pos[ix] - neg[ix],
+        "degree": lambda ix: degree[ix],
+        "blend/deg": lambda ix: (pos[ix] - neg[ix]) / np.maximum(degree[ix], 1) + mean[ix],
+        "proxy": lambda ix: prior[ix],
         # A neighbour of a confirmed positive outranks every row that is not
         # one, and the proxy orders within each of the two sets.
-        "proxy+links": lambda: prior + 2.0 * (pos > 0),
-    }.get(order, lambda: float(order.split()[1]) * (pos - neg) + mean)
+        "proxy+links": lambda ix: prior[ix] + 2.0 * (pos[ix] > 0),
+    }.get(order, lambda ix: float(order.split()[1]) * (pos[ix] - neg[ix]) + mean[ix])
     # The matvec behind `mean` is almost the whole cost, so skip it where unread.
     similar = order.split()[0] in ("embeddings", "links+embeddings", "blend", "blend/deg")
 
-    for calls in range(1, n + 1):
-        current = score() + 1e-9 * tie
-        current[asked] = -np.inf
+    def rescore(ix):
+        current[ix] = np.where(asked[ix], -np.inf, score(ix) + 1e-9 * tie[ix])
 
+    current = np.zeros(n)
+    rescore(slice(None))
+    for calls in range(1, n + 1):
         i = int(np.argmax(current))
         asked[i] = True
+        current[i] = -np.inf
         if labels[i]:
             found += 1
+            pos[neighbours[i]] += 1
             if similar:
                 similarity += vectors @ vectors[i]
                 mean = similarity / found
-            pos[neighbours[i]] += 1
+                rescore(slice(None))
+            else:
+                rescore(neighbours[i])
             while len(hit) < len(targets) and found >= targets[len(hit)]:
                 hit.append(calls)
             if len(hit) == len(targets):
                 return hit
         else:
             neg[neighbours[i]] += 1
+            rescore(neighbours[i])
     return hit + [n] * (len(targets) - len(hit))
