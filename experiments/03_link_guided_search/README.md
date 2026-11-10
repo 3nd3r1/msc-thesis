@@ -277,6 +277,32 @@ Links alone minus embeddings, from the same files:
 | Radjenovic_2013   | (-0.4) | (+0.2) | (+0.6) | -2.7   |
 | van_Dis_2020      | (+0.4) | +25.1  | +44.7  | +46.8  |
 
+##### CAD
+
+BLUF: on reply edges links and embeddings beat embeddings alone on identity, affiliation and person at every target, by 1.8 to 5.5 points, and lose on none of the 5 outside one sd.
+
+Links and embeddings minus embeddings at each target, pool with junk and repeated texts dropped, so negative means links help, in brackets where the gap is inside one sd:
+
+| edges  | predicate     | 50%    | 80%    | 90%    | 95%    |
+| ------ | ------------- | ------ | ------ | ------ | ------ |
+| reply  | identity      | -3.7   | -5.5   | -3.4   | -1.8   |
+| reply  | affiliation   | -3.7   | -4.7   | -4.1   | -2.1   |
+| reply  | person        | -3.6   | -3.7   | -4.5   | -3.1   |
+| reply  | counterspeech | (-0.2) | -1.6   | (+0.2) | (+0.1) |
+| reply  | slur          | (-0.5) | (+0.2) | (+0.2) | (+0.1) |
+| thread | identity      | +0.9   | -6.7   | -2.8   | -3.9   |
+| thread | affiliation   | +4.6   | +6.0   | +1.5   | -6.3   |
+| thread | person        | (-0.2) | +2.4   | -0.3   | -5.2   |
+| thread | counterspeech | -5.3   | -7.5   | -4.5   | -6.0   |
+| thread | slur          | +3.2   | +3.1   | -6.7   | -8.5   |
+| author | identity      | -1.3   | -3.9   | -3.1   | -3.4   |
+| author | affiliation   | (+0.5) | (+0.1) | -0.3   | +0.5   |
+| author | person        | (+0.6) | (+0.2) | -0.4   | -1.1   |
+| author | counterspeech | (-1.9) | -1.6   | -0.8   | -3.9   |
+| author | slur          | (-0.3) | (-0.4) | (+0.3) | (-1.2) |
+
+From `results/cad/predicates.txt`, `results/cad_thread/predicates.txt` and `results/cad_author/predicates.txt`.
+
 ### 3. How much the links correlate the positives
 
 Step `lift`
