@@ -266,16 +266,35 @@ def one(job):
     )
 
 
-def table(out, names, vectors, neighbours, orders=ORDERS, recalls=RECALLS):
-    """One block per recall target. Targets are nested, so one search covers them all."""
+def table(out, names, vectors, neighbours, cache, orders=ORDERS, recalls=RECALLS):
+    """One block per recall target. Targets are nested, so one search covers them all.
+
+    Every search is appended to `cache`, so a stopped run resumes where it was.
+    """
     jobs = [(k, o, s) for k in range(len(names)) for o in orders for s in range(SEEDS)]
+    key = lambda job: f"{names[job[0]][0]}|{len(vectors)}|{job[1]}|{job[2]}"
+
+    done = {}
+    if cache.exists():
+        for line in cache.open():
+            d = json.loads(line)
+            done[d["key"]] = d["hits"]
+    todo = [job for job in jobs if key(job) not in done]
+    if len(todo) < len(jobs):
+        print(f"  resuming, {len(jobs) - len(todo):,} searches already in {cache.name}")
+
     SHARED.update(names=names, vectors=vectors, neighbours=neighbours, recalls=recalls)
-    hits = []
-    with ProcessPoolExecutor(SEARCHERS, mp_context=get_context("fork")) as pool:
-        for n, hit in enumerate(pool.map(one, jobs, chunksize=1), 1):
-            hits.append(hit)
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    with (
+        ProcessPoolExecutor(SEARCHERS, mp_context=get_context("fork")) as pool,
+        cache.open("a", buffering=1) as f,
+    ):
+        for n, (job, hit) in enumerate(zip(todo, pool.map(one, todo, chunksize=1)), 1):
+            done[key(job)] = hit
+            f.write(json.dumps({"key": key(job), "hits": hit}) + "\n")
             if n % 200 == 0:
-                print(f"  {n:,}/{len(jobs):,} searches")
+                print(f"  {n:,}/{len(todo):,} searches")
+    hits = [done[key(job)] for job in jobs]
 
     calls = np.array(hits, float).reshape(
         len(names), len(orders), SEEDS, len(recalls)
@@ -294,6 +313,11 @@ def table(out, names, vectors, neighbours, orders=ORDERS, recalls=RECALLS):
 
 def results(ds):
     return RESULTS / ds.name
+
+
+def searches(ds, step):
+    """Searches of a step that has not finished yet, deleted once its table is written."""
+    return results(ds) / f"{step}.searches.jsonl"
 
 
 def vectors_for(nodes):
@@ -322,9 +346,11 @@ def classes(ds):
         names,
         unit(cora_features()),
         adjacency(edges, len(nodes)),
+        searches(ds, "classes"),
         recalls=recalls,
     )
     save()
+    searches(ds, "classes").unlink()
 
 
 def collect(ds, model, name, system):
@@ -506,9 +532,16 @@ def predicates(ds):
         out(f"\n{title}")
         links = subgraph(mask, edges)
         names = [(f"{k} {kind}", masks[k][mask], None) for k, kind, _ in ds.predicates]
-        table(out, names, vectors[mask], adjacency(links, int(mask.sum())))
+        table(
+            out,
+            names,
+            vectors[mask],
+            adjacency(links, int(mask.sum())),
+            searches(ds, "predicates"),
+        )
 
     save()
+    searches(ds, "predicates").unlink()
 
 
 def ranked(scores, labels, recalls):
@@ -621,10 +654,12 @@ def cascade(ds):
             names,
             vectors[mask],
             adjacency(links, int(mask.sum())),
+            searches(ds, "cascade"),
             CASCADE_ORDERS,
         )
 
     save()
+    searches(ds, "cascade").unlink()
 
 
 STEPS = {
