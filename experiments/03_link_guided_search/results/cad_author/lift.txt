@@ -1,0 +1,23 @@
+cad_author, 23,417 entries, 53,606 edges
+5 predicates labelled by CAD's annotators, who saw the thread
+
+edge%: of the edges leaving a positive, the share landing on a positive
+lift: edge% over the positive rate, so 1.0x is no correlation
+nbr+: positives with at least one positive neighbour, which grows with degree
+alone: positives with no neighbour at all, which links can never reach
+
+all 23,417 rows, 1 junk and 356 repeated texts in the pool
+    rate  edge%   lift   nbr+  alone  predicate
+    9.8%  20.7%   2.1x  38.0%  31.6%  identity human
+    5.1%  18.2%   3.5x  36.7%  24.7%  affiliation human
+    4.5%   9.6%   2.1x  25.7%  29.4%  person human
+    0.9%   8.4%   9.1x  20.7%  24.4%  counterspeech human
+    0.5%   2.4%   4.5x   9.4%  32.3%  slur human
+
+23,060 rows, junk and repeated texts dropped
+    rate  edge%   lift   nbr+  alone  predicate
+    9.9%  20.8%   2.1x  37.7%  31.7%  identity human
+    5.2%  18.2%   3.5x  36.3%  24.7%  affiliation human
+    4.5%   9.8%   2.1x  25.5%  29.7%  person human
+    0.9%   5.9%   6.5x  18.4%  25.5%  counterspeech human
+    0.6%   2.4%   4.4x   9.4%  32.3%  slur human

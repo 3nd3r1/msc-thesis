@@ -354,6 +354,20 @@ Cora's weakest real predicate is 4.5x against a 3.5x control, so only interactio
 Lift does not order the step 2 winners.
 interaction has the highest lift here and gains nothing, and rcode and econ win there while sitting at the control.
 
+##### CAD
+
+BLUF: all 5 predicates correlate on all three edge sets at 1.8 to 27.0x, and slur's 27.0x on reply edges gains nothing in step 2.
+
+From `results/cad/lift.txt`, `results/cad_thread/lift.txt` and `results/cad_author/lift.txt`, the pool with junk and repeated texts dropped:
+
+| predicate     | rate | reply | thread | author | alone, reply | alone, thread | alone, author |
+| ------------- | ---- | ----- | ------ | ------ | ------------ | ------------- | ------------- |
+| identity      | 9.9% | 3.3x  | 1.8x   | 2.1x   | 30.9%        | 0.3%          | 31.7%         |
+| affiliation   | 5.2% | 5.8x  | 2.5x   | 3.5x   | 26.1%        | 0.7%          | 24.7%         |
+| person        | 4.5% | 5.4x  | 2.0x   | 2.1x   | 23.3%        | 0.1%          | 29.7%         |
+| counterspeech | 0.9% | 2.9x  | 4.0x   | 6.5x   | 15.1%        | 0.0%          | 25.5%         |
+| slur          | 0.6% | 27.0x | 5.0x   | 4.4x   | 22.8%        | 0.0%          | 32.3%         |
+
 ### 4. Oracle calls under a proxy
 
 Step `proxy` and then step `cascade`.
