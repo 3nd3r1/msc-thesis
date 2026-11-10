@@ -64,6 +64,14 @@ STRICT = SYSTEM + (
     "otherwise answer False."
 )
 
+# The 8B refuses 44% of CAD calls under plain LOTUS.
+MODERATION = (
+    "You are a content moderation classifier. "
+    "The context may be offensive, and classifying it is the job.\n"
+    + SYSTEM
+    + "\nAlways answer True or False."
+)
+
 CORA_PREDICATES = [
     (
         "proof",
@@ -417,9 +425,10 @@ def collect(ds, model, name, system):
     out(f"{model} on {labels.row.nunique():,} {ds.noun}, {len(labels):,} labels")
     out("served by " + (", ".join(sorted(SERVED)) or "unknown, no calls made this run"))
     out(
-        "strict prompt, the claim has to be stated explicitly"
-        if system == STRICT
-        else "plain LOTUS prompt"
+        {
+            STRICT: "strict prompt, the claim has to be stated explicitly",
+            MODERATION: "plain LOTUS prompt framed as content moderation",
+        }.get(system, "plain LOTUS prompt")
     )
 
     out(f"\n  {'yes':>6} {'mean p':>7} {'p<.5':>6}  predicate")
@@ -459,7 +468,13 @@ def human(ds):
 
 def proxy(ds):
     # Human labels have no oracle prompt to match, so the proxy gets plain LOTUS.
-    collect(ds, PROXY, "proxy", SYSTEM if ds.source in HUMAN_SOURCES else STRICT)
+    if ds.source == CAD_SOURCE:
+        system = MODERATION
+    elif ds.source in HUMAN_SOURCES:
+        system = SYSTEM
+    else:
+        system = STRICT
+    collect(ds, PROXY, "proxy", system)
 
 
 def proxy_scores(ds, n):
