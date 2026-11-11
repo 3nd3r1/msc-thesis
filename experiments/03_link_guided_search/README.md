@@ -461,3 +461,37 @@ Same author, from `results/stack_author/cascade.txt`:
 
 The proxy column is the same on both edge sets, since the two datasets share the labels and the proxy never reads an edge.
 Both orders are deterministic once the proxy has scored the rows, so the sd is zero and the seeds buy nothing in this step.
+
+##### CAD
+
+BLUF: on reply edges link expansion on top of the proxy is better or equal on identity, affiliation, person and slur at every target, by up to 8.0 points, and counterspeech ties, while thread edges flip sign between targets and author edges stay within 5 points.
+
+Calls to reach 90% recall as a share of the rows, from `results/cad/cascade.txt`, `results/cad_thread/cascade.txt` and `results/cad_author/cascade.txt`, the pool with junk and repeated texts dropped:
+
+| predicate     | rate | proxy | +reply | +thread | +author |
+| ------------- | ---- | ----- | ------ | ------- | ------- |
+| identity      | 9.9% | 58.7% | 51.0%  | 63.5%   | 57.2%   |
+| affiliation   | 5.2% | 58.1% | 53.2%  | 55.2%   | 57.4%   |
+| person        | 4.5% | 44.0% | 36.7%  | 54.4%   | 42.4%   |
+| counterspeech | 0.9% | 84.4% | 84.6%  | 69.2%   | 81.4%   |
+| slur          | 0.6% | 57.6% | 55.2%  | 49.3%   | 55.6%   |
+
+proxy+links minus proxy at each target, from the same files:
+
+| edges  | predicate     | 50%   | 80%   | 90%   | 95%  |
+| ------ | ------------- | ----- | ----- | ----- | ---- |
+| reply  | identity      | -0.4  | -3.3  | -7.7  | -8.0 |
+| reply  | affiliation   | -2.4  | -4.4  | -4.9  | -5.5 |
+| reply  | person        | 0.0   | -0.7  | -7.3  | -7.9 |
+| reply  | counterspeech | -0.1  | +0.3  | +0.2  | +0.1 |
+| reply  | slur          | -1.9  | -2.9  | -2.4  | -0.3 |
+| thread | identity      | +12.9 | +12.7 | +4.8  | -5.9 |
+| thread | affiliation   | +1.9  | +1.7  | -2.9  | -7.7 |
+| thread | person        | +16.0 | +19.2 | +10.4 | +2.2 |
+| thread | counterspeech | -5.1  | -9.5  | -15.2 | -9.4 |
+| thread | slur          | +1.6  | -1.0  | -8.3  | -4.3 |
+| author | identity      | +2.9  | +1.9  | -1.5  | -3.0 |
+| author | affiliation   | +0.6  | -0.9  | -0.7  | +0.3 |
+| author | person        | +4.1  | +4.9  | -1.6  | -1.5 |
+| author | counterspeech | -1.1  | -1.4  | -3.0  | 0.0  |
+| author | slur          | -0.6  | +0.3  | -2.0  | +0.1 |
