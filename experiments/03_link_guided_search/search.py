@@ -1,5 +1,7 @@
 import numpy as np
 
+DECAY = 0.99
+
 
 def adjacency(edges, n):
     out = [[] for _ in range(n)]
@@ -43,6 +45,7 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
         # A neighbour of a confirmed positive outranks every row that is not
         # one, and the proxy orders within each of the two sets.
         "proxy+links": lambda ix: prior[ix] + 2.0 * (pos[ix] > 0),
+        "proxy+switch": lambda ix: prior[ix],
     }.get(order, lambda ix: float(order.split()[1]) * (pos[ix] - neg[ix]) + mean[ix])
     # The matvec behind `mean` is almost the whole cost, so skip it where unread.
     similar = order.split()[0] in ("embeddings", "links+embeddings", "blend", "blend/deg")
@@ -50,10 +53,26 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
     def rescore(ix):
         current[ix] = np.where(asked[ix], -np.inf, score(ix) + 1e-9 * tie[ix])
 
+    # proxy+switch picks between the proxy's best row and the proxy's best
+    # neighbour of a confirmed positive by Thompson sampling on how often each
+    # source has hit. Counts decay since the proxy's hit rate falls as it goes.
+    hits = np.zeros(2)
+    misses = np.zeros(2)
+
     current = np.zeros(n)
     rescore(slice(None))
     for calls in range(1, n + 1):
         i = int(np.argmax(current))
+        if order == "proxy+switch":
+            near = np.where(pos > 0, current, -np.inf)
+            j = int(np.argmax(near))
+            if near[j] > -np.inf and j != i:
+                source = int(np.argmax(rng.beta(hits + 1, misses + 1)))
+                i = (i, j)[source]
+                hits *= DECAY
+                misses *= DECAY
+                hits[source] += labels[i]
+                misses[source] += 1 - labels[i]
         asked[i] = True
         current[i] = -np.inf
         if labels[i]:

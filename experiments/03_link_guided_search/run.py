@@ -51,7 +51,7 @@ BLENDS = (1.0, 0.3, 0.1)
 ORDERS = ["random", "embeddings", "links", "links+embeddings", "links+-"] + [
     f"blend {a}" for a in BLENDS
 ] + ["blend/deg", "degree"]
-CASCADE_ORDERS = ["proxy", "proxy+links"]
+CASCADE_ORDERS = ["proxy", "proxy+links", "proxy+switch"]
 
 WORKERS = 24
 RETRIES = 8
@@ -656,6 +656,7 @@ def cascade(ds):
     out(
         "neighbours of a confirmed positive, and to the global best when there are none"
     )
+    out("proxy+switch picks between the two by Thompson sampling on which has hit more")
 
     for title, mask in pools:
         out(f"\n{title}")
