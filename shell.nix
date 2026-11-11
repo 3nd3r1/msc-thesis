@@ -58,7 +58,6 @@ pkgs.mkShell {
     python3Packages.wordcloud
     python3Packages.jupytext
     python3Packages.jupyterlab
-    python3Packages.geopandas
     python3Packages.transformers
     python3Packages.torch
     python3Packages.torch-geometric
