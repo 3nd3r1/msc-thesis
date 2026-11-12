@@ -14,3 +14,4 @@ Exploratory work that isn't an experiment yet, like screening a dataset before d
 - `cad_screen/` - screens CAD's reply, thread and author graphs against a matched cosine kNN,, whether they add to the embedding in a classifier and whether that beats fold noise and a shuffled graph, see the 2026-11-07 log.
 - `context_screen/` - runs the CAD screen on other datasets whose labels were given in context, Switchboard dialogue acts, MELD emotions and the Reddit and Gab hate conversations, see the 2026-11-12 log.
 - `meld_proxy/` - checks whether the 8B proxy ranks MELD utterances by emotion on a balanced sample, and whether a prompt that says to judge the line alone stops its refusals, see the 2026-11-12 log.
+- `switch_tuning/` - sweeps the decay and a proxy head start of `proxy+switch` against the proxy on every dataset with a proxy, see the 2026-11-12 log.
