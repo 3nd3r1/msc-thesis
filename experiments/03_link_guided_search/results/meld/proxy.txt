@@ -1,0 +1,13 @@
+meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo on 13,708 utterances, 82,148 labels
+served by meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
+plain LOTUS prompt, then the calls with no verdict told to judge the line alone
+
+     yes  mean p   p<.5  predicate
+   13.5%   0.932   0.5%  anger
+   13.2%   0.915   0.9%  disgust
+    7.5%   0.940   0.4%  fear
+    5.7%   0.975   0.2%  joy
+   15.8%   0.896   1.2%  sadness
+   51.8%   0.837   1.5%  surprise
+
+0.0% of labels have no p, logprobs were dropped
