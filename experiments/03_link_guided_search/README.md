@@ -56,6 +56,11 @@ Each abuse category is one predicate, and an entry is positive if any annotator 
 The excluded splits are dropped.
 Deleted and empty authors get no author edges.
 
+- MELD, utterances from Friends with the emotion annotators gave while watching the scene, as the datasets `meld` and `meld_dialogue`, which share the labels and differ in the edges, the line before in the dialogue and same dialogue
+
+All three splits are pooled.
+Each emotion except neutral is one predicate.
+
 ## Models
 
 - Llama 3.1 70B Instruct Turbo as the oracle,
@@ -138,6 +143,11 @@ The labels come from the annotators, so the claim is only what the proxy is aske
 | person        | PersonDirectedAbuse      | the post is abusive toward a specific person                       |
 | counterspeech | CounterSpeech            | the post challenges or argues against abuse                        |
 | slur          | Slur                     | the post uses a slur                                               |
+
+##### MELD
+
+The labels come from the annotators, so the claim is only what the proxy is asked.
+It is the same for each emotion, the speaker of this line from a TV show dialogue expresses the emotion.
 
 #### Result
 
@@ -303,6 +313,29 @@ Links and embeddings minus embeddings at each target, pool with junk and repeate
 | author | slur          | (-0.3) | (-0.4) | (+0.3) | (-1.2) |
 
 From `results/cad/predicates.txt`, `results/cad_thread/predicates.txt` and `results/cad_author/predicates.txt`.
+
+##### MELD
+
+BLUF: on both edge sets links and embeddings beat embeddings alone on 5 of the 6 emotions at every target, and surprise is the exception.
+
+Links and embeddings minus embeddings at each target, pool with junk and repeated texts dropped, so negative means links help, in brackets where the gap is inside one sd:
+
+| edges    | predicate | 50%    | 80%    | 90%    | 95%    |
+| -------- | --------- | ------ | ------ | ------ | ------ |
+| reply    | anger     | -8.5   | -6.1   | -4.5   | -1.9   |
+| reply    | disgust   | -4.8   | -0.6   | (-0.3) | -0.2   |
+| reply    | fear      | -4.9   | -2.4   | -1.7   | -1.0   |
+| reply    | joy       | -3.5   | -4.8   | -2.5   | -1.8   |
+| reply    | sadness   | -7.1   | -4.8   | -4.7   | -2.4   |
+| reply    | surprise  | +1.3   | -2.4   | -0.5   | -0.9   |
+| dialogue | anger     | -9.8   | -10.7  | -9.8   | -6.0   |
+| dialogue | disgust   | -7.8   | -7.3   | -4.5   | -2.0   |
+| dialogue | fear      | -6.3   | -5.2   | -4.8   | -0.4   |
+| dialogue | joy       | (+0.3) | -3.7   | -4.0   | -2.6   |
+| dialogue | sadness   | -8.6   | -6.5   | -7.7   | -6.1   |
+| dialogue | surprise  | +6.9   | +0.6   | -0.6   | -0.6   |
+
+From `results/meld/predicates.txt` and `results/meld_dialogue/predicates.txt`.
 
 ### 3. How much the links correlate the positives
 
