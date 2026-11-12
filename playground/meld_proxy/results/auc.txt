@@ -1,0 +1,11 @@
+8B proxy, plain LOTUS prompt, 200 positives and 200 negatives per emotion
+a call with no verdict scores 0, as in proxy_scores
+redo: the calls with no verdict asked again with a prompt that says to judge the line alone
+
+   emotion   rate  cosine      8B  no verdict    redo  no verdict
+     anger  11.7%   0.589   0.704          91   0.747           1
+   disgust   2.6%   0.601   0.783          75   0.835           0
+      fear   2.6%   0.587   0.704         107   0.773           0
+       joy  16.8%   0.584   0.661         107   0.752           0
+   sadness   7.3%   0.592   0.705         122   0.781           1
+  surprise  11.9%   0.559   0.759          68   0.847           0
