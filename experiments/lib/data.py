@@ -341,3 +341,32 @@ def load_cad_author():
 def cad_junk(nodes):
     """Entries with no text."""
     return pd.DataFrame({"empty": nodes.text.str.len() == 0})
+
+
+MELD = Path(__file__).resolve().parents[2] / "data" / "meld"
+MELD_EMOTIONS = ["anger", "disgust", "fear", "joy", "sadness", "surprise"]
+
+
+def meld_rows():
+    """MELD utterances from Friends in dialogue order, all three splits, one column per emotion."""
+    d = pd.concat(
+        [pd.read_csv(MELD / f"{s}_sent_emo.csv").assign(split=s) for s in ("train", "dev", "test")]
+    )
+    d = d.sort_values(["split", "Dialogue_ID", "Utterance_ID"]).reset_index(drop=True)
+    nodes = pd.DataFrame({"title": "", "text": d.Utterance.str.strip()})
+    for e in MELD_EMOTIONS:
+        nodes[e] = (d.Emotion == e).to_numpy()
+    return (d.split + "/" + d.Dialogue_ID.astype(str)).to_numpy(), nodes
+
+
+def load_meld():
+    """MELD utterances, with an edge from each to the one before it in the dialogue."""
+    dialogue, nodes = meld_rows()
+    i = np.arange(1, len(nodes))
+    return nodes, np.c_[i - 1, i][dialogue[i] == dialogue[i - 1]]
+
+
+def load_meld_dialogue():
+    """The same utterances, with an edge between two in the same dialogue."""
+    dialogue, nodes = meld_rows()
+    return nodes, cliques(pd.Series(range(len(nodes))).groupby(dialogue).groups.values())

@@ -32,6 +32,8 @@ from data import (
     load_cad,
     load_cad_author,
     load_cad_thread,
+    load_meld,
+    load_meld_dialogue,
     load_cora,
     load_stack,
     load_stack_author,
@@ -185,10 +187,16 @@ CAD_PREDICATES = [
     ("slur", "human", "the post uses a slur"),
 ]
 
+MELD_PREDICATES = [
+    (e, "human", f"the speaker of this line from a TV show dialogue expresses {e}")
+    for e in ("anger", "disgust", "fear", "joy", "sadness", "surprise")
+]
+
 ORACLE_SOURCE = f"{ORACLE}, strict prompt"
 SYNERGY_SOURCE = "the review's own screeners, final inclusion after full text"
 CAD_SOURCE = "CAD's annotators, who saw the thread"
-HUMAN_SOURCES = (SYNERGY_SOURCE, CAD_SOURCE)
+MELD_SOURCE = "MELD's annotators, who watched the scene"
+HUMAN_SOURCES = (SYNERGY_SOURCE, CAD_SOURCE, MELD_SOURCE)
 
 Dataset = namedtuple(
     "Dataset",
@@ -215,6 +223,10 @@ def cad(name, load):
     return Dataset(name, "entries", load, CAD_PREDICATES, cad_junk, "cad", CAD_SOURCE)
 
 
+def meld(name, load):
+    return Dataset(name, "utterances", load, MELD_PREDICATES, cad_junk, "meld", MELD_SOURCE)
+
+
 DATASETS = {
     "cora": Dataset("cora", "papers", load_cora, CORA_PREDICATES, cora_junk, "cora"),
     "stack": Dataset(
@@ -231,6 +243,8 @@ DATASETS = {
     "cad": cad("cad", load_cad),
     "cad_thread": cad("cad_thread", load_cad_thread),
     "cad_author": cad("cad_author", load_cad_author),
+    "meld": meld("meld", load_meld),
+    "meld_dialogue": meld("meld_dialogue", load_meld_dialogue),
 } | {f"synergy/{r}": synergy(r) for r in SYNERGY_REVIEWS}
 
 
