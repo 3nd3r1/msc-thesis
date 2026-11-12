@@ -74,6 +74,12 @@ MODERATION = (
     + "\nAlways answer True or False."
 )
 
+# The 8B refuses a fifth to a third of MELD lines under plain LOTUS, asking for the scene.
+LINE_ALONE = SYSTEM + (
+    "\nThe context is one line without the scene. "
+    "Judge it from the line alone and always answer True or False."
+)
+
 CORA_PREDICATES = [
     (
         "proof",
@@ -442,6 +448,7 @@ def collect(ds, model, name, system):
         {
             STRICT: "strict prompt, the claim has to be stated explicitly",
             MODERATION: "plain LOTUS prompt framed as content moderation",
+            LINE_ALONE: "plain LOTUS prompt, then the calls with no verdict told to judge the line alone",
         }.get(system, "plain LOTUS prompt")
     )
 
@@ -482,7 +489,10 @@ def human(ds):
 
 def proxy(ds):
     # Human labels have no oracle prompt to match, so the proxy gets plain LOTUS.
-    if ds.source == CAD_SOURCE:
+    if ds.source == MELD_SOURCE:
+        collect(ds, PROXY, "proxy", SYSTEM)
+        system = LINE_ALONE
+    elif ds.source == CAD_SOURCE:
         system = MODERATION
     elif ds.source in HUMAN_SOURCES:
         system = SYSTEM
