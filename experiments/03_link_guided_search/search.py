@@ -16,7 +16,8 @@ def unit(features):
     return features / np.maximum(norms, 1e-9)
 
 
-def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=None):
+def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=None,
+           decay=DECAY, head=0.0):
     """Oracle calls until each of `recalls` of the positives are found, lowest first."""
     rng = np.random.default_rng(seed)
     n = len(labels)
@@ -56,7 +57,8 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
     # proxy+switch picks between the proxy's best row and the proxy's best
     # neighbour of a confirmed positive by Thompson sampling on how often each
     # source has hit. Counts decay since the proxy's hit rate falls as it goes.
-    hits = np.zeros(2)
+    # `head` is pseudo hits for the proxy, so links have to earn their turn.
+    hits = np.array([head, 0.0])
     misses = np.zeros(2)
 
     current = np.zeros(n)
@@ -69,8 +71,8 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
             if near[j] > -np.inf and j != i:
                 source = int(np.argmax(rng.beta(hits + 1, misses + 1)))
                 i = (i, j)[source]
-                hits *= DECAY
-                misses *= DECAY
+                hits *= decay
+                misses *= decay
                 hits[source] += labels[i]
                 misses[source] += 1 - labels[i]
         asked[i] = True
