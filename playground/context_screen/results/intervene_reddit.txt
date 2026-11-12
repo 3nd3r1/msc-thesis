@@ -1,0 +1,13 @@
+embedding 22,304 texts with all-MiniLM-L6-v2
+intervene_reddit, 22,304 rows
+lift: edges leaving a positive that land on one, over the rate, ctrl is shuffled labels
+far: lift on the graph edges that are not in the matched cosine kNN, knn: lift on the kNN
++knn: out of fold AP of emb + share of positive kNN neighbours, mean of 3 fold seeds
+gain: AP added by the share of positive graph neighbours, shuffled keeps every row's degree
+neighbour labels are true labels, so the gains are an upper bound
+
+       graph     edges  reach   jacc        predicate   rate   lift   ctrl    far    knn   +knn           gain       shuffled
+       reply    17,289  93.1%  0.072             hate  23.6%   0.9x   1.0x   0.8x   2.3x  0.779  +0.023+-0.000  +0.000+-0.000
+
+     segment    84,144  93.1%  0.058             hate  23.6%   0.8x   1.0x   0.8x   2.2x  0.782  +0.022+-0.000  -0.000+-0.000
+

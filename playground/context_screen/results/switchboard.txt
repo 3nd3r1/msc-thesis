@@ -1,0 +1,42 @@
+embedding 27,181 texts with all-MiniLM-L6-v2
+switchboard, 27,181 rows
+lift: edges leaving a positive that land on one, over the rate, ctrl is shuffled labels
+far: lift on the graph edges that are not in the matched cosine kNN, knn: lift on the kNN
++knn: out of fold AP of emb + share of positive kNN neighbours, mean of 3 fold seeds
+gain: AP added by the share of positive graph neighbours, shuffled keeps every row's degree
+neighbour labels are true labels, so the gains are an upper bound
+
+       graph     edges  reach   jacc        predicate   rate   lift   ctrl    far    knn   +knn           gain       shuffled
+       reply    26,931 100.0%  0.008        statement  33.5%   0.5x   1.0x   0.5x   1.9x  0.830  +0.005+-0.000  +0.000+-0.000
+       reply    26,931 100.0%  0.008          opinion  15.9%   1.1x   1.0x   1.1x   2.6x  0.609  +0.001+-0.000  -0.000+-0.000
+       reply    26,931 100.0%  0.008      backchannel  29.4%   0.4x   1.0x   0.4x   2.5x  0.884  +0.003+-0.001  -0.001+-0.001
+       reply    26,931 100.0%  0.008            agree   7.4%   1.3x   1.0x   1.3x   4.2x  0.497  +0.001+-0.000  +0.001+-0.000
+       reply    26,931 100.0%  0.008       yes_answer   2.1%   0.6x   1.0x   0.5x   3.2x  0.146  +0.001+-0.001  -0.001+-0.002
+       reply    26,931 100.0%  0.008        no_answer   1.0%   1.2x   0.8x   0.8x  23.9x  0.453  +0.006+-0.001  -0.002+-0.002
+       reply    26,931 100.0%  0.008  yes_no_question   4.3%   0.6x   1.0x   0.6x   4.8x  0.411  +0.037+-0.001  -0.001+-0.001
+       reply    26,931 100.0%  0.008      wh_question   1.6%   0.8x   0.9x   0.6x  19.8x  0.527  +0.002+-0.003  -0.005+-0.003
+       reply    26,931 100.0%  0.008     appreciation   3.5%   0.5x   1.0x   0.5x  14.5x  0.655  +0.000+-0.000  -0.001+-0.001
+       reply    26,931 100.0%  0.008          closing   1.5%  54.8x   1.0x  54.7x  38.5x  0.699  +0.253+-0.001  -0.000+-0.003
+
+conversation 1,731,277 100.0%  0.016        statement  33.5%   1.0x   1.0x   1.0x   1.8x  0.839  +0.002+-0.000  -0.000+-0.000
+conversation 1,731,277 100.0%  0.016          opinion  15.9%   1.2x   1.0x   1.2x   2.3x  0.615  +0.020+-0.001  -0.000+-0.000
+conversation 1,731,277 100.0%  0.016      backchannel  29.4%   1.0x   1.0x   1.0x   2.5x  0.892  +0.004+-0.000  +0.000+-0.000
+conversation 1,731,277 100.0%  0.016            agree   7.4%   1.3x   1.0x   1.3x   3.6x  0.500  +0.023+-0.000  -0.001+-0.000
+conversation 1,731,277 100.0%  0.016       yes_answer   2.1%   1.5x   1.0x   1.5x   2.7x  0.144  +0.008+-0.003  +0.002+-0.002
+conversation 1,731,277 100.0%  0.016        no_answer   1.0%   1.6x   1.0x   1.5x  14.0x  0.432  +0.009+-0.001  +0.008+-0.002
+conversation 1,731,277 100.0%  0.016  yes_no_question   4.3%   1.4x   1.0x   1.3x   3.2x  0.417  +0.003+-0.001  +0.000+-0.001
+conversation 1,731,277 100.0%  0.016      wh_question   1.6%   1.5x   1.0x   1.3x   7.3x  0.535  -0.001+-0.002  -0.002+-0.001
+conversation 1,731,277 100.0%  0.016     appreciation   3.5%   1.5x   1.0x   1.4x  10.6x  0.652  +0.005+-0.001  +0.001+-0.001
+conversation 1,731,277 100.0%  0.016          closing   1.5%   3.1x   1.0x   2.9x  30.1x  0.714  +0.022+-0.001  +0.000+-0.000
+
+     speaker 1,586,201  80.4%  0.002        statement  33.5%   1.0x   1.0x   1.0x   1.8x  0.839  +0.000+-0.000  +0.000+-0.000
+     speaker 1,586,201  80.4%  0.002          opinion  15.9%   1.0x   1.0x   1.0x   2.3x  0.614  +0.003+-0.001  +0.000+-0.000
+     speaker 1,586,201  80.4%  0.002      backchannel  29.4%   1.0x   1.0x   1.0x   2.5x  0.892  -0.000+-0.000  +0.000+-0.000
+     speaker 1,586,201  80.4%  0.002            agree   7.4%   1.0x   1.0x   1.0x   3.6x  0.499  -0.001+-0.000  +0.000+-0.001
+     speaker 1,586,201  80.4%  0.002       yes_answer   2.1%   1.2x   1.0x   1.2x   2.7x  0.144  +0.003+-0.004  +0.001+-0.002
+     speaker 1,586,201  80.4%  0.002        no_answer   1.0%   1.3x   1.0x   1.2x  14.5x  0.436  +0.007+-0.009  +0.010+-0.013
+     speaker 1,586,201  80.4%  0.002  yes_no_question   4.3%   1.2x   1.0x   1.2x   3.2x  0.418  +0.005+-0.001  +0.001+-0.000
+     speaker 1,586,201  80.4%  0.002      wh_question   1.6%   1.2x   1.0x   1.2x   7.4x  0.535  +0.001+-0.001  -0.000+-0.003
+     speaker 1,586,201  80.4%  0.002     appreciation   3.5%   1.0x   1.0x   1.0x  10.8x  0.652  +0.001+-0.002  +0.000+-0.003
+     speaker 1,586,201  80.4%  0.002          closing   1.5%   1.5x   1.0x   1.3x  30.7x  0.714  +0.001+-0.001  +0.001+-0.001
+
