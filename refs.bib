@@ -54,6 +54,13 @@
   file = {/home/ender/Zotero/storage/7U4ERCYB/Boutaleb et al. - 2025 - Something's Fishy In The Data Lake A Critical Re-evaluation of Table Union Search Benchmarks.pdf;/home/ender/Zotero/storage/RYQ4ULVJ/2505.html}
 }
 
+@misc{CharacterizingGraphDatasets,
+  title = {Characterizing {{Graph Datasets}} for {{Node Classification}}: {{Homophily}}--{{Heterophily Dichotomy}} and {{Beyond}}},
+  urldate = {2026-11-12},
+  howpublished = {https://arxiv.org/html/2209.06177v5},
+  file = {/home/ender/Zotero/storage/RU2N34JC/2209.html}
+}
+
 @inproceedings{chaudhuriRandomSamplingJoins1999,
   title = {On Random Sampling over Joins},
   booktitle = {Proceedings of the 1999 {{ACM SIGMOD}} International Conference on {{Management}} of Data},
@@ -108,6 +115,34 @@
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Databases},
   note = {Comment: Code and data: https://github.com/semviews/lotus-semviews},
   file = {/home/ender/Zotero/storage/6CLD3UGU/Hassanzadeh and Subramanian - 2026 - Semantic Views Certified Reuse of LLM Labels Across Semantic Queries.pdf;/home/ender/Zotero/storage/RZWA44L7/2610.html}
+}
+
+@misc{huangCombiningLabelPropagation2020,
+  title = {Combining {{Label Propagation}} and {{Simple Models Out}}-Performs {{Graph Neural Networks}}},
+  author = {Huang, Qian and He, Horace and Singh, Abhay and Lim, Ser-Nam and Benson, Austin R.},
+  year = 2020,
+  month = nov,
+  number = {arXiv:2010.13993},
+  eprint = {2010.13993},
+  primaryclass = {cs.LG},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2010.13993},
+  urldate = {2026-11-12},
+  abstract = {Graph Neural Networks (GNNs) are the predominant technique for learning over graphs. However, there is relatively little understanding of why GNNs are successful in practice and whether they are necessary for good performance. Here, we show that for many standard transductive node classification benchmarks, we can exceed or match the performance of state-of-the-art GNNs by combining shallow models that ignore the graph structure with two simple post-processing steps that exploit correlation in the label structure: (i) an "error correlation" that spreads residual errors in training data to correct errors in test data and (ii) a "prediction correlation" that smooths the predictions on the test data. We call this overall procedure Correct and Smooth (C\&S), and the post-processing steps are implemented via simple modifications to standard label propagation techniques from early graph-based semi-supervised learning methods. Our approach exceeds or nearly matches the performance of state-of-the-art GNNs on a wide variety of benchmarks, with just a small fraction of the parameters and orders of magnitude faster runtime. For instance, we exceed the best known GNN performance on the OGB-Products dataset with 137 times fewer parameters and greater than 100 times less training time. The performance of our methods highlights how directly incorporating label information into the learning algorithm (as was done in traditional techniques) yields easy and substantial performance gains. We can also incorporate our techniques into big GNN models, providing modest gains. Our code for the OGB results is at https://github.com/Chillee/CorrectAndSmooth.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Computer Science - Social and Information Networks},
+  file = {/home/ender/Zotero/storage/4UADJFQI/Huang et al. - 2020 - Combining Label Propagation and Simple Models Out-performs Graph Neural Networks.pdf;/home/ender/Zotero/storage/E4YGZGBG/2010.html}
+}
+
+@inproceedings{jiangCostEffectiveActive2019,
+  title = {Cost {{Effective Active Search}}},
+  booktitle = {Advances in {{Neural Information Processing Systems}}},
+  author = {Jiang, Shali and Garnett, Roman and Moseley, Benjamin},
+  year = 2019,
+  volume = {32},
+  publisher = {Curran Associates, Inc.},
+  urldate = {2026-11-12},
+  file = {/home/ender/Zotero/storage/3UER976G/Jiang et al. - 2019 - Cost Effective Active Search.pdf}
 }
 
 @misc{kimFastLLMBasedSemantic2026,
@@ -498,6 +533,24 @@ They dont touch cardinality estimation but assume it has moderate errors.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Databases,Computer Science - Machine Learning},
   file = {/home/ender/Zotero/storage/TWLLGGQF/Zhao et al. - 2026 - Larch Learned Query Optimization for Semantic Predicates.pdf;/home/ender/Zotero/storage/GWFM9BTT/2606.html}
+}
+
+@misc{zhaoPROBELearnedProxyBased2026,
+  title = {{{PROBE}}: {{Learned Proxy-Based Execution}} for {{Highly Selective Multimodal Semantic Queries}}},
+  shorttitle = {{{PROBE}}},
+  author = {Zhao, Haikai and Fu, Haisheng and Miao, Zhengjie and Fang, Zhenman},
+  year = 2026,
+  month = nov,
+  number = {arXiv:2611.01454},
+  eprint = {2611.01454},
+  primaryclass = {cs.DB},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2611.01454},
+  urldate = {2026-11-12},
+  abstract = {Large language models (LLMs) enable semantic queries over unstructured data, but invoking an LLM on every row is prohibitively expensive. Proxy-based execution can reduce this ple with the LLM and training a lightweight proxyto label the remaining rows. Nevertheless, in practical scenarios where semantic queries are highly selective, it remainschallenging to identify representative samples foLM budget and to achieve accurate predictions overthe remaining data using the proxy. We present PROBE, a learned proxy-based execution framework for highly selective multimodal semantic queries. PROBE uses selectivity-adaptive sampling to discover rare polightweight proxy on the acquired labels. It thenrefines proxy predictions through residual correction and homogeneity smoothing over a similarity graph. To address sampling bias, PROBE jointly calibrates refined scores usiarate calibration sample, then selectively routescandidates to the LLM by optimizing the tradeoff between estimated F1 and evaluation cost. On queries from SemBench and LRO-Bench with positive rates as low as 2.17x10\textasciicircum -5 budget yields a geometric-mean F1 of 0.762,compared with 0.797 for exhaustive LLM evaluation, at a geometric-mean speedup of 4.87x and a maximum speedup of 9.3x.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Databases},
+  file = {/home/ender/Zotero/storage/IUBI8CC4/Zhao et al. - 2026 - PROBE Learned Proxy-Based Execution for Highly Selective Multimodal Semantic Queries.pdf;/home/ender/Zotero/storage/56UTAN6A/2611.html}
 }
 
 @misc{zhengMICROLightweightMiddleware2026,
