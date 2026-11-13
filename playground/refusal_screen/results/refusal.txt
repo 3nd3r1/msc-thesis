@@ -1,0 +1,63 @@
+refused: share of 300 random pool rows the 8B gives no verdict on under the plain LOTUS prompt, seed 0
+gain: proxy+links minus proxy in points of the rows at 90% recall, negative means links help
+pool with junk and repeated texts dropped
+
+      dataset     predicate  refused   gain
+         cora         proof     0.0%   +8.2
+         cora      language     0.0%   +4.6
+         cora       biology     0.0%   +2.2
+         cora      robotics     0.0%   +3.9
+         cora  first person     0.0%   +4.5
+         cora        markov     0.0%   +3.6
+         cora  unsupervised     0.0%   +0.0
+        stack          spss     0.0%   +5.5
+        stack         rcode     0.0%  +12.3
+        stack        choose     0.0%   +4.8
+        stack   assumptions     0.0%   +0.0
+        stack   interaction     0.0%   +2.4
+        stack     interpret     0.0%   +4.8
+        stack      ownstudy     0.0%   +3.4
+        stack          econ     0.0%   +4.4
+        stack        survey     0.0%   +2.9
+        stack        biomed     0.0%   +5.7
+        stack            we     0.0%   +0.1
+ stack_author          spss     0.0%   +2.6
+ stack_author         rcode     0.0%   +7.8
+ stack_author        choose     0.0%   +5.1
+ stack_author   assumptions     0.0%   +5.5
+ stack_author   interaction     0.0%   +4.6
+ stack_author     interpret     0.0%   +4.9
+ stack_author      ownstudy     0.0%   +0.2
+ stack_author          econ     0.0%   +3.1
+ stack_author        survey     0.0%   +0.7
+ stack_author        biomed     0.0%   +2.3
+ stack_author            we     0.0%   -0.9
+          cad      identity    45.0%   -7.7
+          cad   affiliation    43.3%   -4.9
+          cad        person    33.3%   -7.3
+          cad counterspeech    33.0%   +0.2
+          cad          slur    64.3%   -2.5
+   cad_thread      identity    45.0%   +4.7
+   cad_thread   affiliation    43.3%   -2.9
+   cad_thread        person    33.3%  +10.4
+   cad_thread counterspeech    33.0%  -15.1
+   cad_thread          slur    64.3%   -8.3
+   cad_author      identity    45.0%   -1.6
+   cad_author   affiliation    43.3%   -0.6
+   cad_author        person    33.3%   -1.6
+   cad_author counterspeech    33.0%   -3.0
+   cad_author          slur    64.3%   -2.0
+         meld         anger    20.7%   -9.2
+         meld       disgust    14.7%   -2.5
+         meld          fear    24.3%   -5.7
+         meld           joy    21.0%   -4.7
+         meld       sadness    27.7%   -4.4
+         meld      surprise    13.3%   +1.4
+meld_dialogue         anger    20.7%  -13.5
+meld_dialogue       disgust    14.7%   -2.2
+meld_dialogue          fear    24.3%   -6.7
+meld_dialogue           joy    21.0%   -6.7
+meld_dialogue       sadness    27.7%   -9.3
+meld_dialogue      surprise    13.3%  +12.4
+
+Spearman of refused against gain over all predicates -0.634, fixed to pass at -0.3 or lower: pass
