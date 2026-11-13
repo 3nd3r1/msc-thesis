@@ -1,0 +1,75 @@
+meld_dialogue, 13,708 utterances, 82,721 edges
+calls% is calls over rows, mean and sd of 50 seeds
+proxy is p(yes) from meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo, one call per row and predicate
+both orders pay that, so only the oracle calls below differ
+proxy+links sends the oracle to the best proxy score among the unasked
+neighbours of a confirmed positive, and to the global best when there are none
+proxy+switch picks between the two by Thompson sampling on which has hit more
+
+all 13,708 rows, 0 junk and 1550 repeated texts in the pool
+  50% recall                 proxy           proxy+links          proxy+switch
+             anger human 11.7%    18.5%+-0.0%    22.5%+-0.0%    16.6%+-0.0%
+           disgust human  2.6%    11.5%+-0.0%    13.0%+-0.0%     9.1%+-0.1%
+              fear human  2.6%    14.1%+-0.0%    15.6%+-0.0%    12.6%+-0.1%
+               joy human 16.8%    18.0%+-0.0%    29.9%+-0.0%    16.8%+-0.0%
+           sadness human  7.3%    16.7%+-0.0%    21.3%+-0.0%    14.8%+-0.1%
+          surprise human 11.9%    13.9%+-0.0%    31.5%+-0.0%    13.8%+-0.1%
+
+  80% recall                 proxy           proxy+links          proxy+switch
+             anger human 11.7%    52.3%+-0.0%    43.7%+-0.0%    44.6%+-0.1%
+           disgust human  2.6%    33.4%+-0.0%    32.0%+-0.0%    31.5%+-0.1%
+              fear human  2.6%    45.6%+-0.0%    38.5%+-0.0%    38.5%+-0.0%
+               joy human 16.8%    52.6%+-0.0%    56.1%+-0.0%    51.8%+-0.1%
+           sadness human  7.3%    50.9%+-0.0%    43.7%+-0.0%    44.2%+-0.1%
+          surprise human 11.9%    35.4%+-0.0%    56.4%+-0.0%    35.4%+-0.0%
+
+  90% recall                 proxy           proxy+links          proxy+switch
+             anger human 11.7%    73.1%+-0.0%    57.3%+-0.0%    59.3%+-0.1%
+           disgust human  2.6%    50.0%+-0.0%    44.6%+-0.0%    44.6%+-0.0%
+              fear human  2.6%    69.5%+-0.0%    61.5%+-0.0%    61.5%+-0.0%
+               joy human 16.8%    74.3%+-0.0%    68.0%+-0.0%    72.7%+-0.1%
+           sadness human  7.3%    72.6%+-0.0%    61.8%+-0.0%    61.8%+-0.0%
+          surprise human 11.9%    52.8%+-0.0%    68.1%+-0.0%    52.9%+-0.0%
+
+  95% recall                 proxy           proxy+links          proxy+switch
+             anger human 11.7%    84.0%+-0.0%    71.6%+-0.0%    71.6%+-0.0%
+           disgust human  2.6%    66.9%+-0.0%    62.2%+-0.0%    62.2%+-0.0%
+              fear human  2.6%    78.9%+-0.0%    78.0%+-0.0%    78.0%+-0.0%
+               joy human 16.8%    86.0%+-0.0%    80.5%+-0.0%    84.5%+-0.2%
+           sadness human  7.3%    83.4%+-0.0%    76.2%+-0.0%    76.2%+-0.0%
+          surprise human 11.9%    67.1%+-0.0%    75.5%+-0.0%    67.1%+-0.0%
+
+
+12,158 rows, junk and repeated texts dropped
+  50% recall                 proxy           proxy+links          proxy+switch
+             anger human 12.4%    18.8%+-0.0%    22.7%+-0.0%    16.7%+-0.1%
+           disgust human  2.9%    12.1%+-0.0%    13.1%+-0.0%     9.1%+-0.1%
+              fear human  2.8%    14.7%+-0.0%    16.1%+-0.0%    13.8%+-0.1%
+               joy human 16.7%    17.1%+-0.0%    28.8%+-0.0%    16.8%+-0.0%
+           sadness human  7.8%    16.4%+-0.0%    20.7%+-0.0%    14.9%+-0.1%
+          surprise human 10.8%    13.6%+-0.0%    29.3%+-0.0%    14.0%+-0.0%
+
+  80% recall                 proxy           proxy+links          proxy+switch
+             anger human 12.4%    52.1%+-0.0%    43.8%+-0.0%    44.3%+-0.1%
+           disgust human  2.9%    34.2%+-0.0%    32.8%+-0.0%    32.8%+-0.0%
+              fear human  2.8%    44.0%+-0.0%    38.5%+-0.0%    38.5%+-0.0%
+               joy human 16.7%    53.8%+-0.0%    54.6%+-0.0%    51.9%+-0.1%
+           sadness human  7.8%    50.8%+-0.0%    43.2%+-0.0%    44.1%+-0.1%
+          surprise human 10.8%    36.5%+-0.0%    53.4%+-0.0%    36.3%+-0.1%
+
+  90% recall                 proxy           proxy+links          proxy+switch
+             anger human 12.4%    71.1%+-0.0%    57.6%+-0.0%    58.4%+-0.2%
+           disgust human  2.9%    47.4%+-0.0%    45.2%+-0.0%    45.2%+-0.0%
+              fear human  2.8%    67.5%+-0.0%    60.8%+-0.0%    60.8%+-0.0%
+               joy human 16.7%    75.0%+-0.0%    68.4%+-0.0%    71.4%+-0.2%
+           sadness human  7.8%    72.0%+-0.0%    62.7%+-0.0%    62.7%+-0.0%
+          surprise human 10.8%    53.5%+-0.0%    65.9%+-0.0%    53.6%+-0.1%
+
+  95% recall                 proxy           proxy+links          proxy+switch
+             anger human 12.4%    82.8%+-0.0%    70.8%+-0.0%    70.8%+-0.0%
+           disgust human  2.9%    65.8%+-0.0%    61.7%+-0.0%    61.7%+-0.0%
+              fear human  2.8%    77.4%+-0.0%    76.8%+-0.0%    76.8%+-0.0%
+               joy human 16.7%    86.2%+-0.0%    80.5%+-0.0%    82.8%+-0.2%
+           sadness human  7.8%    82.5%+-0.0%    76.6%+-0.0%    76.6%+-0.0%
+          surprise human 10.8%    67.4%+-0.0%    74.5%+-0.0%    67.2%+-0.1%
+

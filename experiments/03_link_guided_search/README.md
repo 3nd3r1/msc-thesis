@@ -69,7 +69,7 @@ Each emotion except neutral is one predicate.
 ## Steps
 
 Each step is `python run.py <dataset> <step>` and writes `results/<dataset>/<step>.txt`.
-Datasets are `cora`, `stack`, `stack_author`, `synergy/<review>`, `cad`, `cad_thread` and `cad_author`.
+Datasets are `cora`, `stack`, `stack_author`, `synergy/<review>`, `cad`, `cad_thread`, `cad_author`, `meld` and `meld_dialogue`.
 Every loader returns rows with a title and a text column plus the edges, so only `classes` is tied to one dataset.
 
 ### 1. Cora classes as predicates
@@ -530,17 +530,51 @@ proxy+links minus proxy at each target, from the same files:
 | author | counterspeech | -1.1  | -1.4  | -3.0  | 0.0  |
 | author | slur          | -0.6  | +0.3  | -2.0  | +0.1 |
 
+##### MELD
+
+BLUF: on both edge sets link expansion on top of the proxy is better on every emotion except surprise from 80% recall, by up to 13.5 points, apart from joy at 80% on dialogue edges, and surprise is worse at every target.
+
+Calls to reach 90% recall as a share of the rows, from `results/meld/cascade.txt` and `results/meld_dialogue/cascade.txt`, the pool with junk and repeated texts dropped:
+
+| predicate | rate  | proxy | +reply | +dialogue |
+| --------- | ----- | ----- | ------ | --------- |
+| anger     | 12.4% | 71.1% | 61.9%  | 57.6%     |
+| disgust   | 2.9%  | 47.4% | 44.9%  | 45.2%     |
+| fear      | 2.8%  | 67.5% | 61.8%  | 60.8%     |
+| joy       | 16.7% | 75.0% | 70.4%  | 68.4%     |
+| sadness   | 7.8%  | 72.0% | 67.6%  | 62.7%     |
+| surprise  | 10.8% | 53.5% | 54.9%  | 65.9%     |
+
+proxy+links minus proxy at each target, from the same files:
+
+| edges    | predicate | 50%   | 80%   | 90%   | 95%   |
+| -------- | --------- | ----- | ----- | ----- | ----- |
+| reply    | anger     | -1.8  | -9.1  | -9.2  | -4.9  |
+| reply    | disgust   | -1.8  | -0.9  | -2.5  | -3.6  |
+| reply    | fear      | -2.3  | -2.4  | -5.7  | -3.7  |
+| reply    | joy       | +2.3  | -7.0  | -4.6  | -1.0  |
+| reply    | sadness   | -1.3  | -5.0  | -4.4  | -0.5  |
+| reply    | surprise  | +4.3  | +4.2  | +1.4  | +3.2  |
+| dialogue | anger     | +3.9  | -8.3  | -13.5 | -12.0 |
+| dialogue | disgust   | +1.0  | -1.4  | -2.2  | -4.1  |
+| dialogue | fear      | +1.4  | -5.5  | -6.7  | -0.6  |
+| dialogue | joy       | +11.7 | +0.8  | -6.6  | -5.7  |
+| dialogue | sadness   | +4.3  | -7.6  | -9.3  | -5.9  |
+| dialogue | surprise  | +15.7 | +16.9 | +12.4 | +7.1  |
+
 ##### proxy+switch
 
-BLUF: `proxy+switch` is within 0.5 points of the proxy or better in 144 of 176 cells, at most 3.7 points worse, and up to 15.2 points better.
+BLUF: `proxy+switch` is within 0.5 points of the proxy or better in 189 of 224 cells, at most 3.7 points worse, and up to 15.2 points better.
 
-proxy+switch minus proxy over every predicate and target, the pool with junk and repeated texts dropped, from the six `results/<dataset>/cascade.txt` files:
+proxy+switch minus proxy over every predicate and target, the pool with junk and repeated texts dropped, from the `results/<dataset>/cascade.txt` files:
 
-| dataset      | cells | within 0.5 or better | worst | best  |
-| ------------ | ----- | -------------------- | ----- | ----- |
-| cad          | 20    | 20                   | +0.3  | -7.9  |
-| cad_thread   | 20    | 18                   | +0.9  | -15.2 |
-| cad_author   | 20    | 17                   | +2.5  | -3.0  |
-| cora         | 28    | 25                   | +3.5  | -2.7  |
-| stack        | 44    | 32                   | +3.7  | -5.2  |
-| stack_author | 44    | 32                   | +3.0  | -2.4  |
+| dataset       | cells | within 0.5 or better | worst | best  |
+| ------------- | ----- | -------------------- | ----- | ----- |
+| cad           | 20    | 20                   | +0.3  | -7.9  |
+| cad_thread    | 20    | 18                   | +0.9  | -15.2 |
+| cad_author    | 20    | 17                   | +2.5  | -3.0  |
+| cora          | 28    | 25                   | +3.5  | -2.7  |
+| stack         | 44    | 32                   | +3.7  | -5.2  |
+| stack_author  | 44    | 32                   | +3.0  | -2.4  |
+| meld          | 24    | 21                   | +3.2  | -9.2  |
+| meld_dialogue | 24    | 24                   | +0.4  | -12.7 |
