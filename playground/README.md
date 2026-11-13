@@ -15,3 +15,4 @@ Exploratory work that isn't an experiment yet, like screening a dataset before d
 - `context_screen/` - runs the CAD screen on other datasets whose labels were given in context, Switchboard dialogue acts, MELD emotions and the Reddit and Gab hate conversations, see the 2026-11-12 log.
 - `meld_proxy/` - checks whether the 8B proxy ranks MELD utterances by emotion on a balanced sample, and whether a prompt that says to judge the line alone stops its refusals, see the 2026-11-12 log.
 - `switch_tuning/` - sweeps the decay and a proxy head start of `proxy+switch` against the proxy on every dataset with a proxy, see the 2026-11-12 log.
+- `residual_screen/` - checks whether the correlation of the label or of the proxy residual along the edges tracks what links add to the proxy in step 4 of 03, see the 2026-11-13 log.
