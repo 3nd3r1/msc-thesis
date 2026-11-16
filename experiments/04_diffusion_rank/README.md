@@ -39,3 +39,18 @@ Only the pool with junk and repeated texts dropped.
 `python run.py verdict` applies the pass rule to those files and writes `results/verdict.txt`.
 
 ## Result
+
+Fail. Over CAD, MELD and MELD dialogue, `proxy+diffuse` on ranks needs 6.65 points of the rows more than the proxy over links, and 8.25 over the kNN.
+
+proxy+diffuse minus proxy at 90% recall, mean over predicates, in points of the rows, from `results/verdict.txt`:
+
+| dataset       | links | knn   | both  |
+| ------------- | ----- | ----- | ----- |
+| cad           | +14.8 | +11.1 | +7.0  |
+| meld          | +8.3  | +10.6 | +4.5  |
+| meld_dialogue | -1.7  | +3.5  | -4.1  |
+| cora          | +13.8 | +16.5 | +13.1 |
+| stack         | +9.9  | +10.4 | +15.2 |
+| stack_author  | +4.7  | +10.4 | +13.5 |
+
+Closed.

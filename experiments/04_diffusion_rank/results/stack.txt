@@ -1,0 +1,167 @@
+stack, 4,912 rows, junk and repeated texts dropped
+calls% is calls over rows, mean and sd of 50 seeds
+the proxy score is the rank of the 8B's p over the rows, ties share their mean rank
+proxy+diffuse adds the mean residual, verdict minus rank, of the asked neighbours
+knn is the top k cosine neighbours, k picked so it has about as many edges as the links
+
+links, 5,653 edges
+  50% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     2.4%+-0.0%     2.4%+-0.0%
+           rcode lexical 12.5%     6.4%+-0.0%     6.5%+-0.0%
+        choose high rate 13.7%     9.0%+-0.0%     8.8%+-0.0%
+     assumptions topical  8.7%     6.8%+-0.0%     7.1%+-0.0%
+     interaction topical  3.2%     1.8%+-0.0%     1.8%+-0.0%
+     interpret row local 10.4%     7.8%+-0.0%     7.4%+-0.0%
+         ownstudy author  5.8%     6.5%+-0.0%     6.6%+-0.0%
+              econ field  7.0%     4.5%+-0.0%     4.5%+-0.0%
+            survey field  9.3%     5.0%+-0.0%     5.1%+-0.0%
+            biomed field 11.0%     5.8%+-0.0%     5.9%+-0.0%
+              we control  2.7%     3.3%+-0.0%     3.2%+-0.0%
+
+  80% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     4.3%+-0.0%     4.5%+-0.0%
+           rcode lexical 12.5%    10.6%+-0.0%    11.2%+-0.0%
+        choose high rate 13.7%    19.4%+-0.0%    21.5%+-0.0%
+     assumptions topical  8.7%    17.3%+-0.0%    21.4%+-0.0%
+     interaction topical  3.2%     3.5%+-0.0%     3.6%+-0.0%
+     interpret row local 10.4%    16.8%+-0.0%    17.6%+-0.0%
+         ownstudy author  5.8%    16.8%+-0.0%    20.3%+-0.0%
+              econ field  7.0%    13.7%+-0.0%    14.8%+-0.0%
+            survey field  9.3%    13.5%+-0.0%    13.8%+-0.0%
+            biomed field 11.0%    12.6%+-0.0%    12.9%+-0.0%
+              we control  2.7%    13.4%+-0.0%    18.4%+-0.0%
+
+  90% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     6.0%+-0.0%     7.9%+-0.0%
+           rcode lexical 12.5%    12.2%+-0.0%    13.4%+-0.0%
+        choose high rate 13.7%    27.6%+-0.0%    38.8%+-0.0%
+     assumptions topical  8.7%    25.4%+-0.0%    46.3%+-0.0%
+     interaction topical  3.2%     4.7%+-0.0%     5.6%+-0.0%
+     interpret row local 10.4%    22.9%+-0.0%    30.5%+-0.0%
+         ownstudy author  5.8%    26.0%+-0.0%    50.6%+-0.0%
+              econ field  7.0%    25.5%+-0.0%    32.5%+-0.0%
+            survey field  9.3%    23.7%+-0.0%    26.5%+-0.0%
+            biomed field 11.0%    22.8%+-0.0%    24.5%+-0.0%
+              we control  2.7%    26.4%+-0.0%    55.3%+-0.0%
+
+  95% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     9.6%+-0.0%    40.6%+-0.0%
+           rcode lexical 12.5%    13.6%+-0.0%    15.0%+-0.0%
+        choose high rate 13.7%    35.6%+-0.0%    69.1%+-0.0%
+     assumptions topical  8.7%    36.4%+-0.0%    68.1%+-0.0%
+     interaction topical  3.2%     5.6%+-0.0%    59.2%+-0.0%
+     interpret row local 10.4%    28.9%+-0.0%    68.0%+-0.0%
+         ownstudy author  5.8%    36.2%+-0.0%    71.1%+-0.0%
+              econ field  7.0%    42.3%+-0.0%    66.3%+-0.0%
+            survey field  9.3%    35.1%+-0.0%    51.8%+-0.0%
+            biomed field 11.0%    32.9%+-0.0%    56.2%+-0.0%
+              we control  2.7%    34.9%+-0.0%    66.7%+-0.0%
+
+
+knn, 4,001 edges
+  50% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     2.4%+-0.0%     2.4%+-0.0%
+           rcode lexical 12.5%     6.4%+-0.0%     6.4%+-0.0%
+        choose high rate 13.7%     9.0%+-0.0%     9.0%+-0.0%
+     assumptions topical  8.7%     6.8%+-0.0%     6.7%+-0.0%
+     interaction topical  3.2%     1.8%+-0.0%     1.8%+-0.0%
+     interpret row local 10.4%     7.8%+-0.0%     7.3%+-0.0%
+         ownstudy author  5.8%     6.5%+-0.0%     6.2%+-0.0%
+              econ field  7.0%     4.5%+-0.0%     4.3%+-0.0%
+            survey field  9.3%     5.0%+-0.0%     5.0%+-0.0%
+            biomed field 11.0%     5.8%+-0.0%     5.8%+-0.0%
+              we control  2.7%     3.3%+-0.0%     3.3%+-0.0%
+
+  80% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     4.3%+-0.0%     5.0%+-0.0%
+           rcode lexical 12.5%    10.6%+-0.0%    10.9%+-0.0%
+        choose high rate 13.7%    19.4%+-0.0%    20.5%+-0.0%
+     assumptions topical  8.7%    17.3%+-0.0%    17.3%+-0.0%
+     interaction topical  3.2%     3.5%+-0.0%     3.6%+-0.0%
+     interpret row local 10.4%    16.8%+-0.0%    16.6%+-0.0%
+         ownstudy author  5.8%    16.8%+-0.0%    23.8%+-0.0%
+              econ field  7.0%    13.7%+-0.0%    14.0%+-0.0%
+            survey field  9.3%    13.5%+-0.0%    13.2%+-0.0%
+            biomed field 11.0%    12.6%+-0.0%    12.6%+-0.0%
+              we control  2.7%    13.4%+-0.0%    13.4%+-0.0%
+
+  90% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     6.0%+-0.0%    37.2%+-0.0%
+           rcode lexical 12.5%    12.2%+-0.0%    13.0%+-0.0%
+        choose high rate 13.7%    27.6%+-0.0%    37.4%+-0.0%
+     assumptions topical  8.7%    25.4%+-0.0%    39.5%+-0.0%
+     interaction topical  3.2%     4.7%+-0.0%     6.2%+-0.0%
+     interpret row local 10.4%    22.9%+-0.0%    29.1%+-0.0%
+         ownstudy author  5.8%    26.0%+-0.0%    64.3%+-0.0%
+              econ field  7.0%    25.5%+-0.0%    32.9%+-0.0%
+            survey field  9.3%    23.7%+-0.0%    26.0%+-0.0%
+            biomed field 11.0%    22.8%+-0.0%    25.1%+-0.0%
+              we control  2.7%    26.4%+-0.0%    27.2%+-0.0%
+
+  95% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     9.6%+-0.0%    62.6%+-0.0%
+           rcode lexical 12.5%    13.6%+-0.0%    14.7%+-0.0%
+        choose high rate 13.7%    35.6%+-0.0%    62.7%+-0.0%
+     assumptions topical  8.7%    36.4%+-0.0%    69.6%+-0.0%
+     interaction topical  3.2%     5.6%+-0.0%    58.7%+-0.0%
+     interpret row local 10.4%    28.9%+-0.0%    55.3%+-0.0%
+         ownstudy author  5.8%    36.2%+-0.0%    69.0%+-0.0%
+              econ field  7.0%    42.3%+-0.0%    62.5%+-0.0%
+            survey field  9.3%    35.1%+-0.0%    58.2%+-0.0%
+            biomed field 11.0%    32.9%+-0.0%    53.6%+-0.0%
+              we control  2.7%    34.9%+-0.0%    55.2%+-0.0%
+
+
+both, 8,937 edges
+  50% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     2.4%+-0.0%     2.4%+-0.0%
+           rcode lexical 12.5%     6.4%+-0.0%     6.4%+-0.0%
+        choose high rate 13.7%     9.0%+-0.0%     8.8%+-0.0%
+     assumptions topical  8.7%     6.8%+-0.0%     6.8%+-0.0%
+     interaction topical  3.2%     1.8%+-0.0%     1.8%+-0.0%
+     interpret row local 10.4%     7.8%+-0.0%     7.1%+-0.0%
+         ownstudy author  5.8%     6.5%+-0.0%     6.6%+-0.0%
+              econ field  7.0%     4.5%+-0.0%     4.4%+-0.0%
+            survey field  9.3%     5.0%+-0.0%     5.1%+-0.0%
+            biomed field 11.0%     5.8%+-0.0%     5.8%+-0.0%
+              we control  2.7%     3.3%+-0.0%     3.2%+-0.0%
+
+  80% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     4.3%+-0.0%     4.9%+-0.0%
+           rcode lexical 12.5%    10.6%+-0.0%    11.1%+-0.0%
+        choose high rate 13.7%    19.4%+-0.0%    22.8%+-0.0%
+     assumptions topical  8.7%    17.3%+-0.0%    21.8%+-0.0%
+     interaction topical  3.2%     3.5%+-0.0%     3.9%+-0.0%
+     interpret row local 10.4%    16.8%+-0.0%    17.9%+-0.0%
+         ownstudy author  5.8%    16.8%+-0.0%    33.8%+-0.0%
+              econ field  7.0%    13.7%+-0.0%    15.5%+-0.0%
+            survey field  9.3%    13.5%+-0.0%    14.2%+-0.0%
+            biomed field 11.0%    12.6%+-0.0%    12.8%+-0.0%
+              we control  2.7%    13.4%+-0.0%    14.5%+-0.0%
+
+  90% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     6.0%+-0.0%    41.9%+-0.0%
+           rcode lexical 12.5%    12.2%+-0.0%    13.6%+-0.0%
+        choose high rate 13.7%    27.6%+-0.0%    42.1%+-0.0%
+     assumptions topical  8.7%    25.4%+-0.0%    40.1%+-0.0%
+     interaction topical  3.2%     4.7%+-0.0%    16.2%+-0.0%
+     interpret row local 10.4%    22.9%+-0.0%    35.8%+-0.0%
+         ownstudy author  5.8%    26.0%+-0.0%    53.9%+-0.0%
+              econ field  7.0%    25.5%+-0.0%    37.5%+-0.0%
+            survey field  9.3%    23.7%+-0.0%    36.4%+-0.0%
+            biomed field 11.0%    22.8%+-0.0%    29.3%+-0.0%
+              we control  2.7%    26.4%+-0.0%    43.4%+-0.0%
+
+  95% recall                 proxy         proxy+diffuse
+            spss lexical  3.7%     9.6%+-0.0%    56.7%+-0.0%
+           rcode lexical 12.5%    13.6%+-0.0%    16.3%+-0.1%
+        choose high rate 13.7%    35.6%+-0.0%    51.5%+-0.0%
+     assumptions topical  8.7%    36.4%+-0.0%    55.0%+-0.0%
+     interaction topical  3.2%     5.6%+-0.0%    51.9%+-0.0%
+     interpret row local 10.4%    28.9%+-0.0%    56.0%+-0.0%
+         ownstudy author  5.8%    36.2%+-0.0%    63.1%+-0.0%
+              econ field  7.0%    42.3%+-0.0%    58.9%+-0.0%
+            survey field  9.3%    35.1%+-0.0%    53.5%+-0.0%
+            biomed field 11.0%    32.9%+-0.0%    52.5%+-0.0%
+              we control  2.7%    34.9%+-0.0%    53.8%+-0.0%
+

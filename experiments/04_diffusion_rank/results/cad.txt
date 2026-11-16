@@ -1,0 +1,95 @@
+cad, 23,060 rows, junk and repeated texts dropped
+calls% is calls over rows, mean and sd of 50 seeds
+the proxy score is the rank of the 8B's p over the rows, ties share their mean rank
+proxy+diffuse adds the mean residual, verdict minus rank, of the asked neighbours
+knn is the top k cosine neighbours, k picked so it has about as many edges as the links
+
+links, 12,560 edges
+  50% recall                 proxy         proxy+diffuse
+          identity human  9.9%    15.5%+-0.0%    15.7%+-0.0%
+       affiliation human  5.2%    19.3%+-0.0%    18.9%+-0.0%
+            person human  4.5%     9.4%+-0.0%     9.5%+-0.0%
+     counterspeech human  0.9%    30.1%+-0.0%    40.1%+-0.0%
+              slur human  0.6%    12.4%+-0.0%    12.2%+-0.0%
+
+  80% recall                 proxy         proxy+diffuse
+          identity human  9.9%    39.3%+-0.0%    44.9%+-0.0%
+       affiliation human  5.2%    42.3%+-0.0%    49.6%+-0.0%
+            person human  4.5%    25.1%+-0.0%    33.0%+-0.0%
+     counterspeech human  0.9%    60.7%+-0.0%    78.0%+-0.0%
+              slur human  0.6%    35.6%+-0.0%    56.8%+-0.0%
+
+  90% recall                 proxy         proxy+diffuse
+          identity human  9.9%    58.7%+-0.0%    71.9%+-0.0%
+       affiliation human  5.2%    58.1%+-0.0%    75.8%+-0.0%
+            person human  4.5%    44.0%+-0.0%    68.8%+-0.0%
+     counterspeech human  0.9%    84.4%+-0.0%    85.0%+-0.0%
+              slur human  0.6%    57.6%+-0.0%    75.3%+-0.0%
+
+  95% recall                 proxy         proxy+diffuse
+          identity human  9.9%    77.2%+-0.0%    81.7%+-0.0%
+       affiliation human  5.2%    71.9%+-0.0%    83.4%+-0.0%
+            person human  4.5%    61.0%+-0.0%    78.4%+-0.0%
+     counterspeech human  0.9%    92.2%+-0.0%    93.1%+-0.0%
+              slur human  0.6%    69.8%+-0.0%    85.4%+-0.0%
+
+
+knn, 18,844 edges
+  50% recall                 proxy         proxy+diffuse
+          identity human  9.9%    15.5%+-0.0%    15.1%+-0.0%
+       affiliation human  5.2%    19.3%+-0.0%    17.6%+-0.0%
+            person human  4.5%     9.4%+-0.0%     9.7%+-0.0%
+     counterspeech human  0.9%    30.1%+-0.0%    49.1%+-0.0%
+              slur human  0.6%    12.4%+-0.0%    12.1%+-0.0%
+
+  80% recall                 proxy         proxy+diffuse
+          identity human  9.9%    39.3%+-0.0%    53.4%+-0.0%
+       affiliation human  5.2%    42.3%+-0.0%    52.1%+-0.0%
+            person human  4.5%    25.1%+-0.0%    48.2%+-0.0%
+     counterspeech human  0.9%    60.7%+-0.0%    71.5%+-0.0%
+              slur human  0.6%    35.6%+-0.0%    40.2%+-0.0%
+
+  90% recall                 proxy         proxy+diffuse
+          identity human  9.9%    58.7%+-0.0%    70.9%+-0.0%
+       affiliation human  5.2%    58.1%+-0.0%    70.5%+-0.0%
+            person human  4.5%    44.0%+-0.0%    67.8%+-0.0%
+     counterspeech human  0.9%    84.4%+-0.0%    85.3%+-0.0%
+              slur human  0.6%    57.6%+-0.0%    63.6%+-0.0%
+
+  95% recall                 proxy         proxy+diffuse
+          identity human  9.9%    77.2%+-0.0%    81.0%+-0.0%
+       affiliation human  5.2%    71.9%+-0.0%    82.1%+-0.0%
+            person human  4.5%    61.0%+-0.0%    79.3%+-0.0%
+     counterspeech human  0.9%    92.2%+-0.0%    91.5%+-0.0%
+              slur human  0.6%    69.8%+-0.0%    70.1%+-0.0%
+
+
+both, 29,933 edges
+  50% recall                 proxy         proxy+diffuse
+          identity human  9.9%    15.5%+-0.0%    15.5%+-0.0%
+       affiliation human  5.2%    19.3%+-0.0%    17.7%+-0.0%
+            person human  4.5%     9.4%+-0.0%    10.0%+-0.0%
+     counterspeech human  0.9%    30.1%+-0.0%    50.7%+-0.0%
+              slur human  0.6%    12.4%+-0.0%    13.2%+-0.0%
+
+  80% recall                 proxy         proxy+diffuse
+          identity human  9.9%    39.3%+-0.0%    48.7%+-0.0%
+       affiliation human  5.2%    42.3%+-0.0%    50.0%+-0.0%
+            person human  4.5%    25.1%+-0.0%    45.2%+-0.0%
+     counterspeech human  0.9%    60.7%+-0.0%    74.2%+-0.0%
+              slur human  0.6%    35.6%+-0.0%    50.2%+-0.0%
+
+  90% recall                 proxy         proxy+diffuse
+          identity human  9.9%    58.7%+-0.0%    65.5%+-0.0%
+       affiliation human  5.2%    58.1%+-0.0%    63.2%+-0.0%
+            person human  4.5%    44.0%+-0.0%    61.4%+-0.0%
+     counterspeech human  0.9%    84.4%+-0.0%    83.8%+-0.0%
+              slur human  0.6%    57.6%+-0.0%    63.8%+-0.0%
+
+  95% recall                 proxy         proxy+diffuse
+          identity human  9.9%    77.2%+-0.0%    75.9%+-0.0%
+       affiliation human  5.2%    71.9%+-0.0%    76.4%+-0.0%
+            person human  4.5%    61.0%+-0.0%    72.6%+-0.0%
+     counterspeech human  0.9%    92.2%+-0.0%    91.0%+-0.0%
+              slur human  0.6%    69.8%+-0.0%    79.0%+-0.0%
+

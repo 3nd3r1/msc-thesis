@@ -1,0 +1,13 @@
+proxy+diffuse minus proxy at 90% recall, mean over predicates, in points of the rows
+
+       dataset   links     knn    both
+           cad   +14.8   +11.1    +7.0
+          meld    +8.3   +10.6    +4.5
+ meld_dialogue    -1.7    +3.5    -4.1
+          cora   +13.8   +16.5   +13.1
+         stack    +9.9   +10.4   +15.2
+  stack_author    +4.7   +10.4   +13.5
+
+over cad, meld, meld_dialogue: links +6.65, knn +8.25
+pass rule: links below 0 and below knn
+fail
