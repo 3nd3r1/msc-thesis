@@ -19,7 +19,8 @@ RESULTS = Path(__file__).resolve().parent / "results"
 SEEDS = 20
 DECAYS = [0.9, 0.97, 0.99, 0.999, 1.0]
 HEADS = [0, 3, 10, 30]
-NAMES = ["stack", "stack_author", "cora", "cad", "cad_thread", "cad_author"]
+NAMES = sys.argv[1:] or ["stack", "stack_author", "cora", "cad", "cad_thread", "cad_author",
+                        "meld", "meld_dialogue"]
 
 SHARED = {}
 
@@ -56,8 +57,7 @@ def gaps(name):
     }
 
 
-RESULTS.mkdir(exist_ok=True)
-lines = [
+HEADER = [
     "proxy+switch minus proxy, in points of the rows, negative means switch needs fewer calls",
     f"over every predicate and target {', '.join(f'{r:.0%}' for r in RECALLS)}, "
     f"switch is the mean of {SEEDS} seeds",
@@ -66,10 +66,11 @@ lines = [
     "",
     f"{'dataset':>13} {'decay':>6} {'head':>5} {'mean':>6} {'worst':>6} {'best':>6} {'> +0.5':>7}",
 ]
+(RESULTS / "sweep").mkdir(parents=True, exist_ok=True)
 for name in NAMES:
+    lines = list(HEADER)
     for (d, h), g in gaps(name).items():
         lines.append(f"{name:>13} {d:>6} {h:>5} {g.mean():>+6.2f} {g.max():>+6.1f} "
                      f"{g.min():>+6.1f} {int((g > 0.5).sum()):>3}/{g.size}")
         print(lines[-1], flush=True)
-    lines.append("")
-(RESULTS / "sweep.txt").write_text("\n".join(lines) + "\n")
+    (RESULTS / "sweep" / f"{name}.txt").write_text("\n".join(lines) + "\n")
