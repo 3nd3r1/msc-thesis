@@ -1,6 +1,6 @@
 import numpy as np
 
-DECAY = 0.99
+DECAY = 1.0
 
 
 def adjacency(edges, n):
@@ -56,7 +56,7 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
 
     # proxy+switch picks between the proxy's best row and the proxy's best
     # neighbour of a confirmed positive by Thompson sampling on how often each
-    # source has hit. Counts decay since the proxy's hit rate falls as it goes.
+    # source has hit. `decay` shrinks old counts, 1.0 keeps them all.
     # `head` is pseudo hits for the proxy, so links have to earn their turn.
     hits = np.array([head, 0.0])
     misses = np.zeros(2)

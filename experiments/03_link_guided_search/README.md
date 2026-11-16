@@ -25,7 +25,7 @@ Orders compared:
 - degree, the rows with the most edges first, a control that reads no labels and shows how much of what links do is degree alone
 - small-LLM proxy score, the LOTUS and BARGAIN way
 - the proxy score with link expansion on top
-- `proxy+switch`, which each call picks between the proxy's best row and the proxy's best neighbour of a confirmed positive by Thompson sampling on which source has hit more, with counts decayed by 0.99 per pick
+- `proxy+switch`, which each call picks between the proxy's best row and the proxy's best neighbour of a confirmed positive by Thompson sampling on which source has hit more, with no decay on the counts, picked in `playground/switch_tuning`
 
 Every order starts with no labels, so the first positive is found at random and only then do links and similarity have anything to point at.
 `blend 1.0` isolates the negatives and `blend 0.3` and `blend 0.1` isolate the scaling, so each order differs from the one above it by one thing.
@@ -564,17 +564,17 @@ proxy+links minus proxy at each target, from the same files:
 
 ##### proxy+switch
 
-BLUF: `proxy+switch` is within 0.5 points of the proxy or better in 189 of 224 cells, at most 3.7 points worse, and up to 15.2 points better.
+BLUF: `proxy+switch` is within 0.5 points of the proxy or better in 209 of 224 cells, at most 3.5 points worse, and up to 15.2 points better.
 
 proxy+switch minus proxy over every predicate and target, the pool with junk and repeated texts dropped, from the `results/<dataset>/cascade.txt` files:
 
 | dataset       | cells | within 0.5 or better | worst | best  |
 | ------------- | ----- | -------------------- | ----- | ----- |
 | cad           | 20    | 20                   | +0.3  | -7.9  |
-| cad_thread    | 20    | 18                   | +0.9  | -15.2 |
-| cad_author    | 20    | 17                   | +2.5  | -3.0  |
-| cora          | 28    | 25                   | +3.5  | -2.7  |
-| stack         | 44    | 32                   | +3.7  | -5.2  |
-| stack_author  | 44    | 32                   | +3.0  | -2.4  |
-| meld          | 24    | 21                   | +3.2  | -9.2  |
-| meld_dialogue | 24    | 24                   | +0.4  | -12.7 |
+| cad_thread    | 20    | 19                   | +1.1  | -15.2 |
+| cad_author    | 20    | 19                   | +0.6  | -3.0  |
+| cora          | 28    | 24                   | +3.5  | -3.8  |
+| stack         | 44    | 40                   | +1.4  | -4.3  |
+| stack_author  | 44    | 39                   | +1.5  | -4.0  |
+| meld          | 24    | 24                   | +0.3  | -9.2  |
+| meld_dialogue | 24    | 24                   | +0.1  | -12.3 |
