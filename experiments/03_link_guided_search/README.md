@@ -1,5 +1,9 @@
 # 03 link guided search
 
+Closed on 2026-11-16.
+Links help on top of the proxy on CAD and MELD and not on Cora, Stack and SYNERGY.
+`proxy+switch` and `proxy+diffuse` move to their own experiments, see the 2026-11-16 log.
+
 ## Question
 
 For a predicate, does ordering oracle calls by links between rows find the positives in fewer calls than ordering by embedding similarity or by a small-LLM proxy score?

@@ -8,8 +8,11 @@ itself is written in LaTeX on Overleaf; this repo holds code, results and the no
 
 - `docs/` - all markdown notes.
   - `docs/Thesis.md` is the way in
-- `experiments/` - one folder per experiment, `NN_short_name/run.py` plus `results/`
-- `playground/` - exploratory work that isn't an experiment yet, rules in `playground/README.md`
+- `experiments/` - one folder per experiment, `NN_short_name/run.py` plus `results/`.
+  - An experiment tests one hypothesis that is locked before the run, with the pass rule written in its README.
+  - It is small, one question and one table, done in about a day of work plus the runs.
+  - Once answered it is closed and never extended. A follow up question is a new number.
+- `playground/` - quick tests and screening, to see whether something is worth an experiment, rules in `playground/README.md`
 - `labels/` - oracle or human labels per dataset, shared between experiments
 - `data/` - raw data downloads, gitignored.
 - `README.md` - repo front page.
