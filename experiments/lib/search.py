@@ -1,6 +1,14 @@
+import json
+import os
+from concurrent.futures import ProcessPoolExecutor
+from multiprocessing import get_context
+
 import numpy as np
 
 DECAY = 1.0
+SEEDS = 50
+RECALLS = [0.50, 0.80, 0.90, 0.95]
+SEARCHERS = os.cpu_count()
 
 
 def adjacency(edges, n):
@@ -115,3 +123,66 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
             neg[neighbours[i]] += 1
             rescore(neighbours[i])
     return hit + [n] * (len(targets) - len(hit))
+
+
+SHARED = {}
+
+
+def one(job):
+    """One search, in a worker. Fork hands it SHARED, so no job carries the data."""
+    k, order, seed = job
+    _, labels, proxy = SHARED["names"][k]
+    return search(
+        labels,
+        order,
+        SHARED["vectors"],
+        SHARED["neighbours"],
+        seed,
+        SHARED["recalls"],
+        proxy,
+    )
+
+
+def table(out, names, vectors, neighbours, cache, orders, recalls=RECALLS):
+    """One block per recall target. Targets are nested, so one search covers them all.
+
+    Every search is appended to `cache`, so a stopped run resumes where it was.
+    """
+    jobs = [(k, o, s) for k in range(len(names)) for o in orders for s in range(SEEDS)]
+    key = lambda job: f"{names[job[0]][0]}|{len(vectors)}|{job[1]}|{job[2]}"
+
+    done = {}
+    if cache.exists():
+        for line in cache.open():
+            d = json.loads(line)
+            done[d["key"]] = d["hits"]
+    todo = [job for job in jobs if key(job) not in done]
+    if len(todo) < len(jobs):
+        print(f"  resuming, {len(jobs) - len(todo):,} searches already in {cache.name}")
+
+    SHARED.update(names=names, vectors=vectors, neighbours=neighbours, recalls=recalls)
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    with (
+        ProcessPoolExecutor(SEARCHERS, mp_context=get_context("fork")) as pool,
+        cache.open("a", buffering=1) as f,
+    ):
+        for n, (job, hit) in enumerate(zip(todo, pool.map(one, todo, chunksize=1)), 1):
+            done[key(job)] = hit
+            f.write(json.dumps({"key": key(job), "hits": hit}) + "\n")
+            if n % 200 == 0:
+                print(f"  {n:,}/{len(todo):,} searches")
+    hits = [done[key(job)] for job in jobs]
+
+    calls = np.array(hits, float).reshape(
+        len(names), len(orders), SEEDS, len(recalls)
+    ) / len(vectors)
+
+    for j, recall in enumerate(recalls):
+        out(f"  {recall:.0%} recall" + "".join(f"{o:>22}" for o in orders))
+        for k, (name, labels, _) in enumerate(names):
+            line = f"{name:>24} {labels.mean():>5.1%}"
+            for i, order in enumerate(orders):
+                runs = calls[k, i, :, j]
+                line += f"   {runs.mean():>6.1%}+-{runs.std():.1%}"
+            out(line)
+        out()

@@ -11,11 +11,10 @@ from sklearn.metrics import roc_auc_score
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments/lib"))
-sys.path.insert(0, str(ROOT / "experiments/03_link_guided_search"))
 
 from embed import embed
 from llm import PROXY, SYSTEM, client, judge, p_yes
-from run import DATASETS
+from corpora import DATASETS
 from search import unit
 
 RESULTS = Path(__file__).resolve().parent / "results"

@@ -12,11 +12,10 @@ from sklearn.model_selection import StratifiedKFold
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments/lib"))
-sys.path.insert(0, str(ROOT / "experiments/03_link_guided_search"))
 sys.path.insert(0, str(ROOT / "playground/synergy_screen"))
 
 from embed import embed
-from run import correlation
+from corpora import correlation
 from screen import ctrl, knn, lift_of, pairs_from
 from search import adjacency, unit
 

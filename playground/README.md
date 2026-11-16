@@ -4,7 +4,7 @@ Quick tests and screening, like checking a dataset or a signal before deciding t
 
 - One folder per question, scripts and `results/` inside, no README or step structure needed.
 - It is committed, so a log entry can point at a script or a result here.
-- Scripts can import from `experiments/lib` and from the experiments.
+- Scripts import shared code from `experiments/lib`, never from an experiment.
 - When a quick test suggests a hypothesis worth testing, it becomes a numbered experiment with the hypothesis locked in its README, see `CLAUDE.md`.
 
 ## Contents

@@ -4,10 +4,10 @@ from pathlib import Path
 
 import numpy as np
 
-import pick  # noqa: F401, puts experiments/lib and 03 on the path
+import pick  # noqa: F401, puts experiments/lib on the path
 from data import load_synergy
 from report import report
-from run import SYNERGY_REVIEWS
+from corpora import SYNERGY_REVIEWS
 
 if __name__ == "__main__":
     out, save = report(Path(__file__).resolve().parent / "results", "degree")

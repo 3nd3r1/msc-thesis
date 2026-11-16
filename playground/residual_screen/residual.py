@@ -8,10 +8,9 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments/lib"))
-sys.path.insert(0, str(ROOT / "experiments/03_link_guided_search"))
 
 from report import report
-from run import DATASETS, loaded, proxy_scores, subgraph
+from corpora import DATASETS, loaded, proxy_scores, subgraph
 from search import adjacency, search
 
 RESULTS = Path(__file__).resolve().parent / "results"

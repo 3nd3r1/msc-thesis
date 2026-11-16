@@ -7,7 +7,7 @@ import numpy as np
 from pick import picked
 from data import load_synergy
 from report import report
-from run import vectors_for
+from corpora import vectors_for
 from search import adjacency
 
 SEEDS = 10

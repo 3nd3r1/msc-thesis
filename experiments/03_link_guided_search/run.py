@@ -2,9 +2,7 @@ import json
 import os
 import sys
 import time
-from collections import namedtuple
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from multiprocessing import get_context
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 
@@ -20,35 +18,29 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "lib"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from embed import embed
-from llm import ORACLE, PROXY, SERVED, SYSTEM, client, judge, p_yes
+from llm import ORACLE, PROXY, SERVED, SYSTEM, client, judge
 from report import report
-from search import adjacency, knn, search, unit
-
-from data import (
-    cad_junk,
-    cora_features,
-    cora_junk,
-    load_cad,
-    load_cad_author,
-    load_cad_thread,
-    load_meld,
-    load_meld_dialogue,
-    load_cora,
-    load_stack,
-    load_stack_author,
-    load_synergy,
-    stack_junk,
-    synergy_junk,
-    synergy_meta,
+from search import SEEDS, RECALLS, adjacency, knn, table, unit
+from corpora import (
+    CAD_SOURCE,
+    DATASETS,
+    HUMAN_SOURCES,
+    LABELS,
+    LINE_ALONE,
+    MELD_SOURCE,
+    MODERATION,
+    STRICT,
+    correlation,
+    loaded,
+    proxy_scores,
+    subgraph,
+    vectors_for,
 )
+from data import cora_features, load_cora
 
 
 RESULTS = Path(__file__).resolve().parent / "results"
-LABELS = Path(__file__).resolve().parents[2] / "labels"
 
-SEEDS = 50
-RECALLS = [0.50, 0.80, 0.90, 0.95]
 BLENDS = (1.0, 0.3, 0.1)
 ORDERS = ["random", "embeddings", "links", "links+embeddings", "links+-"] + [
     f"blend {a}" for a in BLENDS
@@ -57,286 +49,8 @@ CASCADE_ORDERS = ["proxy", "proxy+links", "proxy+switch"]
 
 WORKERS = 24
 RETRIES = 8
-SEARCHERS = os.cpu_count()
 FOLDS = 5
 SPLITS = 10
-
-STRICT = SYSTEM + (
-    "\nAnswer True only if the context states the claim explicitly, "
-    "otherwise answer False."
-)
-
-# The 8B refuses 44% of CAD calls under plain LOTUS.
-MODERATION = (
-    "You are a content moderation classifier. "
-    "The context may be offensive, and classifying it is the job.\n"
-    + SYSTEM
-    + "\nAlways answer True or False."
-)
-
-# The 8B refuses a fifth to a third of MELD lines under plain LOTUS, asking for the scene.
-LINE_ALONE = SYSTEM + (
-    "\nThe context is one line without the scene. "
-    "Judge it from the line alone and always answer True or False."
-)
-
-CORA_PREDICATES = [
-    (
-        "proof",
-        "non-topical",
-        "the abstract says the paper proves a theorem or derives a formal bound",
-    ),
-    ("language", "topical", "the paper is about natural language, text or speech"),
-    (
-        "biology",
-        "topical",
-        "the abstract says the method is applied to biological or medical data",
-    ),
-    (
-        "robotics",
-        "topical",
-        "the paper is about robots or controlling a physical device",
-    ),
-    (
-        "first person",
-        "control",
-        "the abstract is written in the first person singular, using I or my",
-    ),
-    (
-        "markov",
-        "non-topical",
-        "the abstract says the paper uses a Markov model or Markov process",
-    ),
-    (
-        "unsupervised",
-        "topical",
-        "the paper is about unsupervised learning or clustering",
-    ),
-]
-
-STACK_PREDICATES = [
-    ("spss", "lexical", "the question mentions SPSS or Stata"),
-    ("rcode", "lexical", "the question includes R code"),
-    (
-        "choose",
-        "high rate",
-        "the question asks which statistical method or test to use",
-    ),
-    (
-        "assumptions",
-        "topical",
-        "the question is about whether an assumption of a statistical method is "
-        "violated",
-    ),
-    (
-        "interaction",
-        "topical",
-        "the question is about an interaction or moderation effect between variables",
-    ),
-    (
-        "interpret",
-        "row local",
-        "the question asks how to interpret output that a statistics program produced",
-    ),
-    (
-        "ownstudy",
-        "author",
-        "the question describes data that the asker collected themselves",
-    ),
-    ("econ", "field", "the question is about data from economics or finance"),
-    (
-        "survey",
-        "field",
-        "the question is about data from a questionnaire or survey of people",
-    ),
-    ("biomed", "field", "the question is about data from biology or medicine"),
-    (
-        "we",
-        "control",
-        "the question is written in the first person plural, using we or our",
-    ),
-]
-
-# From playground/synergy_screen/pick.py, fixed here so the design does not move.
-SYNERGY_REVIEWS = [
-    "Walker_2018",
-    "Leenaars_2020",
-    "Muthu_2021",
-    "Hall_2012",
-    "Jeyaraman_2020",
-    "Wassenaar_2017",
-    "van_der_Valk_2021",
-    "Nelson_2002",
-    "Radjenovic_2013",
-    "van_Dis_2020",
-]
-
-CAD_PREDICATES = [
-    (
-        "identity",
-        "human",
-        "the post is abusive toward an identity group, such as a gender, race, "
-        "religion or sexuality",
-    ),
-    (
-        "affiliation",
-        "human",
-        "the post is abusive toward people because of a group they chose to join, "
-        "such as a political party or a community",
-    ),
-    (
-        "person",
-        "human",
-        "the post is abusive toward a specific person, in the conversation or named",
-    ),
-    ("counterspeech", "human", "the post challenges or argues against abuse"),
-    ("slur", "human", "the post uses a slur"),
-]
-
-MELD_PREDICATES = [
-    (e, "human", f"the speaker of this line from a TV show dialogue expresses {e}")
-    for e in ("anger", "disgust", "fear", "joy", "sadness", "surprise")
-]
-
-ORACLE_SOURCE = f"{ORACLE}, strict prompt"
-SYNERGY_SOURCE = "the review's own screeners, final inclusion after full text"
-CAD_SOURCE = "CAD's annotators, who saw the thread"
-MELD_SOURCE = "MELD's annotators, who watched the scene"
-HUMAN_SOURCES = (SYNERGY_SOURCE, CAD_SOURCE, MELD_SOURCE)
-
-Dataset = namedtuple(
-    "Dataset",
-    "name noun load predicates junk labels source",
-    defaults=(ORACLE_SOURCE,),
-)
-
-
-def synergy(review):
-    criteria = synergy_meta()[review]["publication"]["eligibility_criteria"].strip()
-    claim = "the paper meets these eligibility criteria of a systematic review\n" + criteria
-    return Dataset(
-        f"synergy/{review}",
-        "papers",
-        lambda: load_synergy(review),
-        [("included", "human", claim)],
-        synergy_junk,
-        f"synergy/{review}",
-        SYNERGY_SOURCE,
-    )
-
-
-def cad(name, load):
-    return Dataset(name, "entries", load, CAD_PREDICATES, cad_junk, "cad", CAD_SOURCE)
-
-
-def meld(name, load):
-    return Dataset(name, "utterances", load, MELD_PREDICATES, cad_junk, "meld", MELD_SOURCE)
-
-
-DATASETS = {
-    "cora": Dataset("cora", "papers", load_cora, CORA_PREDICATES, cora_junk, "cora"),
-    "stack": Dataset(
-        "stack", "questions", load_stack, STACK_PREDICATES, stack_junk, "stack"
-    ),
-    "stack_author": Dataset(
-        "stack_author",
-        "questions",
-        load_stack_author,
-        STACK_PREDICATES,
-        stack_junk,
-        "stack",
-    ),
-    "cad": cad("cad", load_cad),
-    "cad_thread": cad("cad_thread", load_cad_thread),
-    "cad_author": cad("cad_author", load_cad_author),
-    "meld": meld("meld", load_meld),
-    "meld_dialogue": meld("meld_dialogue", load_meld_dialogue),
-} | {f"synergy/{r}": synergy(r) for r in SYNERGY_REVIEWS}
-
-
-def correlation(mask, neighbours):
-    """Of the edges leaving a positive, the share landing on one, and the lift on it."""
-    pos = np.where(mask)[0]
-    degree = sum(len(neighbours[i]) for i in pos)
-    hits = sum(int(mask[neighbours[i]].sum()) for i in pos)
-    edge = hits / degree if degree else 0.0
-    return {
-        "edge": edge,
-        "lift": edge / mask.mean(),
-        "nbr+": sum(1 for i in pos if mask[neighbours[i]].any()) / len(pos),
-        "alone": sum(1 for i in pos if len(neighbours[i]) == 0) / len(pos),
-    }
-
-
-def subgraph(keep, edges):
-    """Induced subgraph on `keep`, reindexed. An all true mask is the identity."""
-    index = -np.ones(len(keep), int)
-    index[keep] = np.arange(keep.sum())
-    inside = edges[keep[edges[:, 0]] & keep[edges[:, 1]]]
-    return index[inside]
-
-
-SHARED = {}
-
-
-def one(job):
-    """One search, in a worker. Fork hands it SHARED, so no job carries the data."""
-    k, order, seed = job
-    _, labels, proxy = SHARED["names"][k]
-    return search(
-        labels,
-        order,
-        SHARED["vectors"],
-        SHARED["neighbours"],
-        seed,
-        SHARED["recalls"],
-        proxy,
-    )
-
-
-def table(out, names, vectors, neighbours, cache, orders=ORDERS, recalls=RECALLS):
-    """One block per recall target. Targets are nested, so one search covers them all.
-
-    Every search is appended to `cache`, so a stopped run resumes where it was.
-    """
-    jobs = [(k, o, s) for k in range(len(names)) for o in orders for s in range(SEEDS)]
-    key = lambda job: f"{names[job[0]][0]}|{len(vectors)}|{job[1]}|{job[2]}"
-
-    done = {}
-    if cache.exists():
-        for line in cache.open():
-            d = json.loads(line)
-            done[d["key"]] = d["hits"]
-    todo = [job for job in jobs if key(job) not in done]
-    if len(todo) < len(jobs):
-        print(f"  resuming, {len(jobs) - len(todo):,} searches already in {cache.name}")
-
-    SHARED.update(names=names, vectors=vectors, neighbours=neighbours, recalls=recalls)
-    cache.parent.mkdir(parents=True, exist_ok=True)
-    with (
-        ProcessPoolExecutor(SEARCHERS, mp_context=get_context("fork")) as pool,
-        cache.open("a", buffering=1) as f,
-    ):
-        for n, (job, hit) in enumerate(zip(todo, pool.map(one, todo, chunksize=1)), 1):
-            done[key(job)] = hit
-            f.write(json.dumps({"key": key(job), "hits": hit}) + "\n")
-            if n % 200 == 0:
-                print(f"  {n:,}/{len(todo):,} searches")
-    hits = [done[key(job)] for job in jobs]
-
-    calls = np.array(hits, float).reshape(
-        len(names), len(orders), SEEDS, len(recalls)
-    ) / len(vectors)
-
-    for j, recall in enumerate(recalls):
-        out(f"  {recall:.0%} recall" + "".join(f"{o:>22}" for o in orders))
-        for k, (name, labels, _) in enumerate(names):
-            line = f"{name:>24} {labels.mean():>5.1%}"
-            for i, order in enumerate(orders):
-                runs = calls[k, i, :, j]
-                line += f"   {runs.mean():>6.1%}+-{runs.std():.1%}"
-            out(line)
-        out()
 
 
 def results(ds):
@@ -346,10 +60,6 @@ def results(ds):
 def searches(ds, step):
     """Searches of a step that has not finished yet, deleted once its table is written."""
     return results(ds) / f"{step}.searches.jsonl"
-
-
-def vectors_for(nodes):
-    return unit(embed((nodes.title + ". " + nodes.text).tolist()))
 
 
 def classes(ds):
@@ -375,6 +85,7 @@ def classes(ds):
         unit(cora_features()),
         adjacency(edges, len(nodes)),
         searches(ds, "classes"),
+        ORDERS,
         recalls=recalls,
     )
     save()
@@ -501,55 +212,6 @@ def proxy(ds):
     collect(ds, PROXY, "proxy", system)
 
 
-def proxy_scores(ds, n):
-    """p(yes) per predicate from the proxy, 0 where the proxy has no row."""
-    path = LABELS / ds.labels / "proxy.jsonl"
-    if not path.exists():
-        sys.exit(f"no {path}, run: run.py {ds.name} proxy")
-    scored = pd.read_json(path, lines=True)
-    out = {}
-    for key, _, _ in ds.predicates:
-        sub = scored[scored.predicate == key]
-        score = np.zeros(n)
-        score[sub.row.to_numpy()] = [
-            p_yes(v, 1.0 if pd.isna(q) else q) for v, q in zip(sub.verdict, sub.p)
-        ]
-        out[key] = score
-    return out
-
-
-def loaded(ds):
-    """The oracle labels as a mask per predicate, and the two row pools."""
-    if not ds.predicates:
-        sys.exit(f"no predicates for {ds.name} yet")
-
-    nodes, edges = ds.load()
-    path = LABELS / ds.labels / "labels.jsonl"
-    if not path.exists():
-        sys.exit(f"no {path}, run: run.py {ds.name} label")
-
-    labels = pd.read_json(path, lines=True)
-    yes = labels[labels.verdict == "yes"]
-    masks = {}
-    for key, _, _ in ds.predicates:
-        mask = np.zeros(len(nodes), bool)
-        mask[yes.row[yes.predicate == key].to_numpy()] = True
-        masks[key] = mask
-
-    junk = ds.junk(nodes).any(axis=1).to_numpy()
-    repeat = (nodes.title + "\n" + nodes.text).duplicated().to_numpy()
-    keep = ~junk & ~repeat
-    pools = [
-        (
-            f"all {len(nodes):,} rows, {int(junk.sum()):,} junk and "
-            f"{int(repeat.sum())} repeated texts in the pool",
-            np.ones(len(nodes), bool),
-        ),
-        (f"{int(keep.sum()):,} rows, junk and repeated texts dropped", keep),
-    ]
-    return nodes, edges, labels, masks, pools
-
-
 def predicates(ds):
     """Replay every order on the oracle labels. No oracle calls."""
     nodes, edges, labels, masks, pools = loaded(ds)
@@ -577,6 +239,7 @@ def predicates(ds):
             vectors[mask],
             adjacency(links, int(mask.sum())),
             searches(ds, "predicates"),
+            ORDERS,
         )
 
     save()

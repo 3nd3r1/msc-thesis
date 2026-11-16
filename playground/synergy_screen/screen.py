@@ -8,11 +8,10 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments/lib"))
-sys.path.insert(0, str(ROOT / "experiments/03_link_guided_search"))
 
 from data import SYNERGY_REPO, synergy_citations, synergy_pool
 from embed import embed
-from run import correlation
+from corpora import correlation
 from search import adjacency, knn, unit
 
 CAP = 20

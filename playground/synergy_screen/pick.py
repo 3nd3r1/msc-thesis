@@ -5,10 +5,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments/lib"))
-sys.path.insert(0, str(ROOT / "experiments/03_link_guided_search"))
 
 from data import load_synergy, synergy_meta
-from run import correlation
+from corpora import correlation
 from search import adjacency
 
 MIN_POSITIVES = 40

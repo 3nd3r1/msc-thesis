@@ -9,11 +9,10 @@ import pandas as pd
 from sklearn.metrics import roc_auc_score
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "experiments" / "lib"))
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "experiments" / "03_link_guided_search"))
 
 from embed import embed
 from llm import ORACLE, PROXY, SYSTEM, client, judge, p_yes
-from run import DATASETS, LABELS
+from corpora import DATASETS, LABELS
 from search import unit
 
 

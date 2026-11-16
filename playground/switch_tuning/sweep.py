@@ -10,10 +10,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments/lib"))
-sys.path.insert(0, str(ROOT / "experiments/03_link_guided_search"))
 
-from run import DATASETS, RECALLS, loaded, proxy_scores, subgraph
-from search import DECAY, adjacency, search
+from corpora import DATASETS, loaded, proxy_scores, subgraph
+from search import DECAY, RECALLS, adjacency, search
 
 RESULTS = Path(__file__).resolve().parent / "results"
 SEEDS = 20
