@@ -17,3 +17,4 @@ Quick tests and screening, like checking a dataset or a signal before deciding t
 - `switch_tuning/` - sweeps the decay and a proxy head start of `proxy+switch` against the proxy on every dataset with a proxy, see the 2026-11-12 log.
 - `residual_screen/` - checks whether the correlation of the label or of the proxy residual along the edges tracks what links add to the proxy in step 4 of 03, see the 2026-11-13 log.
 - `refusal_screen/` - checks whether how often the 8B refuses under the plain LOTUS prompt on a random sample tracks what links add to the proxy in step 4 of 03, with the pass rule fixed in the script before the run, see the 2026-11-13 log.
+- `shape_screen/` - checks whether how hard a predicate is to find from the text, the AP of a classifier on the embeddings, tracks what links add to the proxy in step 4 of 03, with the pass rule fixed in the script before the run, see the 2026-11-16 log.

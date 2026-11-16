@@ -1,0 +1,63 @@
+ap: out of fold average precision of a logistic regression on the embeddings, 5 folds, seed 0
+gain: proxy+links minus proxy in points of the rows at 90% recall, negative means links help
+pool with junk and repeated texts dropped
+
+      dataset     predicate   rate     ap   gain
+         cora         proof   6.6%  0.451   +8.2
+         cora      language   3.2%  0.757   +4.6
+         cora       biology   4.8%  0.821   +2.2
+         cora      robotics   4.3%  0.893   +3.9
+         cora  first person   2.8%  0.076   +4.5
+         cora        markov   3.6%  0.626   +3.6
+         cora  unsupervised   3.6%  0.521   +0.0
+        stack          spss   3.7%  0.632   +5.5
+        stack         rcode  12.5%  0.741  +12.3
+        stack        choose  13.7%  0.730   +4.8
+        stack   assumptions   8.7%  0.636   +0.0
+        stack   interaction   3.2%  0.781   +2.4
+        stack     interpret  10.4%  0.749   +4.8
+        stack      ownstudy   5.8%  0.280   +3.4
+        stack          econ   7.0%  0.670   +4.4
+        stack        survey   9.3%  0.750   +2.9
+        stack        biomed  11.0%  0.776   +5.7
+        stack            we   2.7%  0.068   +0.1
+ stack_author          spss   3.7%  0.632   +2.6
+ stack_author         rcode  12.5%  0.741   +7.8
+ stack_author        choose  13.7%  0.730   +5.1
+ stack_author   assumptions   8.7%  0.636   +5.5
+ stack_author   interaction   3.2%  0.781   +4.6
+ stack_author     interpret  10.4%  0.749   +4.9
+ stack_author      ownstudy   5.8%  0.280   +0.2
+ stack_author          econ   7.0%  0.670   +3.1
+ stack_author        survey   9.3%  0.750   +0.7
+ stack_author        biomed  11.0%  0.776   +2.3
+ stack_author            we   2.7%  0.068   -0.9
+          cad      identity   9.9%  0.379   -7.7
+          cad   affiliation   5.2%  0.364   -4.9
+          cad        person   4.5%  0.271   -7.3
+          cad counterspeech   0.9%  0.053   +0.2
+          cad          slur   0.6%  0.219   -2.5
+   cad_thread      identity   9.9%  0.379   +4.7
+   cad_thread   affiliation   5.2%  0.364   -2.9
+   cad_thread        person   4.5%  0.271  +10.4
+   cad_thread counterspeech   0.9%  0.053  -15.1
+   cad_thread          slur   0.6%  0.219   -8.3
+   cad_author      identity   9.9%  0.379   -1.6
+   cad_author   affiliation   5.2%  0.364   -0.6
+   cad_author        person   4.5%  0.271   -1.6
+   cad_author counterspeech   0.9%  0.053   -3.0
+   cad_author          slur   0.6%  0.219   -2.0
+         meld         anger  12.4%  0.356   -9.2
+         meld       disgust   2.9%  0.140   -2.5
+         meld          fear   2.8%  0.128   -5.7
+         meld           joy  16.7%  0.532   -4.7
+         meld       sadness   7.8%  0.265   -4.4
+         meld      surprise  10.8%  0.430   +1.4
+meld_dialogue         anger  12.4%  0.356  -13.5
+meld_dialogue       disgust   2.9%  0.140   -2.2
+meld_dialogue          fear   2.8%  0.128   -6.7
+meld_dialogue           joy  16.7%  0.532   -6.7
+meld_dialogue       sadness   7.8%  0.265   -9.3
+meld_dialogue      surprise  10.8%  0.430  +12.4
+
+Spearman of ap against gain over all predicates +0.585, fixed to pass at +0.5 or higher: pass
