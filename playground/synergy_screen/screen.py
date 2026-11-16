@@ -13,25 +13,11 @@ sys.path.insert(0, str(ROOT / "experiments/03_link_guided_search"))
 from data import SYNERGY_REPO, synergy_citations, synergy_pool
 from embed import embed
 from run import correlation
-from search import adjacency, unit
+from search import adjacency, knn, unit
 
 CAP = 20
 SEEDS = 20
 MAX_PAIRS = 4_000_000
-
-
-def knn(vectors, k, block=2048):
-    """Top k by cosine, in row blocks so the full matrix is never held."""
-    n = len(vectors)
-    pairs = set()
-    for s in range(0, n, block):
-        sim = vectors[s:s + block] @ vectors.T
-        for r in range(len(sim)):
-            sim[r, s + r] = -1
-        for r, top in enumerate(np.argpartition(-sim, k, axis=1)[:, :k]):
-            i = s + r
-            pairs.update((min(i, int(j)), max(i, int(j))) for j in top)
-    return np.array(sorted(pairs))
 
 
 def pairs_from(groups, cap=CAP):

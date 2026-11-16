@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from embed import embed
 from llm import ORACLE, PROXY, SERVED, SYSTEM, client, judge, p_yes
 from report import report
-from search import adjacency, search, unit
+from search import adjacency, knn, search, unit
 
 from data import (
     cad_junk,
@@ -702,6 +702,45 @@ def cascade(ds):
     searches(ds, "cascade").unlink()
 
 
+def diffuse(ds):
+    """proxy+diffuse over links, over a cosine kNN with as many edges, and over both."""
+    nodes, edges, _, masks, pools = loaded(ds)
+    scores = proxy_scores(ds, len(nodes))
+    vectors = vectors_for(nodes)
+    out, save = report(results(ds), "diffuse")
+
+    out(f"{ds.name}, {len(nodes):,} {ds.noun}, {len(edges):,} edges")
+    out(f"calls% is calls over rows, mean and sd of {SEEDS} seeds")
+    out(f"proxy is p(yes) from {PROXY}, one call per row and predicate")
+    out("proxy+diffuse adds to the proxy the mean residual, verdict minus proxy,")
+    out("of the asked neighbours, one hop of Correct and Smooth bias diffusion")
+    out("knn is the top k cosine neighbours, k picked so it has about as many edges as the links")
+
+    for title, mask in pools:
+        n = int(mask.sum())
+        links = subgraph(mask, edges)
+        cos = knn(vectors[mask], max(1, round(len(links) / n)))
+        both = np.unique(np.r_[links, cos], axis=0)
+        names = [
+            (f"{k} {kind}", masks[k][mask], scores[k][mask])
+            for k, kind, _ in ds.predicates
+        ]
+        for graph, pairs in [("links", links), ("knn", cos), ("both", both)]:
+            out(f"\n{title}, {graph}, {len(pairs):,} edges")
+            table(
+                out,
+                names,
+                vectors[mask],
+                adjacency(pairs, n),
+                searches(ds, f"diffuse_{graph}"),
+                ["proxy", "proxy+diffuse"],
+            )
+
+    save()
+    for graph in ("links", "knn", "both"):
+        searches(ds, f"diffuse_{graph}").unlink()
+
+
 STEPS = {
     "classes": classes,
     "label": label,
@@ -711,6 +750,7 @@ STEPS = {
     "lift": lift,
     "ceiling": ceiling,
     "cascade": cascade,
+    "diffuse": diffuse,
 }
 
 if __name__ == "__main__":

@@ -11,6 +11,20 @@ def adjacency(edges, n):
     return [np.array(x, dtype=int) for x in out]
 
 
+def knn(vectors, k, block=2048):
+    """Top k by cosine, in row blocks so the full matrix is never held."""
+    n = len(vectors)
+    pairs = set()
+    for s in range(0, n, block):
+        sim = vectors[s:s + block] @ vectors.T
+        for r in range(len(sim)):
+            sim[r, s + r] = -1
+        for r, top in enumerate(np.argpartition(-sim, k, axis=1)[:, :k]):
+            i = s + r
+            pairs.update((min(i, int(j)), max(i, int(j))) for j in top)
+    return np.array(sorted(pairs))
+
+
 def unit(features):
     norms = np.linalg.norm(features, axis=1, keepdims=True)
     return features / np.maximum(norms, 1e-9)
@@ -29,6 +43,8 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
     similarity = np.zeros(n)
     mean = np.zeros(n)
     prior = np.zeros(n) if proxy is None else proxy
+    residual = np.zeros(n)
+    seen = np.zeros(n)
     asked = np.zeros(n, bool)
     degree = np.array([len(x) for x in neighbours], float)
     found = 0
@@ -47,6 +63,9 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
         # one, and the proxy orders within each of the two sets.
         "proxy+links": lambda ix: prior[ix] + 2.0 * (pos[ix] > 0),
         "proxy+switch": lambda ix: prior[ix],
+        # One hop of the bias diffusion in Correct and Smooth: the proxy plus the
+        # mean residual, verdict minus proxy, of the asked neighbours.
+        "proxy+diffuse": lambda ix: prior[ix] + residual[ix] / np.maximum(seen[ix], 1),
     }.get(order, lambda ix: float(order.split()[1]) * (pos[ix] - neg[ix]) + mean[ix])
     # The matvec behind `mean` is almost the whole cost, so skip it where unread.
     similar = order.split()[0] in ("embeddings", "links+embeddings", "blend", "blend/deg")
@@ -77,6 +96,8 @@ def search(labels, order, vectors, neighbours, seed=0, recalls=(0.90,), proxy=No
                 misses[source] += 1 - labels[i]
         asked[i] = True
         current[i] = -np.inf
+        residual[neighbours[i]] += labels[i] - prior[i]
+        seen[neighbours[i]] += 1
         if labels[i]:
             found += 1
             pos[neighbours[i]] += 1
