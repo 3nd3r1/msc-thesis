@@ -1,0 +1,26 @@
+proxy+switch minus proxy, in points of the rows, negative means switch needs fewer calls
+over every predicate and target 50%, 80%, 90%, 95%, switch is the mean of 20 seeds
+pool with junk and repeated texts dropped
+head is pseudo hits for the proxy at the start, the committed setting is decay 0.99 head 0
+
+      dataset  decay  head   mean  worst   best  > +0.5
+         cora    0.9     0  +0.05   +3.3   -3.3   6/28
+         cora    0.9     3  +0.04   +3.3   -3.2   5/28
+         cora    0.9    10  +0.04   +3.3   -3.2   5/28
+         cora    0.9    30  +0.04   +3.3   -3.2   5/28
+         cora   0.97     0  +0.01   +3.3   -2.6   6/28
+         cora   0.97     3  -0.00   +3.3   -2.3   6/28
+         cora   0.97    10  -0.01   +3.3   -2.3   5/28
+         cora   0.97    30  -0.03   +3.3   -2.0   4/28
+         cora   0.99     0  -0.04   +3.3   -2.7   3/28
+         cora   0.99     3  -0.05   +3.3   -2.7   3/28
+         cora   0.99    10  -0.02   +3.3   -3.1   4/28
+         cora   0.99    30  -0.02   +3.3   -3.8   3/28
+         cora  0.999     0  -0.11   +3.3   -4.2   4/28
+         cora  0.999     3  -0.08   +3.3   -4.3   4/28
+         cora  0.999    10  -0.06   +3.3   -3.9   3/28
+         cora  0.999    30  +0.04   +3.2   -1.8   3/28
+         cora    1.0     0  -0.10   +3.3   -3.8   4/28
+         cora    1.0     3  -0.09   +3.3   -4.3   4/28
+         cora    1.0    10  -0.04   +3.3   -3.4   3/28
+         cora    1.0    30  +0.06   +3.2   -1.6   3/28

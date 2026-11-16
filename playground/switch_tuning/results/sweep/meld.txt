@@ -1,0 +1,26 @@
+proxy+switch minus proxy, in points of the rows, negative means switch needs fewer calls
+over every predicate and target 50%, 80%, 90%, 95%, switch is the mean of 20 seeds
+pool with junk and repeated texts dropped
+head is pseudo hits for the proxy at the start, the committed setting is decay 0.99 head 0
+
+      dataset  decay  head   mean  worst   best  > +0.5
+         meld    0.9     0  -2.52   +4.2   -9.2   4/24
+         meld    0.9     3  -2.52   +4.2   -9.2   4/24
+         meld    0.9    10  -2.52   +4.2   -9.2   4/24
+         meld    0.9    30  -2.52   +4.2   -9.2   4/24
+         meld   0.97     0  -2.58   +4.2   -9.2   4/24
+         meld   0.97     3  -2.58   +4.2   -9.2   4/24
+         meld   0.97    10  -2.58   +4.2   -9.2   4/24
+         meld   0.97    30  -2.58   +4.2   -9.2   4/24
+         meld   0.99     0  -2.71   +3.2   -9.2   3/24
+         meld   0.99     3  -2.71   +3.2   -9.2   3/24
+         meld   0.99    10  -2.71   +3.2   -9.2   3/24
+         meld   0.99    30  -2.71   +3.2   -9.2   3/24
+         meld  0.999     0  -2.92   +2.4   -9.2   1/24
+         meld  0.999     3  -2.92   +2.4   -9.2   1/24
+         meld  0.999    10  -2.93   +2.4   -9.2   1/24
+         meld  0.999    30  -2.93   +2.4   -9.2   1/24
+         meld    1.0     0  -3.04   +0.3   -9.2   0/24
+         meld    1.0     3  -3.04   +0.3   -9.2   0/24
+         meld    1.0    10  -3.04   +0.3   -9.2   0/24
+         meld    1.0    30  -3.03   +0.2   -9.2   0/24
