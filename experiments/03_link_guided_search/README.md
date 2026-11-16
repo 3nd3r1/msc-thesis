@@ -26,11 +26,12 @@ Orders compared:
 - small-LLM proxy score, the LOTUS and BARGAIN way
 - the proxy score with link expansion on top
 - `proxy+switch`, which each call picks between the proxy's best row and the proxy's best neighbour of a confirmed positive by Thompson sampling on which source has hit more, with no decay on the counts, picked in `playground/switch_tuning`
+- `proxy+diffuse`, the proxy plus the mean residual, verdict minus proxy, of the asked neighbours, one hop of the bias diffusion in Correct and Smooth as PROBE uses it, run over the links, over a cosine kNN with about as many edges and over both
 
 Every order starts with no labels, so the first positive is found at random and only then do links and similarity have anything to point at.
 `blend 1.0` isolates the negatives and `blend 0.3` and `blend 0.1` isolate the scaling, so each order differs from the one above it by one thing.
 With no edges `blend 1.0` is the same order as links and embeddings together.
-The two proxy orders sit in their own step, since an 8B call on every row is a cost the others never pay, and comparing them against each other holds it fixed.
+The proxy orders sit in their own step, since an 8B call on every row is a cost the others never pay, and comparing them against each other holds it fixed.
 
 ## Data
 
@@ -408,6 +409,7 @@ Step `proxy` and then step `cascade`.
 
 - `proxy` gets p(yes) on every row and predicate from the small model.
 - `cascade` replays the proxy order and the proxy with link expansion on top, and makes no oracle calls.
+- `diffuse` replays the proxy and `proxy+diffuse` over the links, the cosine kNN and both, and makes no oracle calls.
 
 Both orders pay one small-model call per row, so the column below is oracle calls alone.
 
@@ -578,3 +580,20 @@ proxy+switch minus proxy over every predicate and target, the pool with junk and
 | stack_author  | 44    | 39                   | +1.5  | -4.0  |
 | meld          | 24    | 24                   | +0.3  | -9.2  |
 | meld_dialogue | 24    | 24                   | +0.1  | -12.3 |
+
+##### proxy+diffuse
+
+BLUF: `proxy+diffuse` is worse than the proxy on most cells of every dataset and graph, by up to 35.6 points on CAD and MELD and up to 87.9 on Cora and Stack.
+
+proxy+diffuse minus proxy over every predicate and target, as cells within 0.5 points or better, worst and best, the pool with junk and repeated texts dropped, from the `results/<dataset>/diffuse.txt` files:
+
+| dataset       | links             | knn               | both              |
+| ------------- | ----------------- | ----------------- | ----------------- |
+| cad           | 4/20 +26.5 -1.5   | 4/20 +33.5 -2.1   | 4/20 +30.4 -3.4   |
+| cad_thread    | 6/20 +10.3 -4.9   | 4/20 +25.3 -6.3   | 8/20 +16.2 -6.1   |
+| cad_author    | 1/20 +35.6 -0.1   | 2/20 +28.9 -2.9   | 2/20 +24.8 -2.1   |
+| meld          | 5/24 +31.4 -1.0   | 1/24 +34.8 -0.4   | 3/24 +28.0 -1.4   |
+| meld_dialogue | 1/24 +26.6 +0.1   | 0/24 +35.3 +1.4   | 6/24 +29.6 -2.1   |
+| cora          | 4/28 +79.9 -2.5   | 7/28 +81.6 -12.1  | 7/28 +79.6 -6.2   |
+| stack         | 13/44 +57.0 -0.2  | 16/44 +87.9 -0.4  | 13/44 +81.1 -0.3  |
+| stack_author  | 15/44 +63.2 -0.2  | 16/44 +87.9 -0.4  | 13/44 +87.9 -0.2  |
