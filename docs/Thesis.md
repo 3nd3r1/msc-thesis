@@ -17,3 +17,4 @@ MSc thesis, computer science, University of Helsinki. Supervised by Prof. Jiahen
 - [Directions](Directions/) - candidate thesis directions, one per note
 - [Ideas](Ideas/) - loose ideas, one per note
 - [Process](Process.md) - the Helsinki thesis process
+- [Baselines](Baselines.md) - what the published semantic filter methods measure and on which data
