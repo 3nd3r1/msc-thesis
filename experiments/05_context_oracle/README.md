@@ -40,3 +40,27 @@ Every human positive the two answers disagree on, or both miss, goes to `results
 
 `python run.py label` asks the 70B and appends to `results/calls.jsonl`, resuming if stopped.
 `python run.py report` writes `results/recall.txt` and `results/cases.txt`.
+
+## Result
+
+Fail. With the neighbour's text the 70B finds 2.1 points more of the human positives on average, where 10 passes, and its false positive rate drops 0.9 points.
+
+From `results/recall.txt`:
+
+| dataset | predicate     | rec row | rec ctx | fpr row | fpr ctx | nbr+ missed | nbr+ found |
+| ------- | ------------- | ------- | ------- | ------- | ------- | ----------- | ---------- |
+| cad     | affiliation   | 67%     | 63%     | 0%      | 0%      | 30%         | 25%        |
+| cad     | counterspeech | 50%     | 53%     | 13%     | 13%     | 0%          | 0%         |
+| cad     | identity      | 80%     | 77%     | 10%     | 20%     | 83%         | 21%        |
+| cad     | person        | 80%     | 90%     | 13%     | 7%      | 67%         | 21%        |
+| cad     | slur          | 80%     | 73%     | 13%     | 13%     | 0%          | 12%        |
+| meld    | anger         | 47%     | 53%     | 7%      | 3%      | 25%         | 36%        |
+| meld    | disgust       | 47%     | 60%     | 7%      | 7%      | 12%         | 14%        |
+| meld    | fear          | 67%     | 63%     | 13%     | 17%     | 20%         | 25%        |
+| meld    | joy           | 57%     | 63%     | 13%     | 7%      | 8%          | 53%        |
+| meld    | sadness       | 33%     | 37%     | 7%      | 0%      | 20%         | 20%        |
+| meld    | surprise      | 93%     | 90%     | 27%     | 27%     | 0%          | 4%         |
+
+DeepInfra served Llama 3.3 70B Turbo for these calls, while the Cora and Stack labels in 03 were served by Llama 3.1 70B Turbo.
+
+Closed.

@@ -1,0 +1,576 @@
+Every human positive where the row alone and the context disagree, or both miss.
+alone and ctx are the 70B's verdicts, nbr+ is whether the neighbour is a human positive too.
+
+## cad affiliation
+
+row 3450  alone no  ctx no  nbr+ no
+  neighbour: Ironically, no communists were actually killed by the Salvadoran troops during El Mozote.  Just protestant evangelical men, women, and children.
+  row:       That's why I don't support the slaughter of innocent men, women, or children. Neither did the Reagan administration. Real world foreign policy often puts you into positions where you have to ally with a bad guy to get rid of the REALLY bad guy. World War II is the prime example of this. We allied with the USSR, an evil regime, to take down an even worse regime at the time.  [linebreak]  [linebreak
+
+row 4734  alone no  ctx no  nbr+ yes
+  neighbour: Anon is a fundamentalist and rejects degenerate progressivism
+  row:       Like a HERO
+
+row 7995  alone yes  ctx no  nbr+ no
+  neighbour: This could be my own ignorance but maybe someone can explain to me. I thought a 'terf' was a feminist who didn't include transwomen in their definition of feminism because 'terf' believe that growing up and being biologically female is essential to the female experience.  [linebreak]  [linebreak] A) is that incorrect?  [linebreak] B) if that is correct why is that as bad as molesting children. You
+  row:       All those things reach the threshold of not deserving respect, they're not just as bad. Obviously being a nazi is worse than being a terf but that doesn't mean terfs deserve respect
+
+row 8013  alone no  ctx yes  nbr+ yes
+  neighbour: No they hate them cus 40% of cops are domestic abusers and the job inherently attracts and protects people who want to abuse power.
+  row:       I don't find the 40% statistics unbelievable, especially for America. But they still dragged the 60% along for no good reason. Like cops are not on the same level of pedophiles, people can acknowledge that and still say "there are bad cops, and the law enforcement system has problems etc."
+
+row 13651  alone no  ctx no  nbr+ no
+  neighbour: I see guys who look like this visiting Macau all the time. Same clothes, vibe, tattoos. [linebreak]  [linebreak] I've always assumed they were gangsters or scum. Glad my instincts are correct!
+  row:       The son of one the wife's auntie dresses like that. He's in early 30's. Mom is a street sweeper, Dad does random jigs here and there. The guy never really worked, never had regular girl friends. He once had a "girlfriend" in Chengdu, while he lives in Nanjing, but he never saw her. He borrowed money to go to Chengdu, he came back from Chengdu a couple of days later : no more "girlfriend", no money
+
+row 16402  alone no  ctx no  nbr+ no
+  neighbour: Gay people have [higher-than-average income](http://www.experian.com/blogs/marketing-forward/2012/07/20/sim-a-look-at-household-income-and-discretionary-spend-of-lesbian-gay-and-heterosexual-americans/), and usually no kids.  Scarcely surprising for them to chase those dollars.
+  row:       There's a difference between chasing the gay $ and pandering to SJWs. [linebreak]  [linebreak] None of the gay people I know at all well are raging regressives although there are a few where I work who who certainly have the disease.
+
+row 16912  alone no  ctx no  nbr+ no
+  neighbour: > Youtube algorithm is based on personal searches  [linebreak]  [linebreak] i doubt, they literally censored opindia video and even deleted it after it started trending
+  row:       Not surprised if true...world kuch zyada hi anti india ho gya he
+
+row 17255  alone no  ctx no  nbr+ no
+  neighbour: >If inceldom were a predominantly non-white movement, most people would acknowledge them as a legitimate terrorist threat and not just harmless losers who don't know any better. [linebreak]  [linebreak] Yeesh, really ? A terrorist threat ? come on,
+  row:       Yes, they've resulted in the deaths of REAL human beings on at least four separate occasions. What would you call that? [linebreak]  [linebreak] They discuss acting out violently all the time and some have followed through. Violence doesn't have to be driven by religion or race to be considered terrorism. Sexist violence inspired by a misogynistic ideology still qualifies as terrorism. It's just t
+
+row 21358  alone yes  ctx no  nbr+ yes
+  neighbour: The only people committing violence in Charlottesville were Leftists and it wasn't just 'antifa'.  Fox News was sitting there all morning talking about nazis while in the background of their reporter people were flinging rocks up over the walls of the park.  [linebreak]  [linebreak] One mentally ill kid fleeing the area doesn't mean you can say there was anything wrong with the people protesting t
+  row:       Nice spin but that's not what happened. One of the rightists at the Unite the Right rally murdered someone with their car.
+
+row 21401  alone no  ctx yes  nbr+ no
+  neighbour: im so glad a bunch of fags in sf have effectively taken control over like 90% of what i see on the internet
+  row:       reeee, social media is no longer letting my fellow rightoids run fake news campaigns on the internet to indoctrinate and bamboozle a bunch of dumb ass boomers. [linebreak]  [linebreak] Rural Americans are too stupid for an unfiltered internet, don't know what to tell you.
+
+row 21437  alone yes  ctx no  nbr+ no
+  neighbour: The same people who cry about Chinese censorship are cheering censoring done by muh private companies.      [linebreak] Internet went so fast from being 'wild west' to widespread censorship being accepted that I can't imagine how it will look like in another 10-15 years.
+  row:       Then they tell you "create your own platform" so [they do ](https://www.tabletmag.com/scroll/249414/hatreon-a-crowdfunding-site-for-bigots-is-exhibit-a-for-why-kicking-them-off-social-platforms-doesnt-solve-the-problem) but then they still go and Lobby to get them [shut down](https://hornet.com/stories/makersupport-shutdown-alt-right-crowdfunding)  including by going to every payment provider avai
+
+row 21627  alone no  ctx no  nbr+ no
+  neighbour: Remember when there was a Catholic priest ranting about Jews and supporting fascism in the 30s and he got kicked off the air unceremoniously? The good old days, when America was fascist.
+  row:       It never even began for Coughlincels
+
+row 22047  alone no  ctx no  nbr+ yes
+  neighbour: By that logic, one could argue that acts of violence against communists are also self-defense since communists murdered far more people in the 20th century than the Nazis did.
+  row:       ThAt WaSn'T rEaL CoMmUnIsM
+
+## cad counterspeech
+
+row 5682  alone yes  ctx no  nbr+ no
+  neighbour: Because you have to be really intelligent and willing to spend a very long time working very hard before you start making money.  Most women aren't driven like that.
+  row:       Wow I thought you were gonna reply something subtlety sexist but you really just cut straight to the chase.
+
+row 6369  alone no  ctx no  nbr+ no
+  neighbour: Even the fucking NYT is exposing this fake venezuela "revolution". Guess what? It's the rich upclass revolting against the government's attempt to bring equality to its people. https://www.youtube.com/watch?v=_fV-C1Ag5sI (YT marked this nsfw in an attempt to censor it)
+  row:       So people haven't been starving and eating dogs and zoo animals?The only upper class are the children of maduro and Chavez at this point.
+
+row 6549  alone no  ctx no  nbr+ no
+  neighbour: How weak do you have to be to get your finger broken?
+  row:       Not broken, severed.  [linebreak]  [linebreak] She threw a bottle of vodka at him so hard that it severed his finger.
+
+row 13382  alone no  ctx no  nbr+ no
+  neighbour: Yeah, I get all that.. the graphic answers the question with "false" though..
+  row:       which is unfortunately a bad message, because female to male transgender people still can experience period symptoms, because the vast majority of trans people don't actually get sex reassignment surgery. so there are indeed men who menstruate. the language needs to evolve because as we learn more about what it means to be human and all the various nuances of identity and expression, we need to ac
+
+row 14192  alone no  ctx no  nbr+ no
+  neighbour: His wife makes all the money in the family.
+  row:       his supermodel wife. yeah. thats what i call winning...
+
+row 14348  alone no  ctx yes  nbr+ no
+  neighbour: The new reds are delusional, they don't include anyone that aren't manual laborers in the new proletariat. Small shop owners, white collar, they get the wall!
+  row:       This is a lie.
+
+row 14466  alone no  ctx no  nbr+ no
+  neighbour: Ordered by LBJ cause he was ordered by the Israelis. Just like we always have been taking orders from them.
+  row:       >Ordered by LBJ cause he was ordered by the Israelis [linebreak]  [linebreak] Citation needed.
+
+row 14974  alone no  ctx no  nbr+ no
+  neighbour: Love it when that happens with the notre dam burning video
+  row:       Wtf is wrong with you
+
+row 15501  alone yes  ctx no  nbr+ no
+  neighbour: To be fair, Christianity is pretty sexist. It's actually racist too, what with Yahweh having a chosen people, but the dominionism helps offset that. Oh, and I can point to several well known Christian pastors that believe that marital rape isn't a thing and that it's a wife's duty to satisfy her husband whenever he wishes. And expecting priests to be celibate does seem to cause issues with pedophi
+  row:       Jesus literally said men and women are equal, how the hell is that sexist?
+
+row 16010  alone no  ctx no  nbr+ no
+  neighbour: I agree with you, but it's also super obvious to me that the modern Republican party doesn't follow Jesus's teachings at all. I'm not saying Jesus isa socialist or anything of that nature. But the president should be an example to follow and instead I see someone with nothing but hatred to the core. He promotes violence and division. I don't think I've ever seen him show empathy, the closest he co
+  row:       What the hell are you talking about?
+
+row 18122  alone no  ctx no  nbr+ no
+  neighbour: It's just shortening the terms, but it's annoying how they set out to normalise weird terms for straight and normal. [linebreak]  [linebreak] Ace is weird, it's just a cool name for asexual which while weird, I don't think any asexual person has really ever been discriminated against
+  row:       > I don't think any asexual person has really ever been discriminated against [linebreak]  [linebreak] Well not for being asexual explicitly. [linebreak]  [linebreak] I bet good money that some tumblrina with 74 pronouns and labels, one of them being "ace" has been discriminated against.....namely due to having a severe case of guano psychosis...but that it's irrelevant to the asexual bit. [linebr
+
+row 18243  alone no  ctx yes  nbr+ no
+  neighbour: No, there are two genders and how comfortable you are with yours. [linebreak]  [linebreak] "Non-binary" and "agender" are bullshit used by transtrenders to label themselves and, in the process, insult and trivialize actual trans people and the issues they go through.
+  row:       Allow me to correct you... [linebreak]  [linebreak] There are two SEXES and how comfortable you are with yours [linebreak]  [linebreak] (And even this isn't 100% true because of XXY) [linebreak]  [linebreak] And the whole second part is only true for the special snowflakes, but I believe there are people that genuinely feel like they don't belong either as a "man" or a "woman", or even feel like t
+
+row 18639  alone no  ctx yes  nbr+ no
+  neighbour: No, there are two genders and how comfortable you are with yours. [linebreak]  [linebreak] "Non-binary" and "agender" are bullshit used by transtrenders to label themselves and, in the process, insult and trivialize actual trans people and the issues they go through.
+  row:       hello friend, non-binary is a thing yet not a biological gender. agender is a version of non-binary   [linebreak]  [linebreak]  [linebreak] thanks
+
+row 19261  alone yes  ctx no  nbr+ no
+  neighbour: Saw a post on r/blackpeopletwitter arguing that black men are more oppressed than white women. Such bullshit.
+  row:       I dunno, black males are often dealt a pretty shitty hand in life, at least in America.
+
+row 19452  alone no  ctx yes  nbr+ no
+  neighbour: You certainty do, you're way too fragile to understand why being straight is not something to be proud of.
+  row:       There's nothing wrong with it. Thanks for the flair idea though.
+
+row 21896  alone no  ctx no  nbr+ no
+  neighbour: But trans women are men who want to be women?
+  row:       Trans women are women born in the wrong sex. They don't want to be, they are.
+
+row 23085  alone no  ctx no  nbr+ no
+  neighbour: Yes, that's exactly what i'm saying. The entire fandom has given the keys to the fascists with their constant appeasing and dehumanization, regardless of whether you want to admit it or not, these "far left" individuals are doing more to help fascism then literal fascists ever could. There's a reason why there's a well-documented furry->alt-right pipeline and a lot of it has to do with how the fan
+  row:       >regardless of whether you want to admit it or not, these "far left" individuals are doing more to help fascism then literal fascists ever could. There's a reason why **there's a well-documented furry->alt-right pipeline** and a lot of it has to do with how **the fandom glorifies fascist narratives**. [linebreak]  [linebreak] what the actual fuck did i just read [linebreak]  [linebreak] i'm gettin
+
+row 23112  alone no  ctx no  nbr+ no
+  neighbour: It's a working example of what happens when you let fascists exist within your group. Sure they all were happy and dandy giving their kumbaya-save-the-whales acceptance of the dangerous fucks, and now they get to suffer the toxicity they bring now that they've successfully taken over the fandom. What a load of fucking shit.
+  row:       Chief, I'm sorry to report that this ain't it.
+
+## cad identity
+
+row 1705  alone no  ctx no  nbr+ yes
+  neighbour: Seriously? [linebreak]  [linebreak] These children are going to wither and die when they have to deal with the real world.
+  row:       No - they'll shriek and panic and everyone will fold to them because its just easier than dealing with a 30 year old toddler.
+
+row 5543  alone no  ctx no  nbr+ yes
+  neighbour: *they
+  row:       Bigot.
+
+row 8284  alone no  ctx no  nbr+ yes
+  neighbour: Bra, period, tampons.
+  row:       You forgot being pregnant, being a mom. [linebreak]  [linebreak]  [linebreak]
+
+row 8616  alone yes  ctx no  nbr+ no
+  neighbour: I have a dark sense of humour. I never really make jokes about gays, though.  [linebreak]  [linebreak] I mean, I'm sure I've made a joke aimed at a gay man before, but the focus of the humour wasn't in any way related to his sexuality. [linebreak]  [linebreak] My jokes mostly rely on dead baby humour, being a serial killer, or cannibalism (though I hate that word. I prefer to think of myself as a 
+  row:       I think you need an AID with that
+
+row 15365  alone yes  ctx no  nbr+ no
+  neighbour: Eh I am okay with this my family were die hard loyalists and got exiled to Canada after the American Revolution. Though I find this a humorous take because the American founders were way more liberal than the very conservative British state. I mean this person forgets that the House Of Lords in the UK has representatives from the Church of England.  [linebreak]  [linebreak] Being a loyalist usuall
+  row:       To be fair, Christianity is pretty sexist. It's actually racist too, what with Yahweh having a chosen people, but the dominionism helps offset that. Oh, and I can point to several well known Christian pastors that believe that marital rape isn't a thing and that it's a wife's duty to satisfy her husband whenever he wishes. And expecting priests to be celibate does seem to cause issues with pedophi
+
+row 18005  alone no  ctx no  nbr+ yes
+  neighbour: That some degree of ethnocentrism is healthy for a population? That fascism is underappreciated as a means of social organisation due largely to the the unchecked power of the media-propaganda complex during and after the second world war? That the whole skinhead aesthetic just oozes cool? [linebreak]  [linebreak]  [linebreak] Or maybe that I'm just a fucking racist nazi. [linebreak]  [linebreak] 
+  row:       First two points yes, but idk about having swaztikas tattooed on me.
+
+row 20123  alone no  ctx no  nbr+ no
+  neighbour: there are white people in detroit?
+  row:       People are moving back. Detroit is slowly becoming a city again.
+
+row 20722  alone no  ctx yes  nbr+ yes
+  neighbour: unfortunately ageplay/ddlg/dmlb/abdl is have been the trendy kink for the past couple years. it seems to be equally enjoyed by both men and women but given that it's text-based it's probably mostly a bunch of pedos pretending to be kids and getting off to each other
+  row:       It's a very different scene in the kink spaces - probably because those people actually would like to live it in the real world, and there you simply cannot get away from the fact that everyone is an adult. [linebreak]  [linebreak] It's still super weird, but without this aggressively pedo creepy vibe.
+
+## cad person
+
+row 6272  alone no  ctx yes  nbr+ yes
+  neighbour: Fuck any mods that do this shit. [linebreak]  [linebreak] In-fact fuck the following;  [linebreak]  [linebreak] GallowBoob [linebreak]  [linebreak] N8TheGr8  [linebreak]  [linebreak] darth_tiffany [linebreak]  [linebreak] Merari01 [linebreak]  [linebreak] awkwardtheturtle [linebreak]  [linebreak] TheYellowRose [linebreak]  [linebreak] And that other fucko, MGLLN.
+  row:       Add TheYellowRose to that list!
+
+row 6336  alone no  ctx yes  nbr+ yes
+  neighbour: Didn't this chick marry her brother???
+  row:       Yeah i dont fucking get how people are taking this jihadist seriously
+
+row 7232  alone yes  ctx no  nbr+ no
+  neighbour: This is perverted, especially on what used to be free-speech supporting platforms like reddit
+  row:       Unfortunately money>free speech as far as Reddit is concerned. [linebreak]  [linebreak] I promise you, if Reddit believes it is in their financial interests to ban r/conspiracy, they would do it without hesitation. It probably wouldn't even take that much. The "wrong" posts, according to the established media, get upvoted after a tragedy, and then if the mainstream media gets a hold of it... [line
+
+row 12107  alone no  ctx no  nbr+ no
+  neighbour: Holy fuck! That's awful.
+  row:       You know that the founder of Planned Parenthood was into eugenics, right? This stuff isn't new.
+
+row 14706  alone no  ctx yes  nbr+ yes
+  neighbour: Comrade [linebreak]  [linebreak]  [linebreak] Go back to Chapo you commie faggot
+  row:       Protip, the douche goes in your vagina...you're not supposed to go around spraying that shit online.
+
+row 15504  alone no  ctx no  nbr+ no
+  neighbour: >Are Redditors really following the teachings of an actual schizophrenic?  [linebreak]  [linebreak] Ahh SRD, the bastion of progressiveness, where  ableist shit like this gets 37 upvotes
+  row:       Please don't defend following schizophrenic delusions
+
+row 19606  alone no  ctx yes  nbr+ yes
+  neighbour: Why? His opinion has more logic behind it and a hope for salvation. Unless you like fucking kids you have more to gain by agreeing with him than not at least clarifying beyond tour knee jerk reaction.
+  row:       The Bible also says not to eat shellfish and not allow women to talk in chruch. Do you agree with that? I don't really give a shit what your faith is. But either go full Christian or not at all. No one needs to hear your Christian lite bullshit
+
+## cad slur
+
+row 3257  alone yes  ctx no  nbr+ no
+  neighbour: The noose tightens!
+  row:       Are you allowed to say the n-word on here? Racist!
+
+row 4967  alone no  ctx no  nbr+ no
+  neighbour: OK then go back to lurking. This was probably your best comment of all time, it's all downhill from here. Quit while you're ahead.
+  row:       I mean you're the one going into a random SRD thread to passive-aggressively bitch about the fact that that you were linked here. Hell I didn't even think the energy drink thread was that great but this is next level petty shit.
+
+row 9328  alone no  ctx no  nbr+ no
+  neighbour: I agree with the call to riot unironically.  [linebreak]  [linebreak] EDIT: lmfao @ the downtokes
+  row:       Why tho? Barr is releasing this shit in like 2 weeks. They're just bitching that Congress doesn't have it RIGHT NOW.
+
+row 14156  alone no  ctx no  nbr+ no
+  neighbour: >Do you see me going on those subs and then bitching?  [linebreak]  [linebreak] No, that requires the balls to actually defend your position when facts aren't on your side. You'll take it to your widdle safe-space where you can circlejerk about things that trigger you.
+  row:       Wow, you're so brave going on a sub you hate, to regularly have a bitching screech-fest. Maybe we could organize a speaking event so you could tell War veterans what true bravery is. You're really risking it all by constantly whining on an anonymous forum, aren't you, great warrior? [linebreak]  [linebreak] Your obsession is embarrassing, not "having balls". Do you know what "defending your positi
+
+row 14346  alone no  ctx no  nbr+ no
+  neighbour: If she can't understand how calling out half the population (the half doing the most dangerous and physically difficult jobs for the benefit of society) for something they can't change and didn't choose is rude, then she may be physically retarded.
+  row:       Echo chambers can be a real bitch.
+
+row 19456  alone yes  ctx no  nbr+ no
+  neighbour: To everyone else it makes you look like you're just butthurt because you can't blow the candles of someone else's birthday cake.  [linebreak]  [linebreak] Just because you say it's a troll, it doesn't make it so. It's beyond pathetic to think that being straight is shamed and requires being celebrated. The straight parade belongs in a cringe compilation and you sound like one those "it's just a pr
+  row:       You're bitching about people doing something that isn't hurting anyone, spreading a message that isn't wrong, and THEY'RE the one that isn't pathetic?
+
+row 19537  alone no  ctx no  nbr+ no
+  neighbour: This whole subreddit is meant to be anti-censorship.
+  row:       Where does it say that? I thought it was a place to bitch about why you feel reddit is going or has gone to shit
+
+row 23221  alone no  ctx no  nbr+ no
+  neighbour: Humidity is the real enemy. Not to discount any discomfort you've felt from dry heat. It's still hot. Still unpleasant. [linebreak]  [linebreak] But man, dry heat just feels so much... I don't know... cleaner? Humid heat clings to you... it's moist heat.  [linebreak]  [linebreak] Is dry heat bad for gardens? Makes sense, but I hadn't thought about it
+  row:       I'm not sure if moist heat is any better for the garden, but half my garden is trying to die since this heat wave started.  Really the only thing I have to bitch about with the heat is kitchen work in this weather.  Ready for this damn heat wave GTFO
+
+## meld anger
+
+row 302  alone no  ctx no  nbr+ yes
+  neighbour: Oh, so you just sort of happened to leave it in here?
+  row:       Did it ever occur to you that I might just be that stupid?
+
+row 769  alone no  ctx no  nbr+ yes
+  neighbour: And your like 'Mom, get outta here!'
+  row:       You know, but of course, like, after that you can't possibly think of anything else, and you can't, you know, stop what your doing.
+
+row 1975  alone no  ctx no  nbr+ no
+  neighbour: Wow, you guys, this is big.
+  row:       Pants and a sweater?
+
+row 3180  alone no  ctx yes  nbr+ no
+  neighbour: Yeah, you were, but you decided to make salmon because you had some left over at the restaurant.
+  row:       And then you realised if you  bitched about it, then you  would stop cooking, and you  would have to make your famous baked potato and Diet Coke.
+
+row 3592  alone no  ctx no  nbr+ yes
+  neighbour: Aww man! I can’t believe I locked myself out again!
+  row:       Hang on buddy!
+
+row 4991  alone no  ctx no  nbr+ no
+  neighbour: Wow, that feels so good to get off my chest!
+  row:       Okay, you go!
+
+row 6494  alone no  ctx no  nbr+ no
+  neighbour: She was?
+  row:       Well, she graduated from high school!
+
+row 7086  alone no  ctx no  nbr+ no
+  neighbour: He musta been sweeping. They found a broom in his hand.
+  row:       That's terrible.
+
+row 7408  alone no  ctx yes  nbr+ no
+  neighbour: I’ve had better.
+  row:       Okay! When?!
+
+row 8446  alone no  ctx no  nbr+ no
+  neighbour: No, cause I made lasagne.
+  row:       Am I out of control?
+
+row 8660  alone no  ctx yes  nbr+ no
+  neighbour: Um, see, but that’s not the final draft.
+  row:       It’s laminated!
+
+row 9866  alone no  ctx no  nbr+ yes
+  neighbour: Every five minutes, Joey throws his sticks in the air, and I have to hear, "Oh my eye!
+  row:       Oh god, my eye!"
+
+row 10072  alone no  ctx no  nbr+ no
+  neighbour: Oh come on, we just had this huge fight, all right, don’t I have to wait a while?
+  row:       Hey, this isn’t like swimming after you eat, pick up the phone!!
+
+row 10509  alone yes  ctx no  nbr+ yes
+  neighbour: Hi, I was wondering if it is possible to increase security in the Paleontology section?
+  row:       See I-I wrote a book up there and instead of reading it people are-are-are well, rolling around in front of it.
+
+row 10963  alone no  ctx no  nbr+ no
+  neighbour: But look, all these rooms are fine okay?
+  row:       Can you just pick one so I can watch--have a perfect, magical weekend together with you.
+
+row 11427  alone no  ctx no  nbr+ no
+  neighbour: Really?
+  row:       Yes! Now, she feels terrible! She really wants to make up! You gotta find her.
+
+row 12758  alone no  ctx no  nbr+ no
+  neighbour: We should do something. Whistle.
+  row:       We are not going to whistle.
+
+## meld disgust
+
+row 921  alone no  ctx yes  nbr+ no
+  neighbour: You won't even taste it?
+  row:       No!
+
+row 2621  alone no  ctx no  nbr+ no
+  neighbour: Y’know I don’t understand why they didn’t cry. It was a beautiful speech.
+  row:       Oh, come on.
+
+row 2712  alone no  ctx no  nbr+ no
+  neighbour: Who? Who is it?
+  row:       About a month ago this guy spent the night with Rachel, I didn’t see who it was but
+
+row 4084  alone no  ctx yes  nbr+ no
+  neighbour: Yeah.
+  row:       Hey lady! I don't care how much you want it! Okay?! I am
+
+row 5305  alone yes  ctx no  nbr+ no
+  neighbour: Whoa, ah!! We’re you just gonna give me some lemonade?
+  row:       Yeah huh!! Cover yourself up!
+
+row 6380  alone no  ctx yes  nbr+ no
+  neighbour: I know. They were mine.
+  row:       Oh.  No! No wait, that’s weird!
+
+row 7355  alone no  ctx no  nbr+ no
+  neighbour: I highly doubt that.
+  row:       Oh yeah. If you ah, move your hamper, you see what color the tile used to be.  Yeah.
+
+row 8095  alone no  ctx no  nbr+ yes
+  neighbour: No, I don’t think we’ll be doing that.
+  row:       We’re not gonna do that.
+
+row 8166  alone no  ctx no  nbr+ no
+  neighbour: Pheebs, I think she’s great. Okay? We’re going out again.
+  row:       Okay, I hear you! Are you capable of talking about any thing else?
+
+row 8542  alone no  ctx no  nbr+ no
+  neighbour: Well, he’s very charming.
+  row:       I know, he’s too charming, but if you two start going out, then it’s just gonna make it so much harder for me to hate him.
+
+row 9261  alone no  ctx no  nbr+ no
+  neighbour: Okay, look, I-I know what you guys are going to say
+  row:       You two will have very hairy children.
+
+row 9678  alone no  ctx no  nbr+ no
+  neighbour: Thanks Monica!
+  row:       Does that smell bother you?
+
+row 11787  alone no  ctx no  nbr+ no
+  neighbour: Ben is way cuter than that kid.
+  row:       I mean look at him, look at you,
+
+row 11985  alone no  ctx yes  nbr+ yes
+  neighbour: All right fine, don't do anything, just sit here and talk to us, meanwhile she is talking to him about you.
+  row:       And he's being Mr. Joe Sensitive, and she starts thinking 'Maybe this is the guy for me, because he understands me.'
+
+row 12308  alone no  ctx no  nbr+ no
+  neighbour: I’ve had seven pretty serious shocks.
+  row:       I officially give up.
+
+row 13321  alone no  ctx no  nbr+ no
+  neighbour: Enh. Sure!
+  row:       I wonder how long that milk  has been setting out.
+
+row 13391  alone no  ctx yes  nbr+ no
+  neighbour: I mean naked game. Strip poker, we should totally play strip poker.
+  row:       No, no!
+
+## meld fear
+
+row 414  alone yes  ctx no  nbr+ yes
+  neighbour: No-o-o!!
+  row:       Uh-oh, Bruiser has Becker on the canvas and is going for his favourite area.
+
+row 1274  alone no  ctx yes  nbr+ yes
+  neighbour: I’m, I’m freaking out!
+  row:       Monica kinda trusted me with something and she shouldn’t have!
+
+row 2323  alone yes  ctx no  nbr+ no
+  neighbour: I don’t think I’d be comfortable with any of my old lovers there.
+  row:       Wait-wait-wait, do you, do you think, maybe we shouldn’t invite her?
+
+row 2517  alone yes  ctx no  nbr+ no
+  neighbour: But, it seems to me it's pretty much like anything else, you know, face your fear.
+  row:       It have a fear of heights, you go to the top of the building!
+
+row 2776  alone no  ctx no  nbr+ no
+  neighbour: If this is your idea of sexy talk?
+  row:       No seriously, y’know the contracts I gave you, did you overnight them?
+
+row 3185  alone no  ctx no  nbr+ no
+  neighbour: Y’know it’s like uh, Biology!
+  row:       Which is funny because in high school I uh, I-I failed Biology and tonight Biology failed me.
+
+row 4288  alone no  ctx no  nbr+ yes
+  neighbour: Joey, I am scared to death about this.
+  row:       But I really think I can do it, I’m just gonna need some help.
+
+row 7053  alone no  ctx yes  nbr+ no
+  neighbour: Oh? Really? That’s what my daughter means to you? Nothing?
+  row:       No! No sir umm, she means a lot to me. I mean, I care—I-I love Rachel.
+
+row 10173  alone no  ctx no  nbr+ no
+  neighbour: I’m sorry.
+  row:       Does it?
+
+row 10200  alone no  ctx no  nbr+ no
+  neighbour: There’s no way to do this without her?
+  row:       ‘Cause I kinda all ready told her uh, it was, it was already taken care of.
+
+row 10975  alone no  ctx no  nbr+ no
+  neighbour: What did you say?
+  row:       I said, "Geez, relax Monnnnn."
+
+row 11015  alone no  ctx no  nbr+ no
+  neighbour: That was 10 blocks from here and, the, the woman was walking alone at night, I would never do that.
+  row:       Mom, c'mon, stop worrying.
+
+row 12121  alone no  ctx no  nbr+ no
+  neighbour: Now, I know what you’re thinking
+  row:       Pregnant Woman Slays Four?
+
+## meld joy
+
+row 739  alone no  ctx no  nbr+ no
+  neighbour: Hi.
+  row:       Hi.  Umm, I think there’s something that we really need to talk about.
+
+row 2420  alone no  ctx yes  nbr+ no
+  neighbour: Y'know, like-like write a play.
+  row:       Write a movie!
+
+row 2915  alone no  ctx no  nbr+ no
+  neighbour: Do you remember when you first came here, how you spent two weeks getting trained by another waitress?
+  row:       Oh, sure! Do you need me to train somebody new?
+
+row 7361  alone no  ctx no  nbr+ no
+  neighbour: Look at that, every inch of this stuff is glued down.
+  row:       It’d take forever to pry this up.
+
+row 7899  alone no  ctx no  nbr+ no
+  neighbour: Yeah, you still have feelings for me.
+  row:       And-and to be honest, I-I still have feelings for you.
+
+row 8925  alone no  ctx no  nbr+ yes
+  neighbour: Hey, what’d you guys do to get up on there?
+  row:       Oh yeah? Well when you learned how to dance did you forget how to put on underpants?
+
+row 9456  alone no  ctx no  nbr+ no
+  neighbour: Oh my God!  I'm your
+  row:       I'd better not found you naked in my hotel room!
+
+row 9613  alone no  ctx no  nbr+ no
+  neighbour: Uh-huh. Uh-huh.
+  row:       That’s interesting, but check this out. I date her
+
+row 9971  alone no  ctx yes  nbr+ no
+  neighbour: Oh May 15
+  row:       Oooh it’s getting close!
+
+row 9976  alone no  ctx no  nbr+ no
+  neighbour: The best man? Wow!
+  row:       I know! I almost called off my wedding. Oh, who’s your band?!
+
+row 10952  alone yes  ctx no  nbr+ yes
+  neighbour: This was fun! But I've got an invasive vaginal exam to get to!
+  row:       I'd love to stay, but I have eh...  got    a hot date...
+
+row 11305  alone no  ctx no  nbr+ no
+  neighbour: You opened them all?
+  row:       I know! I know! I am a terrible person! I mean, Chandler is never going to trust me with anything ever again!
+
+row 11696  alone no  ctx yes  nbr+ no
+  neighbour: Yeah, it’s beautiful.
+  row:       I can’t believe you’re gonna ask Monica to marry you!
+
+row 12833  alone no  ctx no  nbr+ no
+  neighbour: It really was.
+  row:       Uh me? Gay? No! No. No, but I have a number of close friends who are.
+
+## meld sadness
+
+row 339  alone no  ctx no  nbr+ no
+  neighbour: No! I won’t leave you!
+  row:       Don’t worry about me, I’m a robot! I’m just a machine!!
+
+row 618  alone no  ctx no  nbr+ no
+  neighbour: Yeah! And! And, it was the easiest 400 bucks I’ve ever made.
+  row:       Okay Ross, can I uh, can I ask you something?
+
+row 785  alone no  ctx no  nbr+ no
+  neighbour: Yeah that’s true. Yeah, you love her. You always have. You have a child together. There is no right answer.
+  row:       Look, we’ve been together.
+
+row 2013  alone no  ctx no  nbr+ no
+  neighbour: Where are you Leslie?
+  row:       Leslie, now would be a
+
+row 2747  alone no  ctx no  nbr+ yes
+  neighbour: It’s not!
+  row:       I mean you were just… You’re so incredible!
+
+row 2768  alone no  ctx no  nbr+ no
+  neighbour: Hey, dinosaur guy, look at you, so sad. Come dance.
+  row:       Ah, that’s okay, thanks.
+
+row 6419  alone no  ctx no  nbr+ no
+  neighbour: Actually, tomorrow night kinda depends on how tonight goes.
+  row:       Oh, uh, listen, about tonight...
+
+row 6454  alone no  ctx no  nbr+ no
+  neighbour: Well…I only have one thing to do today.  I guess I could push it back.
+  row:       Yeah! Now, why do you want to kill yourself?
+
+row 6672  alone no  ctx no  nbr+ yes
+  neighbour: You still love me?
+  row:       Noo.
+
+row 7340  alone no  ctx no  nbr+ yes
+  neighbour: What?
+  row:       Stupid balls are in the way.
+
+row 7912  alone no  ctx no  nbr+ no
+  neighbour: Yes, and I know that you’d say no if he asked you, but I’m sorry; how great would you look walking down the aisle in this Donna Carin.
+  row:       Oh, you so would! Oh, you should get that anyway.  Like for clubbing.
+
+row 8440  alone no  ctx yes  nbr+ yes
+  neighbour: Forever.
+  row:       Yeah, but this can’t be it, I mean.
+
+row 8638  alone no  ctx no  nbr+ no
+  neighbour: Oh. Maybe they're- napping.
+  row:       Oh please, they're having sex.
+
+row 9725  alone no  ctx no  nbr+ no
+  neighbour: No that’s not what I want. Uh, I’m glad you guys were bonding but I
+  row:       Look he doesn’t have any brothers or sisters, somebody’s gonna have to teach him this stuff!
+
+row 11103  alone no  ctx no  nbr+ no
+  neighbour: Ready?
+  row:       Uh-huh.  Good luck.
+
+row 11567  alone no  ctx no  nbr+ no
+  neighbour: Varrrrrrrrroom.
+  row:       All right, I’ll leave.
+
+row 12475  alone no  ctx no  nbr+ no
+  neighbour: You didn’t notice she was wearing different clothes?!
+  row:       Well I was just so excited to see you.
+
+row 12679  alone no  ctx no  nbr+ no
+  neighbour: I’m like the one who talked him into it.
+  row:       I  like to think of myself as the puppet master of the group.
+
+row 12923  alone no  ctx no  nbr+ no
+  neighbour: All right! Everybody ready to go to the movies?
+  row:       Uh actually, I think I'm gonna skip it.
+
+row 13105  alone no  ctx no  nbr+ no
+  neighbour: What if Mary-Angela comes to the door and I ask for Mary-Angela?
+  row:       Where in Cuba?
+
+## meld surprise
+
+row 8247  alone no  ctx no  nbr+ no
+  neighbour: Thanks.
+  row:       Hey, you know our phone's not working?
+
+row 12355  alone yes  ctx no  nbr+ no
+  neighbour: What? Is it the comet?
+  row:       No! No-no. Look, there’s a bug stuck in tar right here.
+
+row 13698  alone no  ctx no  nbr+ no
+  neighbour: I'm tellin' you, she leaned back; I could see her brain.
+  row:       How many perfectly fine women are you gonna reject over the most superficial insignificant things?

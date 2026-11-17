@@ -1,0 +1,19 @@
+meta-llama/Meta-Llama-3.1-70B-Instruct, against the human labels, on a random sample of rows with a neighbour along the link
+recall and fpr from the row alone and with the neighbour's text above it
+nbr+ missed and nbr+ found: share of human positives whose neighbour is a positive, among those the row alone misses and finds
+
+ dataset     predicate  pos  neg  rec row  rec ctx  fpr row  fpr ctx  nbr+ missed  nbr+ found
+     cad   affiliation   30   30      67%      63%       0%       0%          30%         25%
+     cad counterspeech   30   30      50%      53%      13%      13%           0%          0%
+     cad      identity   30   30      80%      77%      10%      20%          83%         21%
+     cad        person   30   30      80%      90%      13%       7%          67%         21%
+     cad          slur   30   30      80%      73%      13%      13%           0%         12%
+    meld         anger   30   30      47%      53%       7%       3%          25%         36%
+    meld       disgust   30   30      47%      60%       7%       7%          12%         14%
+    meld          fear   30   30      67%      63%      13%      17%          20%         25%
+    meld           joy   30   30      57%      63%      13%       7%           8%         53%
+    meld       sadness   30   30      33%      37%       7%       0%          20%         20%
+    meld      surprise   30   30      93%      90%      27%      27%           0%          4%
+
+mean recall gain +2.1 points, mean fpr gain -0.9 points
+fixed to pass at +10 or more recall and +5 or less fpr: fail
