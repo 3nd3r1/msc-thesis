@@ -41,6 +41,28 @@ let
 
     pythonImportsCheck = [ "lotus" ];
   };
+
+  bargain = ps.buildPythonPackage rec {
+    pname = "bargain";
+    version = "0.1.3";
+    pyproject = true;
+
+    src = ps.fetchPypi {
+      inherit pname version;
+      hash = "sha256-dgUW4wTVAWEdBK0Ypagyg1muWg24ZbAOhB9AiYjghP4=";
+    };
+
+    build-system = [ ps.setuptools ];
+
+    dependencies = with ps; [
+      numpy
+      openai
+      pandas
+      tqdm
+    ];
+
+    pythonImportsCheck = [ "BARGAIN" ];
+  };
 in
 pkgs.mkShell {
   buildInputs = with pkgs; [
@@ -63,5 +85,6 @@ pkgs.mkShell {
     python3Packages.torch-geometric
     python3Packages.rich
     lotus-ai
+    bargain
   ];
 }

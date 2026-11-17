@@ -1,0 +1,65 @@
+BARGAIN_R, recall target 0.9, delta 0.1, budget 400 oracle calls, mean of 50 runs
+U is uniform sampling with the full guarantee, A is adaptive sampling with beta 0.02 and r 150 as in the paper
+proxy is the 8B p(yes), oracle is our labels, pool with junk and repeated texts dropped
+ideal: precision of the smallest proxy prefix reaching the target, known in hindsight
+met: share of runs with recall at the target, returned: share of rows returned, calls: distinct oracle calls
+
+ dataset     predicate  v   rate  ideal   prec  recall   met  returned  calls
+    cora         proof  U   6.6%  51.0%  18.2%   98.9%  100%     68.6%    367
+    cora         proof  A   6.6%  51.0%  29.7%   98.0%   98%     39.0%    324
+    cora      language  U   3.2%  80.2%   3.2%  100.0%  100%    100.0%    367
+    cora      language  A   3.2%  80.2%  42.6%   94.6%   96%     10.7%    248
+    cora       biology  U   4.8%  32.6%   4.8%  100.0%  100%    100.0%    367
+    cora       biology  A   4.8%  32.6%  23.0%   90.5%   80%     23.1%    308
+    cora      robotics  U   4.3%  72.1%   4.3%  100.0%  100%    100.0%    367
+    cora      robotics  A   4.3%  72.1%  55.3%   97.9%  100%     10.7%    252
+    cora  first person  U   2.8%  24.5%   2.8%  100.0%  100%    100.0%    367
+    cora  first person  A   2.8%  24.5%   4.2%   99.4%  100%     85.4%    362
+    cora        markov  U   3.6%  59.8%   3.6%  100.0%  100%    100.0%    367
+    cora        markov  A   3.6%  59.8%  53.2%   95.8%   96%      7.8%    239
+    cora  unsupervised  U   3.6%  35.6%   3.6%  100.0%  100%    100.0%    367
+    cora  unsupervised  A   3.6%  35.6%   9.3%   98.5%  100%     57.4%    334
+   stack          spss  U   3.7%  55.4%   3.7%  100.0%  100%    100.0%    386
+   stack          spss  A   3.7%  55.4%  10.6%   99.0%  100%     53.1%    366
+   stack         rcode  U  12.5%  92.2%  75.2%   96.1%   96%     17.5%    386
+   stack         rcode  A  12.5%  92.2%  85.0%   95.0%   98%     14.5%    359
+   stack        choose  U  13.7%  44.7%  35.4%   94.9%   84%     39.8%    386
+   stack        choose  A  13.7%  44.7%  24.5%   97.9%   96%     67.4%    385
+   stack   assumptions  U   8.7%  30.8%  19.5%   96.6%   96%     50.8%    386
+   stack   assumptions  A   8.7%  30.8%  19.9%   96.4%   94%     45.2%    375
+   stack   interaction  U   3.2%  61.4%   3.2%  100.0%  100%    100.0%    386
+   stack   interaction  A   3.2%  61.4%  40.9%   96.7%   98%     11.3%    320
+   stack     interpret  U  10.4%  40.9%  28.9%   96.2%   90%     39.7%    386
+   stack     interpret  A  10.4%  40.9%  28.7%   96.6%  100%     39.3%    378
+   stack      ownstudy  U   5.8%  20.3%   7.3%   99.3%  100%     89.6%    386
+   stack      ownstudy  A   5.8%  20.3%   5.8%  100.0%  100%    100.0%    386
+   stack          econ  U   7.0%  24.7%  10.3%   98.3%   96%     79.6%    386
+   stack          econ  A   7.0%  24.7%  10.8%   97.9%  100%     71.3%    380
+   stack        survey  U   9.3%  35.2%  18.8%   97.1%   96%     57.8%    386
+   stack        survey  A   9.3%  35.2%  18.8%   97.2%   96%     58.1%    379
+   stack        biomed  U  11.0%  43.4%  26.0%   96.4%   96%     47.2%    386
+   stack        biomed  A  11.0%  43.4%  27.4%   95.8%   92%     49.1%    378
+   stack            we  U   2.7%   9.1%   2.7%  100.0%  100%    100.0%    386
+   stack            we  A   2.7%   9.1%   2.7%  100.0%  100%    100.0%    387
+     cad      identity  U   9.9%  15.2%  11.9%   96.0%   92%     82.2%    397
+     cad      identity  A   9.9%  15.2%  10.7%   98.4%   98%     93.1%    397
+     cad   affiliation  U   5.2%   8.0%   5.3%   99.6%  100%     98.0%    397
+     cad   affiliation  A   5.2%   8.0%   5.2%  100.0%  100%    100.0%    397
+     cad        person  U   4.5%   9.3%   4.5%  100.0%  100%    100.0%    397
+     cad        person  A   4.5%   9.3%   6.0%   96.9%   72%     83.7%    396
+     cad counterspeech  U   0.9%   1.0%   0.9%  100.0%  100%    100.0%    397
+     cad counterspeech  A   0.9%   1.0%   2.8%    4.6%    0%      1.7%    250
+     cad          slur  U   0.6%   0.9%   0.6%  100.0%  100%    100.0%    397
+     cad          slur  A   0.6%   0.9%   1.1%   77.1%   68%     70.2%    385
+    meld         anger  U  12.4%  15.7%  13.7%   96.6%   94%     88.0%    394
+    meld         anger  A  12.4%  15.7%  13.5%   97.2%   98%     89.9%    393
+    meld       disgust  U   2.9%   5.5%   2.9%  100.0%  100%    100.0%    394
+    meld       disgust  A   2.9%   5.5%   2.9%  100.0%  100%    100.0%    395
+    meld          fear  U   2.8%   3.8%   2.8%  100.0%  100%    100.0%    394
+    meld          fear  A   2.8%   3.8%   2.8%  100.0%  100%    100.0%    394
+    meld           joy  U  16.7%  20.1%  18.4%   95.4%   88%     87.2%    394
+    meld           joy  A  16.7%  20.1%  18.1%   96.2%  100%     89.3%    393
+    meld       sadness  U   7.8%   9.8%   8.5%   97.2%   94%     90.5%    394
+    meld       sadness  A   7.8%   9.8%   7.9%   99.7%  100%     98.8%    393
+    meld      surprise  U  10.8%  18.2%  14.1%   96.7%   96%     75.6%    394
+    meld      surprise  A  10.8%  18.2%  12.8%   98.0%   96%     85.6%    393
