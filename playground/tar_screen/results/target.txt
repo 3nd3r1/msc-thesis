@@ -1,0 +1,94 @@
+
+cad, 23060 rows, 12560 edges, 200 runs, T 0.9, delta 0.1
+    predicate  rate   pos netsz>1 |  03 p 03 p+l | k/r  arm  cost met sample
+     identity  9.9%  2285   30.2% | 58.7%  51.0% |
+                                              k  22 r  22          proxy cost  81.8% met 87.5% sample  1.0%
+                                              k  22 r  22          links cost  76.3% met 90.0% sample  1.0%
+                                              k  40 r  39          proxy cost  77.8% met 88.0% sample  1.8%
+                                              k  40 r  39          links cost  71.1% met 91.5% sample  1.8%
+                                              k  40 r  39  links+10seeds cost  73.6% met 95.0% sample  2.2%
+                                              k  80 r  76          proxy cost  73.1% met 88.0% sample  3.5%
+                                              k  80 r  76          links cost  66.6% met 92.0% sample  3.5%
+  affiliation  5.2%  1194   30.3% | 58.1%  53.2% |
+                                              k  22 r  22          proxy cost  79.5% met 89.0% sample  1.8%
+                                              k  22 r  22          links cost  74.0% met 90.0% sample  1.8%
+                                              k  40 r  39          proxy cost  76.0% met 93.0% sample  3.3%
+                                              k  40 r  39          links cost  69.3% met 93.5% sample  3.3%
+                                              k  40 r  39  links+10seeds cost  72.7% met 90.0% sample  4.1%
+                                              k  80 r  76          proxy cost  71.6% met 93.0% sample  6.6%
+                                              k  80 r  76          links cost  65.6% met 93.0% sample  6.6%
+       person  4.5%  1048   25.5% | 44.0%  36.7% |
+                                              k  22 r  22          proxy cost  72.0% met 91.5% sample  2.1%
+                                              k  22 r  22          links cost  66.5% met 91.0% sample  2.1%
+                                              k  40 r  39          proxy cost  66.9% met 92.5% sample  3.7%
+                                              k  40 r  39          links cost  59.6% met 95.5% sample  3.7%
+                                              k  40 r  39  links+10seeds cost  64.3% met 97.5% sample  4.8%
+                                              k  80 r  76          proxy cost  61.1% met 93.0% sample  7.6%
+                                              k  80 r  76          links cost  54.7% met 95.0% sample  7.6%
+counterspeech  0.9%   212    3.3% | 84.4%  84.6% |
+                                              k  22 r  22          proxy cost  93.2% met 90.5% sample 10.3%
+                                              k  22 r  22          links cost  93.3% met 90.5% sample 10.3%
+                                              k  40 r  39          proxy cost  93.8% met 97.0% sample 18.9%
+                                              k  40 r  39          links cost  93.8% met 97.0% sample 18.9%
+                                              k  40 r  39  links+10seeds cost  94.8% met 97.5% sample 23.7%
+                                              k  80 r  76          proxy cost  94.4% met 99.5% sample 37.6%
+                                              k  80 r  76          links cost  94.4% met 99.5% sample 37.6%
+         slur  0.6%   127   17.3% | 57.6%  55.2% |
+                                              k  22 r  22          proxy cost  83.2% met 90.5% sample 17.0%
+                                              k  22 r  22          links cost  81.4% met 92.0% sample 17.0%
+                                              k  40 r  39          proxy cost  83.8% met 94.5% sample 31.4%
+                                              k  40 r  39          links cost  81.1% met 94.5% sample 31.4%
+                                              k  40 r  39  links+10seeds cost  82.8% met 97.5% sample 39.6%
+                                              k  80 r  76          proxy cost  88.3% met 100.0% sample 62.6%
+                                              k  80 r  76          links cost  87.4% met 100.0% sample 62.6%
+
+meld, 12158 rows, 9759 edges, 200 runs, T 0.9, delta 0.1
+    predicate  rate   pos netsz>1 |  03 p 03 p+l | k/r  arm  cost met sample
+        anger 12.4%  1504   43.5% | 71.1%  61.9% |
+                                              k  22 r  22          proxy cost  85.6% met 90.5% sample  1.5%
+                                              k  22 r  22          links cost  81.7% met 92.5% sample  1.5%
+                                              k  40 r  39          proxy cost  83.9% met 89.5% sample  2.7%
+                                              k  40 r  39          links cost  79.8% met 90.5% sample  2.7%
+                                              k  40 r  39  links+10seeds cost  82.2% met 95.0% sample  3.3%
+                                              k  80 r  76          proxy cost  81.7% met 93.0% sample  5.3%
+                                              k  80 r  76          links cost  75.6% met 94.0% sample  5.3%
+      disgust  2.9%   350   24.3% | 47.4%  44.9% |
+                                              k  22 r  22          proxy cost  73.7% met 90.0% sample  6.2%
+                                              k  22 r  22          links cost  70.4% met 90.5% sample  6.2%
+                                              k  40 r  39          proxy cost  73.0% met 95.0% sample 11.5%
+                                              k  40 r  39          links cost  69.7% met 96.5% sample 11.5%
+                                              k  40 r  39  links+10seeds cost  72.5% met 97.5% sample 14.8%
+                                              k  80 r  76          proxy cost  71.7% met 97.5% sample 23.0%
+                                              k  80 r  76          links cost  67.9% met 96.0% sample 23.0%
+         fear  2.8%   344   20.3% | 67.5%  61.8% |
+                                              k  22 r  22          proxy cost  84.9% met 93.0% sample  6.4%
+                                              k  22 r  22          links cost  83.1% met 92.0% sample  6.4%
+                                              k  40 r  39          proxy cost  82.0% met 91.5% sample 11.6%
+                                              k  40 r  39          links cost  79.7% met 91.0% sample 11.6%
+                                              k  40 r  39  links+10seeds cost  83.2% met 97.5% sample 14.5%
+                                              k  80 r  76          proxy cost  81.6% met 98.0% sample 23.2%
+                                              k  80 r  76          links cost  79.6% met 96.5% sample 23.2%
+          joy 16.7%  2034   42.9% | 75.1%  70.4% |
+                                              k  22 r  22          proxy cost  87.3% met 88.5% sample  1.1%
+                                              k  22 r  22          links cost  85.0% met 84.5% sample  1.1%
+                                              k  40 r  39          proxy cost  87.7% met 91.5% sample  2.0%
+                                              k  40 r  39          links cost  86.2% met 95.0% sample  2.0%
+                                              k  40 r  39  links+10seeds cost  85.5% met 95.0% sample  2.4%
+                                              k  80 r  76          proxy cost  85.0% met 94.0% sample  3.9%
+                                              k  80 r  76          links cost  82.3% met 91.5% sample  3.9%
+      sadness  7.8%   949   35.6% | 72.0%  67.6% |
+                                              k  22 r  22          proxy cost  86.0% met 89.5% sample  2.3%
+                                              k  22 r  22          links cost  84.8% met 89.5% sample  2.3%
+                                              k  40 r  39          proxy cost  84.6% met 90.0% sample  4.2%
+                                              k  40 r  39          links cost  83.3% met 93.5% sample  4.2%
+                                              k  40 r  39  links+10seeds cost  81.9% met 90.0% sample  5.3%
+                                              k  80 r  76          proxy cost  82.3% met 94.5% sample  8.4%
+                                              k  80 r  76          links cost  80.0% met 93.5% sample  8.4%
+     surprise 10.8%  1314   22.1% | 53.5%  54.9% |
+                                              k  22 r  22          proxy cost  73.6% met 91.0% sample  1.7%
+                                              k  22 r  22          links cost  76.1% met 94.5% sample  1.7%
+                                              k  40 r  39          proxy cost  69.7% met 95.0% sample  3.0%
+                                              k  40 r  39          links cost  71.8% met 93.0% sample  3.0%
+                                              k  40 r  39  links+10seeds cost  73.0% met 85.0% sample  3.8%
+                                              k  80 r  76          proxy cost  66.5% met 91.5% sample  6.0%
+                                              k  80 r  76          links cost  69.1% met 93.5% sample  6.0%
