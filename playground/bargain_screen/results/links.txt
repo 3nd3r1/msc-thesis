@@ -1,0 +1,1057 @@
+BARGAIN_R uniform, recall target 0.9, delta 0.1, mean of 50 runs, pool with junk and repeated texts dropped
+budget: 400 oracle calls as in the paper, and 1%, 2%, 5%, 10% of the rows
+plain: BARGAIN on the 8B p(yes) with the full budget
+proxy, knn, rewired, links: 25% of the budget on search first, then BARGAIN with the rest on the frozen scores
+search asks the highest unasked row, a neighbour of a found positive goes above every untouched row
+frozen scores: found positives, then neighbours of positives by p, then the rest by p, then found negatives
+knn is the cosine kNN with k matched to the mean link degree, rewired keeps every row's link degree with random ends
+met: share of runs with recall at the target, returned: share of rows returned
+cost: distinct oracle calls over both phases plus the returned rows not yet asked, as a share of the rows
+
+lowest cost over the budget grid
+
+      dataset     predicate    plain    proxy      knn  rewired    links
+         cora         proof    73.8%   100.0%   100.0%    98.7%    97.2%
+         cora      language   100.0%   100.0%   100.0%   100.0%   100.0%
+         cora       biology   100.0%   100.0%   100.0%   100.0%   100.0%
+         cora      robotics   100.0%   100.0%   100.0%   100.0%   100.0%
+         cora  first person   100.0%   100.0%   100.0%   100.0%   100.0%
+         cora        markov   100.0%   100.0%   100.0%   100.0%   100.0%
+         cora  unsupervised   100.0%   100.0%   100.0%   100.0%   100.0%
+        stack          spss    98.6%   100.0%   100.0%   100.0%   100.0%
+        stack         rcode    23.3%    23.8%    24.8%    26.4%    24.4%
+        stack        choose    42.7%    45.1%    43.9%    44.7%    43.6%
+        stack   assumptions    48.7%    59.0%    61.8%    66.8%    59.6%
+        stack   interaction   100.0%   100.0%   100.0%   100.0%   100.0%
+        stack     interpret    41.5%    45.8%    44.4%    45.9%    44.6%
+        stack      ownstudy    71.6%    94.3%    97.3%    93.4%    96.8%
+        stack          econ    66.0%    86.8%    86.3%    89.3%    87.3%
+        stack        survey    56.4%    62.5%    67.4%    60.7%    59.5%
+        stack        biomed    48.5%    51.9%    51.0%    56.8%    51.6%
+        stack            we   100.0%   100.0%   100.0%   100.0%   100.0%
+          cad      identity    71.4%    75.7%    72.6%    75.6%    73.4%
+          cad   affiliation    73.8%    73.6%    73.5%    73.7%    73.8%
+          cad        person    61.1%    67.6%    67.6%    66.1%    68.3%
+          cad counterspeech    99.3%   100.0%   100.0%   100.0%   100.0%
+          cad          slur   100.0%   100.0%   100.0%   100.0%   100.0%
+   cad_thread      identity    71.4%    75.7%    73.0%    79.3%    72.1%
+   cad_thread   affiliation    73.8%    73.6%    69.8%    76.7%    72.9%
+   cad_thread        person    61.1%    67.6%    63.1%    73.0%    65.9%
+   cad_thread counterspeech    99.3%   100.0%   100.0%   100.0%   100.0%
+   cad_thread          slur   100.0%   100.0%   100.0%   100.0%   100.0%
+         meld         anger    82.2%    82.8%    81.1%    83.1%    83.0%
+         meld       disgust    80.1%    96.6%    95.3%    91.2%    97.5%
+         meld          fear    85.9%    95.0%    95.3%    96.0%    95.4%
+         meld           joy    84.2%    85.9%    83.7%    85.4%    85.3%
+         meld       sadness    82.7%    85.9%    86.4%    85.8%    84.2%
+         meld      surprise    67.0%    68.6%    67.7%    68.8%    69.2%
+meld_dialogue         anger    82.2%    82.8%    82.9%    82.6%    81.5%
+meld_dialogue       disgust    80.1%    96.6%    93.7%    91.1%    91.8%
+meld_dialogue          fear    85.9%    95.0%    96.1%    96.4%    94.7%
+meld_dialogue           joy    84.2%    85.9%    84.0%    85.3%    84.9%
+meld_dialogue       sadness    82.7%    85.9%    85.4%    83.9%    83.6%
+meld_dialogue      surprise    67.0%    68.6%    69.8%    70.1%    70.7%
+
+every budget
+
+      dataset     predicate budget     arm   rate   prec   met  returned   cost
+         cora         proof    400   plain   6.6%  18.2%  100%     68.6%  73.8%
+         cora         proof    400   proxy   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    400     knn   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    400 rewired   6.6%   7.1%  100%     98.4%  98.7%
+         cora         proof    400   links   6.6%   7.8%  100%     96.7%  97.2%
+         cora         proof     22   plain   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof     22   proxy   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof     22     knn   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof     22 rewired   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof     22   links   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof     45   plain   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof     45   proxy   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof     45     knn   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof     45 rewired   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof     45   links   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    112   plain   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    112   proxy   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    112     knn   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    112 rewired   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    112   links   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    223   plain   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    223   proxy   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    223     knn   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    223 rewired   6.6%   6.6%  100%    100.0% 100.0%
+         cora         proof    223   links   6.6%   6.6%  100%    100.0% 100.0%
+         cora      language    400   plain   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    400   proxy   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    400     knn   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    400 rewired   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    400   links   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     22   plain   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     22   proxy   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     22     knn   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     22 rewired   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     22   links   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     45   plain   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     45   proxy   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     45     knn   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     45 rewired   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language     45   links   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    112   plain   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    112   proxy   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    112     knn   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    112 rewired   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    112   links   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    223   plain   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    223   proxy   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    223     knn   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    223 rewired   3.2%   3.2%  100%    100.0% 100.0%
+         cora      language    223   links   3.2%   3.2%  100%    100.0% 100.0%
+         cora       biology    400   plain   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    400   proxy   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    400     knn   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    400 rewired   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    400   links   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     22   plain   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     22   proxy   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     22     knn   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     22 rewired   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     22   links   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     45   plain   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     45   proxy   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     45     knn   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     45 rewired   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology     45   links   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    112   plain   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    112   proxy   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    112     knn   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    112 rewired   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    112   links   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    223   plain   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    223   proxy   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    223     knn   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    223 rewired   4.8%   4.8%  100%    100.0% 100.0%
+         cora       biology    223   links   4.8%   4.8%  100%    100.0% 100.0%
+         cora      robotics    400   plain   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    400   proxy   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    400     knn   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    400 rewired   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    400   links   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     22   plain   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     22   proxy   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     22     knn   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     22 rewired   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     22   links   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     45   plain   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     45   proxy   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     45     knn   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     45 rewired   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics     45   links   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    112   plain   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    112   proxy   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    112     knn   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    112 rewired   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    112   links   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    223   plain   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    223   proxy   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    223     knn   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    223 rewired   4.3%   4.3%  100%    100.0% 100.0%
+         cora      robotics    223   links   4.3%   4.3%  100%    100.0% 100.0%
+         cora  first person    400   plain   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    400   proxy   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    400     knn   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    400 rewired   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    400   links   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     22   plain   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     22   proxy   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     22     knn   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     22 rewired   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     22   links   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     45   plain   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     45   proxy   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     45     knn   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     45 rewired   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person     45   links   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    112   plain   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    112   proxy   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    112     knn   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    112 rewired   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    112   links   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    223   plain   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    223   proxy   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    223     knn   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    223 rewired   2.8%   2.8%  100%    100.0% 100.0%
+         cora  first person    223   links   2.8%   2.8%  100%    100.0% 100.0%
+         cora        markov    400   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    400   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    400     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    400 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    400   links   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     22   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     22   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     22     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     22 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     22   links   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     45   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     45   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     45     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     45 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov     45   links   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    112   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    112   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    112     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    112 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    112   links   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    223   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    223   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    223     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    223 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora        markov    223   links   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    400   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    400   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    400     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    400 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    400   links   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     22   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     22   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     22     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     22 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     22   links   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     45   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     45   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     45     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     45 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised     45   links   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    112   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    112   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    112     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    112 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    112   links   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    223   plain   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    223   proxy   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    223     knn   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    223 rewired   3.6%   3.6%  100%    100.0% 100.0%
+         cora  unsupervised    223   links   3.6%   3.6%  100%    100.0% 100.0%
+        stack          spss    400   plain   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    400   proxy   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    400     knn   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    400 rewired   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    400   links   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     49   plain   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     49   proxy   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     49     knn   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     49 rewired   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     49   links   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     98   plain   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     98   proxy   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     98     knn   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     98 rewired   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss     98   links   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    246   plain   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    246   proxy   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    246     knn   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    246 rewired   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    246   links   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    491   plain   3.7%   4.0%  100%     98.4%  98.6%
+        stack          spss    491   proxy   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    491     knn   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    491 rewired   3.7%   3.7%  100%    100.0% 100.0%
+        stack          spss    491   links   3.7%   3.7%  100%    100.0% 100.0%
+        stack         rcode    400   plain  12.5%  75.2%   96%     17.5%  23.9%
+        stack         rcode    400   proxy  12.5%  69.7%   96%     20.8%  25.5%
+        stack         rcode    400     knn  12.5%  66.8%  100%     24.3%  29.2%
+        stack         rcode    400 rewired  12.5%  68.8%   98%     23.7%  29.4%
+        stack         rcode    400   links  12.5%  70.6%   98%     20.3%  25.7%
+        stack         rcode     49   plain  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode     49   proxy  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode     49     knn  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode     49 rewired  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode     49   links  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode     98   plain  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode     98   proxy  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode     98     knn  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode     98 rewired  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode     98   links  12.5%  12.5%  100%    100.0% 100.0%
+        stack         rcode    246   plain  12.5%  48.6%   98%     48.6%  51.1%
+        stack         rcode    246   proxy  12.5%  20.2%  100%     86.5%  87.0%
+        stack         rcode    246     knn  12.5%  23.0%  100%     86.5%  87.0%
+        stack         rcode    246 rewired  12.5%  22.7%  100%     85.7%  86.4%
+        stack         rcode    246   links  12.5%  24.9%  100%     83.6%  84.2%
+        stack         rcode    491   plain  12.5%  80.9%   98%     15.4%  23.3%
+        stack         rcode    491   proxy  12.5%  73.9%   96%     18.0%  23.8%
+        stack         rcode    491     knn  12.5%  72.9%   96%     18.4%  24.8%
+        stack         rcode    491 rewired  12.5%  69.9%  100%     19.2%  26.4%
+        stack         rcode    491   links  12.5%  75.4%   92%     17.5%  24.4%
+        stack        choose    400   plain  13.7%  35.4%   84%     39.8%  44.4%
+        stack        choose    400   proxy  13.7%  31.8%  100%     43.7%  47.0%
+        stack        choose    400     knn  13.7%  32.6%   98%     43.6%  47.3%
+        stack        choose    400 rewired  13.7%  33.4%   94%     41.9%  46.7%
+        stack        choose    400   links  13.7%  32.8%   98%     42.9%  47.0%
+        stack        choose     49   plain  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose     49   proxy  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose     49     knn  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose     49 rewired  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose     49   links  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose     98   plain  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose     98   proxy  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose     98     knn  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose     98 rewired  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose     98   links  13.7%  13.7%  100%    100.0% 100.0%
+        stack        choose    246   plain  13.7%  29.1%   90%     54.0%  56.2%
+        stack        choose    246   proxy  13.7%  17.6%  100%     86.3%  86.8%
+        stack        choose    246     knn  13.7%  19.1%   98%     84.4%  85.0%
+        stack        choose    246 rewired  13.7%  20.3%   98%     80.1%  81.2%
+        stack        choose    246   links  13.7%  20.4%  100%     78.9%  79.8%
+        stack        choose    491   plain  13.7%  37.2%   84%     36.8%  42.7%
+        stack        choose    491   proxy  13.7%  34.7%   86%     40.7%  45.1%
+        stack        choose    491     knn  13.7%  35.7%   96%     38.9%  43.9%
+        stack        choose    491 rewired  13.7%  35.8%   92%     38.5%  44.7%
+        stack        choose    491   links  13.7%  36.2%   92%     38.2%  43.6%
+        stack   assumptions    400   plain   8.7%  19.5%   96%     50.8%  54.6%
+        stack   assumptions    400   proxy   8.7%  12.7%  100%     81.1%  82.2%
+        stack   assumptions    400     knn   8.7%  13.4%  100%     77.7%  79.2%
+        stack   assumptions    400 rewired   8.7%  12.1%   98%     83.7%  85.0%
+        stack   assumptions    400   links   8.7%  12.9%   96%     79.8%  81.2%
+        stack   assumptions     49   plain   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions     49   proxy   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions     49     knn   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions     49 rewired   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions     49   links   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions     98   plain   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions     98   proxy   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions     98     knn   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions     98 rewired   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions     98   links   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions    246   plain   8.7%  10.0%  100%     94.0%  94.3%
+        stack   assumptions    246   proxy   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions    246     knn   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions    246 rewired   8.7%   8.7%  100%    100.0% 100.0%
+        stack   assumptions    246   links   8.7%   8.9%  100%     98.9%  98.9%
+        stack   assumptions    491   plain   8.7%  21.2%   96%     43.4%  48.7%
+        stack   assumptions    491   proxy   8.7%  18.2%   98%     55.5%  59.0%
+        stack   assumptions    491     knn   8.7%  17.7%   96%     58.3%  61.8%
+        stack   assumptions    491 rewired   8.7%  15.9%   98%     63.0%  66.8%
+        stack   assumptions    491   links   8.7%  19.3%   92%     56.1%  59.6%
+        stack   interaction    400   plain   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    400   proxy   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    400     knn   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    400 rewired   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    400   links   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     49   plain   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     49   proxy   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     49     knn   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     49 rewired   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     49   links   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     98   plain   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     98   proxy   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     98     knn   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     98 rewired   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction     98   links   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    246   plain   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    246   proxy   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    246     knn   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    246 rewired   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    246   links   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    491   plain   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    491   proxy   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    491     knn   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    491 rewired   3.2%   3.2%  100%    100.0% 100.0%
+        stack   interaction    491   links   3.2%   3.2%  100%    100.0% 100.0%
+        stack     interpret    400   plain  10.4%  28.9%   90%     39.7%  44.3%
+        stack     interpret    400   proxy  10.4%  21.0%  100%     61.8%  64.2%
+        stack     interpret    400     knn  10.4%  24.1%   96%     55.4%  58.4%
+        stack     interpret    400 rewired  10.4%  22.5%   98%     57.1%  60.6%
+        stack     interpret    400   links  10.4%  24.0%   96%     55.2%  58.5%
+        stack     interpret     49   plain  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret     49   proxy  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret     49     knn  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret     49 rewired  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret     49   links  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret     98   plain  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret     98   proxy  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret     98     knn  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret     98 rewired  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret     98   links  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret    246   plain  10.4%  15.6%  100%     81.1%  81.9%
+        stack     interpret    246   proxy  10.4%  10.5%  100%     99.4%  99.5%
+        stack     interpret    246     knn  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret    246 rewired  10.4%  10.6%  100%     98.9%  99.0%
+        stack     interpret    246   links  10.4%  10.4%  100%    100.0% 100.0%
+        stack     interpret    491   plain  10.4%  30.9%   92%     35.4%  41.5%
+        stack     interpret    491   proxy  10.4%  27.4%   96%     41.2%  45.8%
+        stack     interpret    491     knn  10.4%  29.0%  100%     39.3%  44.4%
+        stack     interpret    491 rewired  10.4%  29.3%   98%     40.1%  45.9%
+        stack     interpret    491   links  10.4%  28.8%   96%     38.9%  44.6%
+        stack      ownstudy    400   plain   5.8%   7.3%  100%     89.6%  90.4%
+        stack      ownstudy    400   proxy   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy    400     knn   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy    400 rewired   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy    400   links   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     49   plain   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     49   proxy   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     49     knn   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     49 rewired   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     49   links   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     98   plain   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     98   proxy   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     98     knn   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     98 rewired   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy     98   links   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy    246   plain   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy    246   proxy   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy    246     knn   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy    246 rewired   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy    246   links   5.8%   5.8%  100%    100.0% 100.0%
+        stack      ownstudy    491   plain   5.8%  10.0%   98%     68.6%  71.6%
+        stack      ownstudy    491   proxy   5.8%   6.6%  100%     93.8%  94.3%
+        stack      ownstudy    491     knn   5.8%   6.2%  100%     97.1%  97.3%
+        stack      ownstudy    491 rewired   5.8%   6.9%  100%     92.7%  93.4%
+        stack      ownstudy    491   links   5.8%   6.4%  100%     96.5%  96.8%
+        stack          econ    400   plain   7.0%  10.3%   96%     79.6%  81.2%
+        stack          econ    400   proxy   7.0%   7.6%  100%     94.4%  94.8%
+        stack          econ    400     knn   7.0%   7.5%  100%     96.2%  96.5%
+        stack          econ    400 rewired   7.0%   7.1%  100%     98.4%  98.6%
+        stack          econ    400   links   7.0%   7.3%  100%     97.4%  97.6%
+        stack          econ     49   plain   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ     49   proxy   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ     49     knn   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ     49 rewired   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ     49   links   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ     98   plain   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ     98   proxy   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ     98     knn   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ     98 rewired   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ     98   links   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ    246   plain   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ    246   proxy   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ    246     knn   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ    246 rewired   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ    246   links   7.0%   7.0%  100%    100.0% 100.0%
+        stack          econ    491   plain   7.0%  12.7%   96%     62.5%  66.0%
+        stack          econ    491   proxy   7.0%   9.1%  100%     85.7%  86.8%
+        stack          econ    491     knn   7.0%   9.5%   98%     84.9%  86.3%
+        stack          econ    491 rewired   7.0%   8.7%   98%     88.0%  89.3%
+        stack          econ    491   links   7.0%   9.1%   98%     85.9%  87.3%
+        stack        survey    400   plain   9.3%  18.8%   96%     57.8%  61.0%
+        stack        survey    400   proxy   9.3%  14.5%  100%     74.0%  75.5%
+        stack        survey    400     knn   9.3%  14.6%   98%     78.4%  79.9%
+        stack        survey    400 rewired   9.3%  13.4%   98%     80.8%  82.4%
+        stack        survey    400   links   9.3%  14.1%   98%     78.1%  79.8%
+        stack        survey     49   plain   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey     49   proxy   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey     49     knn   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey     49 rewired   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey     49   links   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey     98   plain   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey     98   proxy   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey     98     knn   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey     98 rewired   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey     98   links   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey    246   plain   9.3%  11.0%  100%     91.6%  92.0%
+        stack        survey    246   proxy   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey    246     knn   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey    246 rewired   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey    246   links   9.3%   9.3%  100%    100.0% 100.0%
+        stack        survey    491   plain   9.3%  20.4%   96%     52.0%  56.4%
+        stack        survey    491   proxy   9.3%  18.2%   98%     59.7%  62.5%
+        stack        survey    491     knn   9.3%  16.8%  100%     64.3%  67.4%
+        stack        survey    491 rewired   9.3%  19.7%   94%     56.3%  60.7%
+        stack        survey    491   links   9.3%  20.3%   92%     55.6%  59.5%
+        stack        biomed    400   plain  11.0%  26.0%   96%     47.2%  51.2%
+        stack        biomed    400   proxy  11.0%  23.3%   96%     55.5%  58.0%
+        stack        biomed    400     knn  11.0%  23.8%   92%     59.1%  62.1%
+        stack        biomed    400 rewired  11.0%  21.9%  100%     59.0%  62.5%
+        stack        biomed    400   links  11.0%  22.7%   98%     59.4%  62.7%
+        stack        biomed     49   plain  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed     49   proxy  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed     49     knn  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed     49 rewired  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed     49   links  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed     98   plain  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed     98   proxy  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed     98     knn  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed     98 rewired  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed     98   links  11.0%  11.0%  100%    100.0% 100.0%
+        stack        biomed    246   plain  11.0%  17.1%   96%     77.9%  78.9%
+        stack        biomed    246   proxy  11.0%  11.2%  100%     99.1%  99.1%
+        stack        biomed    246     knn  11.0%  11.7%   98%     98.4%  98.5%
+        stack        biomed    246 rewired  11.0%  11.1%  100%     99.1%  99.2%
+        stack        biomed    246   links  11.0%  11.0%  100%     99.6%  99.6%
+        stack        biomed    491   plain  11.0%  27.7%   98%     43.2%  48.5%
+        stack        biomed    491   proxy  11.0%  25.5%   96%     48.3%  51.9%
+        stack        biomed    491     knn  11.0%  28.1%   92%     46.3%  51.0%
+        stack        biomed    491 rewired  11.0%  24.5%   98%     51.9%  56.8%
+        stack        biomed    491   links  11.0%  28.3%   90%     46.4%  51.6%
+        stack            we    400   plain   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    400   proxy   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    400     knn   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    400 rewired   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    400   links   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     49   plain   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     49   proxy   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     49     knn   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     49 rewired   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     49   links   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     98   plain   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     98   proxy   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     98     knn   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     98 rewired   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we     98   links   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    246   plain   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    246   proxy   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    246     knn   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    246 rewired   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    246   links   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    491   plain   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    491   proxy   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    491     knn   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    491 rewired   2.7%   2.7%  100%    100.0% 100.0%
+        stack            we    491   links   2.7%   2.7%  100%    100.0% 100.0%
+          cad      identity    400   plain   9.9%  11.9%   92%     82.2%  82.5%
+          cad      identity    400   proxy   9.9%  10.7%   98%     92.6%  92.8%
+          cad      identity    400     knn   9.9%  10.6%  100%     93.5%  93.7%
+          cad      identity    400 rewired   9.9%  10.9%  100%     90.5%  90.8%
+          cad      identity    400   links   9.9%  10.7%   98%     92.4%  92.6%
+          cad      identity    231   plain   9.9%  10.1%  100%     98.3%  98.3%
+          cad      identity    231   proxy   9.9%   9.9%  100%    100.0% 100.0%
+          cad      identity    231     knn   9.9%   9.9%  100%    100.0% 100.0%
+          cad      identity    231 rewired   9.9%   9.9%  100%    100.0% 100.0%
+          cad      identity    231   links   9.9%   9.9%  100%    100.0% 100.0%
+          cad      identity    461   plain   9.9%  12.0%   92%     80.9%  81.3%
+          cad      identity    461   proxy   9.9%  11.4%   92%     86.6%  87.0%
+          cad      identity    461     knn   9.9%  11.3%   94%     87.3%  87.6%
+          cad      identity    461 rewired   9.9%  11.4%   94%     86.4%  86.9%
+          cad      identity    461   links   9.9%  11.5%   98%     85.9%  86.3%
+          cad      identity   1153   plain   9.9%  13.1%   92%     71.9%  73.3%
+          cad      identity   1153   proxy   9.9%  12.9%   86%     74.4%  75.9%
+          cad      identity   1153     knn   9.9%  12.2%   96%     78.7%  80.1%
+          cad      identity   1153 rewired   9.9%  12.4%   96%     77.8%  79.3%
+          cad      identity   1153   links   9.9%  12.5%   94%     77.0%  78.5%
+          cad      identity   2306   plain   9.9%  13.7%   92%     68.5%  71.4%
+          cad      identity   2306   proxy   9.9%  13.1%   98%     72.6%  75.7%
+          cad      identity   2306     knn   9.9%  13.6%   94%     69.2%  72.6%
+          cad      identity   2306 rewired   9.9%  13.1%   98%     72.2%  75.6%
+          cad      identity   2306   links   9.9%  13.5%   94%     70.0%  73.4%
+          cad   affiliation    400   plain   5.2%   5.3%  100%     98.0%  98.1%
+          cad   affiliation    400   proxy   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    400     knn   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    400 rewired   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    400   links   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    231   plain   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    231   proxy   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    231     knn   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    231 rewired   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    231   links   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    461   plain   5.2%   5.4%  100%     95.6%  95.6%
+          cad   affiliation    461   proxy   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation    461     knn   5.2%   5.2%  100%     99.6%  99.6%
+          cad   affiliation    461 rewired   5.2%   5.2%  100%     99.7%  99.7%
+          cad   affiliation    461   links   5.2%   5.2%  100%    100.0% 100.0%
+          cad   affiliation   1153   plain   5.2%   6.6%   90%     75.7%  76.9%
+          cad   affiliation   1153   proxy   5.2%   6.3%   96%     81.5%  83.1%
+          cad   affiliation   1153     knn   5.2%   6.3%   96%     81.4%  83.0%
+          cad   affiliation   1153 rewired   5.2%   6.2%  100%     82.5%  84.1%
+          cad   affiliation   1153   links   5.2%   6.7%   94%     75.8%  77.7%
+          cad   affiliation   2306   plain   5.2%   7.0%   96%     71.1%  73.8%
+          cad   affiliation   2306   proxy   5.2%   7.1%  100%     69.4%  73.6%
+          cad   affiliation   2306     knn   5.2%   7.1%   94%     69.5%  73.5%
+          cad   affiliation   2306 rewired   5.2%   7.1%   98%     69.6%  73.7%
+          cad   affiliation   2306   links   5.2%   7.1%   98%     69.8%  73.8%
+          cad        person    400   plain   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    400   proxy   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    400     knn   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    400 rewired   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    400   links   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    231   plain   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    231   proxy   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    231     knn   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    231 rewired   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    231   links   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    461   plain   4.5%   4.6%  100%     99.6%  99.6%
+          cad        person    461   proxy   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    461     knn   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    461 rewired   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person    461   links   4.5%   4.5%  100%    100.0% 100.0%
+          cad        person   1153   plain   4.5%   7.0%   88%     67.5%  69.0%
+          cad        person   1153   proxy   4.5%   5.8%  100%     79.9%  81.3%
+          cad        person   1153     knn   4.5%   6.4%   94%     74.7%  76.3%
+          cad        person   1153 rewired   4.5%   5.8%   96%     80.6%  82.1%
+          cad        person   1153   links   4.5%   6.1%   96%     77.9%  79.5%
+          cad        person   2306   plain   4.5%   7.9%   84%     57.0%  61.1%
+          cad        person   2306   proxy   4.5%   7.3%   86%     63.4%  67.6%
+          cad        person   2306     knn   4.5%   7.2%   92%     63.5%  67.6%
+          cad        person   2306 rewired   4.5%   7.3%   96%     61.7%  66.1%
+          cad        person   2306   links   4.5%   7.2%   92%     64.2%  68.3%
+          cad counterspeech    400   plain   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    400   proxy   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    400     knn   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    400 rewired   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    400   links   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    231   plain   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    231   proxy   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    231     knn   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    231 rewired   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    231   links   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    461   plain   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    461   proxy   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    461     knn   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    461 rewired   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech    461   links   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech   1153   plain   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech   1153   proxy   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech   1153     knn   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech   1153 rewired   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech   1153   links   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech   2306   plain   0.9%   0.9%  100%     99.3%  99.3%
+          cad counterspeech   2306   proxy   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech   2306     knn   0.9%   0.9%  100%     99.9% 100.0%
+          cad counterspeech   2306 rewired   0.9%   0.9%  100%    100.0% 100.0%
+          cad counterspeech   2306   links   0.9%   0.9%  100%    100.0% 100.0%
+          cad          slur    400   plain   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    400   proxy   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    400     knn   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    400 rewired   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    400   links   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    231   plain   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    231   proxy   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    231     knn   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    231 rewired   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    231   links   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    461   plain   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    461   proxy   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    461     knn   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    461 rewired   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur    461   links   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   1153   plain   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   1153   proxy   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   1153     knn   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   1153 rewired   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   1153   links   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   2306   plain   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   2306   proxy   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   2306     knn   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   2306 rewired   0.6%   0.6%  100%    100.0% 100.0%
+          cad          slur   2306   links   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread      identity    400   plain   9.9%  11.9%   92%     82.2%  82.5%
+   cad_thread      identity    400   proxy   9.9%  10.7%   98%     92.6%  92.8%
+   cad_thread      identity    400     knn   9.9%  11.1%   98%     89.0%  89.2%
+   cad_thread      identity    400 rewired   9.9%  10.8%   98%     91.3%  91.5%
+   cad_thread      identity    400   links   9.9%  10.7%   98%     92.7%  93.0%
+   cad_thread      identity    231   plain   9.9%  10.1%  100%     98.3%  98.3%
+   cad_thread      identity    231   proxy   9.9%   9.9%  100%    100.0% 100.0%
+   cad_thread      identity    231     knn   9.9%   9.9%  100%    100.0% 100.0%
+   cad_thread      identity    231 rewired   9.9%   9.9%  100%    100.0% 100.0%
+   cad_thread      identity    231   links   9.9%   9.9%  100%     99.8%  99.8%
+   cad_thread      identity    461   plain   9.9%  12.0%   92%     80.9%  81.3%
+   cad_thread      identity    461   proxy   9.9%  11.4%   92%     86.6%  87.0%
+   cad_thread      identity    461     knn   9.9%  11.0%   98%     89.7%  90.0%
+   cad_thread      identity    461 rewired   9.9%  11.3%   94%     86.6%  87.0%
+   cad_thread      identity    461   links   9.9%  11.1%  100%     88.1%  88.6%
+   cad_thread      identity   1153   plain   9.9%  13.1%   92%     71.9%  73.3%
+   cad_thread      identity   1153   proxy   9.9%  12.9%   86%     74.4%  75.9%
+   cad_thread      identity   1153     knn   9.9%  12.9%   90%     74.4%  75.7%
+   cad_thread      identity   1153 rewired   9.9%  11.9%   96%     79.7%  81.0%
+   cad_thread      identity   1153   links   9.9%  12.8%   92%     75.3%  77.3%
+   cad_thread      identity   2306   plain   9.9%  13.7%   92%     68.5%  71.4%
+   cad_thread      identity   2306   proxy   9.9%  13.1%   98%     72.6%  75.7%
+   cad_thread      identity   2306     knn   9.9%  13.5%   94%     69.8%  73.0%
+   cad_thread      identity   2306 rewired   9.9%  12.3%   92%     76.3%  79.3%
+   cad_thread      identity   2306   links   9.9%  13.9%   88%     67.9%  72.1%
+   cad_thread   affiliation    400   plain   5.2%   5.3%  100%     98.0%  98.1%
+   cad_thread   affiliation    400   proxy   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    400     knn   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    400 rewired   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    400   links   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    231   plain   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    231   proxy   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    231     knn   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    231 rewired   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    231   links   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    461   plain   5.2%   5.4%  100%     95.6%  95.6%
+   cad_thread   affiliation    461   proxy   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    461     knn   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    461 rewired   5.2%   5.2%  100%    100.0% 100.0%
+   cad_thread   affiliation    461   links   5.2%   5.2%  100%     99.5%  99.6%
+   cad_thread   affiliation   1153   plain   5.2%   6.6%   90%     75.7%  76.9%
+   cad_thread   affiliation   1153   proxy   5.2%   6.3%   96%     81.5%  83.1%
+   cad_thread   affiliation   1153     knn   5.2%   6.7%   90%     76.5%  78.2%
+   cad_thread   affiliation   1153 rewired   5.2%   6.1%   98%     83.0%  84.7%
+   cad_thread   affiliation   1153   links   5.2%   6.5%   94%     77.8%  79.7%
+   cad_thread   affiliation   2306   plain   5.2%   7.0%   96%     71.1%  73.8%
+   cad_thread   affiliation   2306   proxy   5.2%   7.1%  100%     69.4%  73.6%
+   cad_thread   affiliation   2306     knn   5.2%   7.6%   94%     65.8%  69.8%
+   cad_thread   affiliation   2306 rewired   5.2%   6.8%   90%     72.8%  76.7%
+   cad_thread   affiliation   2306   links   5.2%   7.2%   96%     68.8%  72.9%
+   cad_thread        person    400   plain   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    400   proxy   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    400     knn   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    400 rewired   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    400   links   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    231   plain   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    231   proxy   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    231     knn   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    231 rewired   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    231   links   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    461   plain   4.5%   4.6%  100%     99.6%  99.6%
+   cad_thread        person    461   proxy   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    461     knn   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    461 rewired   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person    461   links   4.5%   4.5%  100%    100.0% 100.0%
+   cad_thread        person   1153   plain   4.5%   7.0%   88%     67.5%  69.0%
+   cad_thread        person   1153   proxy   4.5%   5.8%  100%     79.9%  81.3%
+   cad_thread        person   1153     knn   4.5%   6.2%   94%     76.5%  78.0%
+   cad_thread        person   1153 rewired   4.5%   5.8%   98%     77.8%  79.4%
+   cad_thread        person   1153   links   4.5%   5.7%   98%     81.5%  83.2%
+   cad_thread        person   2306   plain   4.5%   7.9%   84%     57.0%  61.1%
+   cad_thread        person   2306   proxy   4.5%   7.3%   86%     63.4%  67.6%
+   cad_thread        person   2306     knn   4.5%   7.8%   92%     58.8%  63.1%
+   cad_thread        person   2306 rewired   4.5%   6.4%   98%     69.1%  73.0%
+   cad_thread        person   2306   links   4.5%   7.4%   98%     61.0%  65.9%
+   cad_thread counterspeech    400   plain   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    400   proxy   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    400     knn   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    400 rewired   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    400   links   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    231   plain   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    231   proxy   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    231     knn   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    231 rewired   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    231   links   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    461   plain   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    461   proxy   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    461     knn   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    461 rewired   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech    461   links   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech   1153   plain   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech   1153   proxy   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech   1153     knn   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech   1153 rewired   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech   1153   links   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech   2306   plain   0.9%   0.9%  100%     99.3%  99.3%
+   cad_thread counterspeech   2306   proxy   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech   2306     knn   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech   2306 rewired   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread counterspeech   2306   links   0.9%   0.9%  100%    100.0% 100.0%
+   cad_thread          slur    400   plain   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    400   proxy   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    400     knn   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    400 rewired   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    400   links   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    231   plain   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    231   proxy   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    231     knn   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    231 rewired   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    231   links   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    461   plain   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    461   proxy   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    461     knn   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    461 rewired   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur    461   links   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   1153   plain   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   1153   proxy   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   1153     knn   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   1153 rewired   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   1153   links   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   2306   plain   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   2306   proxy   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   2306     knn   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   2306 rewired   0.6%   0.6%  100%    100.0% 100.0%
+   cad_thread          slur   2306   links   0.6%   0.6%  100%    100.0% 100.0%
+         meld         anger    400   plain  12.4%  13.7%   94%     88.0%  88.3%
+         meld         anger    400   proxy  12.4%  13.6%   96%     89.0%  89.6%
+         meld         anger    400     knn  12.4%  13.5%  100%     89.6%  90.2%
+         meld         anger    400 rewired  12.4%  13.6%   98%     88.7%  89.4%
+         meld         anger    400   links  12.4%  13.4%   98%     90.4%  91.0%
+         meld         anger    122   plain  12.4%  12.4%  100%    100.0% 100.0%
+         meld         anger    122   proxy  12.4%  12.4%  100%    100.0% 100.0%
+         meld         anger    122     knn  12.4%  12.4%  100%    100.0% 100.0%
+         meld         anger    122 rewired  12.4%  12.4%  100%    100.0% 100.0%
+         meld         anger    122   links  12.4%  12.4%  100%    100.0% 100.0%
+         meld         anger    243   plain  12.4%  13.0%   96%     94.3%  94.4%
+         meld         anger    243   proxy  12.4%  12.4%  100%     99.8%  99.8%
+         meld         anger    243     knn  12.4%  12.4%  100%     99.3%  99.3%
+         meld         anger    243 rewired  12.4%  12.4%  100%     99.5%  99.5%
+         meld         anger    243   links  12.4%  12.5%  100%     98.3%  98.4%
+         meld         anger    608   plain  12.4%  14.2%   88%     83.6%  84.4%
+         meld         anger    608   proxy  12.4%  14.0%   96%     85.3%  86.3%
+         meld         anger    608     knn  12.4%  14.2%   92%     84.0%  85.2%
+         meld         anger    608 rewired  12.4%  14.0%   96%     85.2%  86.5%
+         meld         anger    608   links  12.4%  14.1%   96%     84.7%  85.8%
+         meld         anger   1216   plain  12.4%  14.6%   88%     80.4%  82.2%
+         meld         anger   1216   proxy  12.4%  14.6%   94%     80.6%  82.8%
+         meld         anger   1216     knn  12.4%  14.9%   90%     78.3%  81.1%
+         meld         anger   1216 rewired  12.4%  14.7%   98%     80.2%  83.1%
+         meld         anger   1216   links  12.4%  14.6%  100%     80.4%  83.0%
+         meld       disgust    400   plain   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    400   proxy   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    400     knn   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    400 rewired   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    400   links   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    122   plain   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    122   proxy   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    122     knn   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    122 rewired   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    122   links   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    243   plain   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    243   proxy   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    243     knn   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    243 rewired   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    243   links   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    608   plain   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    608   proxy   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    608     knn   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    608 rewired   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust    608   links   2.9%   2.9%  100%    100.0% 100.0%
+         meld       disgust   1216   plain   2.9%   3.8%   90%     78.0%  80.1%
+         meld       disgust   1216   proxy   2.9%   3.0%   98%     95.9%  96.6%
+         meld       disgust   1216     knn   2.9%   3.1%   98%     94.5%  95.3%
+         meld       disgust   1216 rewired   2.9%   3.3%   98%     89.7%  91.2%
+         meld       disgust   1216   links   2.9%   3.0%  100%     97.0%  97.5%
+         meld          fear    400   plain   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    400   proxy   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    400     knn   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    400 rewired   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    400   links   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    122   plain   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    122   proxy   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    122     knn   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    122 rewired   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    122   links   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    243   plain   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    243   proxy   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    243     knn   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    243 rewired   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    243   links   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    608   plain   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    608   proxy   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    608     knn   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    608 rewired   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear    608   links   2.8%   2.8%  100%    100.0% 100.0%
+         meld          fear   1216   plain   2.8%   3.3%   96%     84.4%  85.9%
+         meld          fear   1216   proxy   2.8%   3.0%  100%     93.9%  95.0%
+         meld          fear   1216     knn   2.8%   3.0%   96%     94.4%  95.3%
+         meld          fear   1216 rewired   2.8%   3.0%  100%     95.0%  96.0%
+         meld          fear   1216   links   2.8%   3.0%   98%     94.5%  95.4%
+         meld           joy    400   plain  16.7%  18.4%   88%     87.2%  87.6%
+         meld           joy    400   proxy  16.7%  18.1%   96%     89.5%  89.9%
+         meld           joy    400     knn  16.7%  18.6%   90%     86.3%  86.9%
+         meld           joy    400 rewired  16.7%  18.3%   92%     88.4%  89.1%
+         meld           joy    400   links  16.7%  18.1%   96%     89.7%  90.4%
+         meld           joy    122   plain  16.7%  16.8%  100%     99.8%  99.8%
+         meld           joy    122   proxy  16.7%  16.7%  100%    100.0% 100.0%
+         meld           joy    122     knn  16.7%  16.7%  100%    100.0% 100.0%
+         meld           joy    122 rewired  16.7%  16.7%  100%    100.0% 100.0%
+         meld           joy    122   links  16.7%  16.8%  100%     99.8%  99.8%
+         meld           joy    243   plain  16.7%  18.1%   92%     89.8%  90.0%
+         meld           joy    243   proxy  16.7%  17.4%  100%     94.6%  94.8%
+         meld           joy    243     knn  16.7%  17.4%   98%     94.7%  94.9%
+         meld           joy    243 rewired  16.7%  17.8%   92%     92.3%  92.6%
+         meld           joy    243   links  16.7%  17.3%   98%     95.2%  95.4%
+         meld           joy    608   plain  16.7%  18.7%   90%     84.5%  85.2%
+         meld           joy    608   proxy  16.7%  18.6%   92%     86.2%  86.9%
+         meld           joy    608     knn  16.7%  18.7%   92%     85.2%  86.2%
+         meld           joy    608 rewired  16.7%  18.5%   98%     86.7%  87.8%
+         meld           joy    608   links  16.7%  18.7%   94%     84.9%  86.1%
+         meld           joy   1216   plain  16.7%  19.0%   94%     82.7%  84.2%
+         meld           joy   1216   proxy  16.7%  18.8%   96%     84.2%  85.9%
+         meld           joy   1216     knn  16.7%  19.3%   82%     81.5%  83.7%
+         meld           joy   1216 rewired  16.7%  19.1%   96%     82.9%  85.4%
+         meld           joy   1216   links  16.7%  19.1%   96%     83.1%  85.3%
+         meld       sadness    400   plain   7.8%   8.5%   94%     90.5%  90.8%
+         meld       sadness    400   proxy   7.8%   8.0%   96%     96.8%  96.9%
+         meld       sadness    400     knn   7.8%   8.0%   98%     98.1%  98.2%
+         meld       sadness    400 rewired   7.8%   7.9%  100%     99.2%  99.3%
+         meld       sadness    400   links   7.8%   8.0%  100%     97.6%  97.7%
+         meld       sadness    122   plain   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    122   proxy   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    122     knn   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    122 rewired   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    122   links   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    243   plain   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    243   proxy   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    243     knn   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    243 rewired   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    243   links   7.8%   7.8%  100%    100.0% 100.0%
+         meld       sadness    608   plain   7.8%   8.8%   94%     85.9%  86.6%
+         meld       sadness    608   proxy   7.8%   8.5%   98%     90.5%  91.3%
+         meld       sadness    608     knn   7.8%   8.7%   94%     87.8%  88.8%
+         meld       sadness    608 rewired   7.8%   8.6%   94%     89.0%  90.2%
+         meld       sadness    608   links   7.8%   8.6%   98%     88.8%  89.8%
+         meld       sadness   1216   plain   7.8%   9.2%   92%     80.9%  82.7%
+         meld       sadness   1216   proxy   7.8%   9.0%  100%     83.6%  85.9%
+         meld       sadness   1216     knn   7.8%   9.0%  100%     84.0%  86.4%
+         meld       sadness   1216 rewired   7.8%   9.0%   94%     83.1%  85.8%
+         meld       sadness   1216   links   7.8%   9.2%   88%     81.6%  84.2%
+         meld      surprise    400   plain  10.8%  14.1%   96%     75.6%  76.4%
+         meld      surprise    400   proxy  10.8%  13.0%  100%     83.8%  84.4%
+         meld      surprise    400     knn  10.8%  12.8%   98%     85.3%  86.0%
+         meld      surprise    400 rewired  10.8%  13.4%  100%     81.2%  82.1%
+         meld      surprise    400   links  10.8%  13.4%   94%     81.8%  82.6%
+         meld      surprise    122   plain  10.8%  10.8%  100%    100.0% 100.0%
+         meld      surprise    122   proxy  10.8%  10.8%  100%    100.0% 100.0%
+         meld      surprise    122     knn  10.8%  10.8%  100%    100.0% 100.0%
+         meld      surprise    122 rewired  10.8%  10.8%  100%    100.0% 100.0%
+         meld      surprise    122   links  10.8%  10.8%  100%    100.0% 100.0%
+         meld      surprise    243   plain  10.8%  11.8%  100%     92.6%  92.7%
+         meld      surprise    243   proxy  10.8%  10.9%  100%     99.4%  99.4%
+         meld      surprise    243     knn  10.8%  10.8%  100%    100.0% 100.0%
+         meld      surprise    243 rewired  10.8%  10.8%  100%    100.0% 100.0%
+         meld      surprise    243   links  10.8%  10.9%  100%     99.2%  99.2%
+         meld      surprise    608   plain  10.8%  15.2%   94%     69.0%  70.5%
+         meld      surprise    608   proxy  10.8%  14.8%   94%     71.9%  73.4%
+         meld      surprise    608     knn  10.8%  14.7%   94%     72.1%  73.9%
+         meld      surprise    608 rewired  10.8%  15.2%   88%     69.7%  71.5%
+         meld      surprise    608   links  10.8%  14.7%   88%     72.7%  74.4%
+         meld      surprise   1216   plain  10.8%  16.2%   92%     63.6%  67.0%
+         meld      surprise   1216   proxy  10.8%  16.0%   94%     65.1%  68.6%
+         meld      surprise   1216     knn  10.8%  16.2%   94%     63.8%  67.7%
+         meld      surprise   1216 rewired  10.8%  16.0%   96%     64.8%  68.8%
+         meld      surprise   1216   links  10.8%  16.0%   92%     65.3%  69.2%
+meld_dialogue         anger    400   plain  12.4%  13.7%   94%     88.0%  88.3%
+meld_dialogue         anger    400   proxy  12.4%  13.6%   96%     89.0%  89.6%
+meld_dialogue         anger    400     knn  12.4%  13.7%   96%     87.7%  88.4%
+meld_dialogue         anger    400 rewired  12.4%  13.6%   98%     88.9%  89.6%
+meld_dialogue         anger    400   links  12.4%  13.5%   98%     89.8%  90.6%
+meld_dialogue         anger    122   plain  12.4%  12.4%  100%    100.0% 100.0%
+meld_dialogue         anger    122   proxy  12.4%  12.4%  100%    100.0% 100.0%
+meld_dialogue         anger    122     knn  12.4%  12.4%  100%    100.0% 100.0%
+meld_dialogue         anger    122 rewired  12.4%  12.4%  100%    100.0% 100.0%
+meld_dialogue         anger    122   links  12.4%  12.4%  100%    100.0% 100.0%
+meld_dialogue         anger    243   plain  12.4%  13.0%   96%     94.3%  94.4%
+meld_dialogue         anger    243   proxy  12.4%  12.4%  100%     99.8%  99.8%
+meld_dialogue         anger    243     knn  12.4%  12.6%  100%     98.1%  98.2%
+meld_dialogue         anger    243 rewired  12.4%  12.5%  100%     99.1%  99.1%
+meld_dialogue         anger    243   links  12.4%  12.5%  100%     99.1%  99.1%
+meld_dialogue         anger    608   plain  12.4%  14.2%   88%     83.6%  84.4%
+meld_dialogue         anger    608   proxy  12.4%  14.0%   96%     85.3%  86.3%
+meld_dialogue         anger    608     knn  12.4%  14.0%   98%     84.9%  86.1%
+meld_dialogue         anger    608 rewired  12.4%  14.2%   92%     83.9%  85.3%
+meld_dialogue         anger    608   links  12.4%  14.3%   96%     83.1%  84.6%
+meld_dialogue         anger   1216   plain  12.4%  14.6%   88%     80.4%  82.2%
+meld_dialogue         anger   1216   proxy  12.4%  14.6%   94%     80.6%  82.8%
+meld_dialogue         anger   1216     knn  12.4%  14.7%   94%     80.1%  82.9%
+meld_dialogue         anger   1216 rewired  12.4%  14.8%   90%     79.4%  82.6%
+meld_dialogue         anger   1216   links  12.4%  14.9%   98%     78.3%  81.5%
+meld_dialogue       disgust    400   plain   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    400   proxy   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    400     knn   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    400 rewired   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    400   links   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    122   plain   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    122   proxy   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    122     knn   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    122 rewired   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    122   links   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    243   plain   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    243   proxy   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    243     knn   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    243 rewired   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    243   links   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    608   plain   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    608   proxy   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    608     knn   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    608 rewired   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust    608   links   2.9%   2.9%  100%    100.0% 100.0%
+meld_dialogue       disgust   1216   plain   2.9%   3.8%   90%     78.0%  80.1%
+meld_dialogue       disgust   1216   proxy   2.9%   3.0%   98%     95.9%  96.6%
+meld_dialogue       disgust   1216     knn   2.9%   3.2%   98%     92.6%  93.7%
+meld_dialogue       disgust   1216 rewired   2.9%   3.3%   98%     89.5%  91.1%
+meld_dialogue       disgust   1216   links   2.9%   3.3%   96%     90.4%  91.8%
+meld_dialogue          fear    400   plain   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    400   proxy   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    400     knn   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    400 rewired   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    400   links   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    122   plain   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    122   proxy   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    122     knn   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    122 rewired   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    122   links   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    243   plain   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    243   proxy   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    243     knn   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    243 rewired   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    243   links   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    608   plain   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    608   proxy   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    608     knn   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    608 rewired   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear    608   links   2.8%   2.8%  100%    100.0% 100.0%
+meld_dialogue          fear   1216   plain   2.8%   3.3%   96%     84.4%  85.9%
+meld_dialogue          fear   1216   proxy   2.8%   3.0%  100%     93.9%  95.0%
+meld_dialogue          fear   1216     knn   2.8%   3.0%  100%     95.1%  96.1%
+meld_dialogue          fear   1216 rewired   2.8%   3.0%  100%     95.5%  96.4%
+meld_dialogue          fear   1216   links   2.8%   3.0%  100%     93.4%  94.7%
+meld_dialogue           joy    400   plain  16.7%  18.4%   88%     87.2%  87.6%
+meld_dialogue           joy    400   proxy  16.7%  18.1%   96%     89.5%  89.9%
+meld_dialogue           joy    400     knn  16.7%  18.1%   94%     89.6%  90.0%
+meld_dialogue           joy    400 rewired  16.7%  18.4%   96%     87.4%  88.3%
+meld_dialogue           joy    400   links  16.7%  18.5%   90%     86.6%  87.5%
+meld_dialogue           joy    122   plain  16.7%  16.8%  100%     99.8%  99.8%
+meld_dialogue           joy    122   proxy  16.7%  16.7%  100%    100.0% 100.0%
+meld_dialogue           joy    122     knn  16.7%  16.7%  100%    100.0% 100.0%
+meld_dialogue           joy    122 rewired  16.7%  16.7%  100%    100.0% 100.0%
+meld_dialogue           joy    122   links  16.7%  16.7%  100%    100.0% 100.0%
+meld_dialogue           joy    243   plain  16.7%  18.1%   92%     89.8%  90.0%
+meld_dialogue           joy    243   proxy  16.7%  17.4%  100%     94.6%  94.8%
+meld_dialogue           joy    243     knn  16.7%  17.6%   96%     93.4%  93.6%
+meld_dialogue           joy    243 rewired  16.7%  17.5%   98%     94.1%  94.5%
+meld_dialogue           joy    243   links  16.7%  17.5%   96%     94.7%  95.0%
+meld_dialogue           joy    608   plain  16.7%  18.7%   90%     84.5%  85.2%
+meld_dialogue           joy    608   proxy  16.7%  18.6%   92%     86.2%  86.9%
+meld_dialogue           joy    608     knn  16.7%  18.4%   96%     86.9%  87.6%
+meld_dialogue           joy    608 rewired  16.7%  18.5%   94%     86.9%  88.3%
+meld_dialogue           joy    608   links  16.7%  18.6%   92%     85.9%  87.3%
+meld_dialogue           joy   1216   plain  16.7%  19.0%   94%     82.7%  84.2%
+meld_dialogue           joy   1216   proxy  16.7%  18.8%   96%     84.2%  85.9%
+meld_dialogue           joy   1216     knn  16.7%  19.2%   96%     82.2%  84.0%
+meld_dialogue           joy   1216 rewired  16.7%  19.2%   96%     82.3%  85.3%
+meld_dialogue           joy   1216   links  16.7%  19.3%   94%     81.9%  84.9%
+meld_dialogue       sadness    400   plain   7.8%   8.5%   94%     90.5%  90.8%
+meld_dialogue       sadness    400   proxy   7.8%   8.0%   96%     96.8%  96.9%
+meld_dialogue       sadness    400     knn   7.8%   8.0%  100%     97.8%  98.0%
+meld_dialogue       sadness    400 rewired   7.8%   7.9%  100%     98.8%  98.9%
+meld_dialogue       sadness    400   links   7.8%   7.9%  100%     99.3%  99.4%
+meld_dialogue       sadness    122   plain   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    122   proxy   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    122     knn   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    122 rewired   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    122   links   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    243   plain   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    243   proxy   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    243     knn   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    243 rewired   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    243   links   7.8%   7.8%  100%    100.0% 100.0%
+meld_dialogue       sadness    608   plain   7.8%   8.8%   94%     85.9%  86.6%
+meld_dialogue       sadness    608   proxy   7.8%   8.5%   98%     90.5%  91.3%
+meld_dialogue       sadness    608     knn   7.8%   8.6%   94%     88.8%  89.8%
+meld_dialogue       sadness    608 rewired   7.8%   8.5%   98%     89.7%  91.0%
+meld_dialogue       sadness    608   links   7.8%   8.7%   94%     88.2%  89.4%
+meld_dialogue       sadness   1216   plain   7.8%   9.2%   92%     80.9%  82.7%
+meld_dialogue       sadness   1216   proxy   7.8%   9.0%  100%     83.6%  85.9%
+meld_dialogue       sadness   1216     knn   7.8%   9.1%   98%     82.8%  85.4%
+meld_dialogue       sadness   1216 rewired   7.8%   9.3%   96%     80.5%  83.9%
+meld_dialogue       sadness   1216   links   7.8%   9.3%   90%     80.5%  83.6%
+meld_dialogue      surprise    400   plain  10.8%  14.1%   96%     75.6%  76.4%
+meld_dialogue      surprise    400   proxy  10.8%  13.0%  100%     83.8%  84.4%
+meld_dialogue      surprise    400     knn  10.8%  13.6%   94%     80.2%  80.9%
+meld_dialogue      surprise    400 rewired  10.8%  13.2%   96%     82.9%  83.7%
+meld_dialogue      surprise    400   links  10.8%  13.3%   94%     82.9%  83.8%
+meld_dialogue      surprise    122   plain  10.8%  10.8%  100%    100.0% 100.0%
+meld_dialogue      surprise    122   proxy  10.8%  10.8%  100%    100.0% 100.0%
+meld_dialogue      surprise    122     knn  10.8%  10.8%  100%    100.0% 100.0%
+meld_dialogue      surprise    122 rewired  10.8%  10.8%  100%    100.0% 100.0%
+meld_dialogue      surprise    122   links  10.8%  10.8%  100%    100.0% 100.0%
+meld_dialogue      surprise    243   plain  10.8%  11.8%  100%     92.6%  92.7%
+meld_dialogue      surprise    243   proxy  10.8%  10.9%  100%     99.4%  99.4%
+meld_dialogue      surprise    243     knn  10.8%  11.0%  100%     98.7%  98.7%
+meld_dialogue      surprise    243 rewired  10.8%  10.9%  100%     99.5%  99.5%
+meld_dialogue      surprise    243   links  10.8%  10.8%  100%     99.8%  99.8%
+meld_dialogue      surprise    608   plain  10.8%  15.2%   94%     69.0%  70.5%
+meld_dialogue      surprise    608   proxy  10.8%  14.8%   94%     71.9%  73.4%
+meld_dialogue      surprise    608     knn  10.8%  14.7%   96%     71.9%  73.4%
+meld_dialogue      surprise    608 rewired  10.8%  14.6%   94%     73.0%  74.9%
+meld_dialogue      surprise    608   links  10.8%  14.7%   94%     73.2%  75.2%
+meld_dialogue      surprise   1216   plain  10.8%  16.2%   92%     63.6%  67.0%
+meld_dialogue      surprise   1216   proxy  10.8%  16.0%   94%     65.1%  68.6%
+meld_dialogue      surprise   1216     knn  10.8%  15.7%   96%     66.4%  69.8%
+meld_dialogue      surprise   1216 rewired  10.8%  15.8%   98%     65.8%  70.1%
+meld_dialogue      surprise   1216   links  10.8%  15.7%  100%     66.4%  70.7%
