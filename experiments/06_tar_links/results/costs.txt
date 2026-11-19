@@ -1,0 +1,51 @@
+recall target 0.9, delta 0.1, pool with junk and repeated texts dropped
+cost: distinct oracle calls as a share of the rows, every returned row confirmed, asking every row costs 100%
+bargain: BARGAIN_R on the 8B p(yes), then the oracle checks the returned rows, mean of 50 runs
+bargain 400: the paper's budget, bargain best: lowest cost over the budgets [400, 0.01, 0.02, 0.05, 0.1], picked in hindsight
+proxy, knn, rewired, links: QBCB with k 40 and r 39, mean of 2000 runs, the order is the 8B p(yes)
+with any neighbour of a confirmed positive above every other row, over no graph, a cosine kNN with
+k matched to the mean link degree, the links rewired with every degree kept, or the links
+met: lowest share of runs reaching the recall target over the arms of the row
+
+ dataset     predicate   rate   pos  bargain 400 bargain best        proxy          knn      rewired        links   met
+     cad      identity   9.9%  2285        83.4%        73.1%        78.7%        74.4%        80.0%        72.0%   91%
+     cad   affiliation   5.2%  1194        98.6%        71.8%        77.0%        71.4%        77.3%        70.4%   92%
+     cad        person   4.5%  1048       100.0%        63.0%        68.0%        65.6%        68.1%        60.7%   84%
+     cad counterspeech   0.9%   212       100.0%        99.6%        93.6%        93.0%        93.7%        93.7%   96%
+     cad          slur   0.6%   127       100.0%       100.0%        82.9%        78.0%        82.5%        80.6%   97%
+    meld         anger  12.4%  1504        85.9%        82.0%        84.6%        83.6%        85.6%        79.7%   90%
+    meld       disgust   2.9%   350       100.0%        79.6%        72.6%        72.9%        73.7%        69.3%   88%
+    meld          fear   2.8%   344       100.0%        86.5%        82.3%        81.7%        82.5%        80.5%   94%
+    meld           joy  16.7%  2034        85.4%        84.3%        87.5%        87.2%        87.9%        85.8%   92%
+    meld       sadness   7.8%   949        91.7%        82.8%        84.8%        84.9%        85.6%        82.8%   92%
+    meld      surprise  10.8%  1314        76.4%        67.3%        70.9%        71.8%        73.3%        72.8%   92%
+    cora         proof   6.6%   148        75.5%        75.5%        38.6%        43.8%        50.5%        44.6%   96%
+    cora      language   3.2%    72       100.0%       100.0%        65.2%        58.8%        68.8%        59.2%   99%
+    cora       biology   4.8%   108        99.9%        99.9%        73.9%        62.5%        73.3%        71.8%   97%
+    cora      robotics   4.3%    97       100.0%       100.0%        44.7%        45.3%        51.4%        46.7%   98%
+    cora  first person   2.8%    62       100.0%       100.0%        73.2%        74.8%        75.9%        74.8%  100%
+    cora        markov   3.6%    81       100.0%       100.0%        53.1%        53.2%        58.3%        55.3%   99%
+    cora  unsupervised   3.6%    81       100.0%       100.0%        61.0%        61.5%        64.5%        61.0%   99%
+   stack          spss   3.7%   181       100.0%        98.7%        32.1%        32.8%        36.6%        36.1%   96%
+   stack         rcode  12.5%   614        23.9%        23.3%        20.8%        27.2%        36.6%        31.5%   94%
+   stack        choose  13.7%   674        43.0%        41.6%        42.1%        39.5%        54.5%        44.2%   82%
+   stack   assumptions   8.7%   427        56.0%        49.4%        45.7%        44.1%        51.7%        43.5%   94%
+   stack   interaction   3.2%   158       100.0%       100.0%        30.4%        31.9%        34.6%        32.0%   96%
+   stack     interpret  10.4%   511        44.3%        41.5%        37.3%        33.7%        47.7%        40.3%   90%
+   stack      ownstudy   5.8%   287        90.3%        70.8%        48.5%        49.5%        52.3%        50.1%   95%
+   stack          econ   7.0%   343        80.3%        65.8%        53.1%        53.5%        57.7%        54.4%   94%
+   stack        survey   9.3%   456        62.8%        54.3%        46.2%        44.4%        52.9%        46.5%   92%
+   stack        biomed  11.0%   539        52.2%        47.5%        44.7%        42.7%        51.4%        48.2%   93%
+   stack            we   2.7%   131       100.0%       100.0%        60.7%        62.2%        62.6%        60.9%   97%
+
+links minus each other arm, mean over predicates, in points of the rows
+
+ dataset bargain best        proxy          knn      rewired
+     cad        -6.03        -4.55        -0.98        -4.84
+    meld        -1.95        -1.98        -1.86        -2.96
+    cora       -37.44        +0.51        +1.93        -4.21
+   stack       -18.64        +2.38        +2.37        -4.62
+
+every QBCB cell meets the target in at least 88% of runs: True
+links below every other arm on cad and meld: True
+verdict: pass

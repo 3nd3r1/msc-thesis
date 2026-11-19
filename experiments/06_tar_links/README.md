@@ -42,3 +42,18 @@ It is reported at the paper's budget of 400 and at the lowest cost over a grid o
 ## Run
 
 `python run.py` writes `results/costs.txt` with the table and the verdict.
+
+## Result
+
+Pass. On CAD and MELD, QBCB over the links costs less than every other arm, by 0.98 to 6.03 points of the rows.
+
+Links minus each arm, mean over predicates, in points of the rows, from `results/costs.txt`:
+
+| dataset | bargain best | proxy | knn   | rewired |
+| ------- | ------------ | ----- | ----- | ------- |
+| cad     | -6.03        | -4.55 | -0.98 | -4.84   |
+| meld    | -1.95        | -1.98 | -1.86 | -2.96   |
+| cora    | -37.44       | +0.51 | +1.93 | -4.21   |
+| stack   | -18.64       | +2.38 | +2.37 | -4.62   |
+
+Closed.
