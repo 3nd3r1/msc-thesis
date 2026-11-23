@@ -1,9 +1,9 @@
 cluster bootstrap over the link components, threads on CAD and dialogues on MELD, 200 draws
 each draw reruns the 06 orders under QBCB with k 40 and r 39, 1000 runs, and BARGAIN plus checking
 at the budget of its wide best from playground/bargain_screen/results/wide.txt, 20 runs
-kNN edges between clusters go to the first copy of the neighbour, rewired is redone on each draw's links
+kNN is rebuilt on each draw among the drawn rows without pairs of copies of one row, rewired is redone on each draw's links
 links minus each arm, mean over predicates, in points of the rows, full data then the 95% interval
 
  dataset                  proxy                    knn                rewired                bargain
-     cad   -4.49 [-5.80, -3.28]   -0.97 [-3.48, -1.03]   -4.80 [-6.17, -3.43]   -1.64 [-4.16, -0.50]
-    meld   -1.98 [-2.82, -1.14]   -1.86 [-2.84, -0.98]   -2.97 [-3.83, -1.85]   -0.01 [-1.96, +0.67]
+     cad   -4.49 [-5.80, -3.28]   -0.97 [-2.67, +0.25]   -4.80 [-6.17, -3.43]   -1.64 [-4.16, -0.50]
+    meld   -1.98 [-2.82, -1.14]   -1.86 [-2.74, -0.77]   -2.97 [-3.83, -1.85]   -0.01 [-1.96, +0.67]

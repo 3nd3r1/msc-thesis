@@ -1,7 +1,12 @@
 """Cluster bootstrap intervals on the 06 gaps, links minus proxy, kNN, rewired and wide BARGAIN, on CAD and MELD."""
 
+import json
+import os
 import re
 import sys
+
+for var in ["OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"]:
+    os.environ.setdefault(var, "1")
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import get_context
 from pathlib import Path
@@ -24,6 +29,8 @@ DRAWS = int(sys.argv[1]) if len(sys.argv) > 1 else 200
 RUNS = 1000
 BARGAIN_RUNS = 20
 OTHERS = ["proxy", "knn", "rewired", "bargain"]
+WORKERS = max(1, (os.cpu_count() or 2) // 2)
+DONE = RESULTS / "gaps_draws.jsonl"
 DATA = {}
 
 
@@ -82,7 +89,7 @@ def one(job):
     rows, copy = resample(DATA[name]["group"], np.random.default_rng(draw))
     res = gaps(name, rows, copy, draw)
     print(name, draw, flush=True)
-    return name, res
+    return name, draw, {c: float(v) for c, v in res.items()}
 
 
 def main():
@@ -105,8 +112,15 @@ def main():
         }
 
     full = {name: gaps(name, np.arange(len(DATA[name]["group"])), np.zeros(len(DATA[name]["group"]), int), 0) for name in NAMES}
-    with ProcessPoolExecutor(mp_context=get_context("fork")) as pool:
-        res = list(pool.map(one, [(name, d) for name in NAMES for d in range(1, DRAWS + 1)]))
+    done = [json.loads(line) for line in DONE.read_text().splitlines()] if DONE.exists() else []
+    seen = {(r["name"], r["draw"]) for r in done}
+    jobs = [(name, d) for name in NAMES for d in range(1, DRAWS + 1) if (name, d) not in seen]
+    with ProcessPoolExecutor(WORKERS, mp_context=get_context("fork")) as pool, DONE.open("a") as f:
+        for name, draw, r in pool.map(one, jobs):
+            f.write(json.dumps({"name": name, "draw": draw, **r}) + "\n")
+            f.flush()
+    done = [json.loads(line) for line in DONE.read_text().splitlines()]
+    res = [(r["name"], r) for r in done if r["draw"] <= DRAWS]
 
     out, save = report(RESULTS, "gaps")
     out(f"cluster bootstrap over the link components, threads on CAD and dialogues on MELD, {DRAWS} draws")
