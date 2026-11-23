@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT / "experiments/lib"))
 from corpora import DATASETS, loaded, proxy_scores, subgraph, vectors_for
 from guarantee import bargain, clusters, order, qbcb, remap, resample, rewire, stop_count
 from report import report
-from search import adjacency, knn
+from search import adjacency
 
 RESULTS = Path(__file__).resolve().parent / "results"
 NAMES = ["cad", "meld"]
@@ -37,6 +37,19 @@ def budgets():
     return out
 
 
+def knn_draw(vectors, rows, k, block=2048):
+    """Top k by cosine among the drawn rows, never to another copy of the same row."""
+    v = vectors[rows]
+    pairs = set()
+    for s in range(0, len(rows), block):
+        sim = v[s:s + block] @ v.T
+        sim[rows[s:s + block, None] == rows[None, :]] = -2
+        for r, top in enumerate(np.argpartition(-sim, k, axis=1)[:, :k]):
+            i = s + r
+            pairs.update((min(i, int(j)), max(i, int(j))) for j in top)
+    return np.array(sorted(pairs))
+
+
 def gaps(name, rows, copy, seed):
     """Mean over predicates of links minus each other arm on one set of rows, in points of the rows."""
     d = DATA[name]
@@ -44,7 +57,7 @@ def gaps(name, rows, copy, seed):
     links = remap(d["links"], rows, copy)
     graphs = {
         "proxy": None,
-        "knn": adjacency(remap(d["knn"], rows, copy, within=False), n),
+        "knn": adjacency(knn_draw(d["vectors"], rows, d["k"]), n),
         "rewired": adjacency(rewire(links, seed), n),
         "links": adjacency(links, n),
     }
@@ -84,7 +97,8 @@ def main():
         tie = np.random.default_rng(0).random(n) * 1e-9
         DATA[name] = {
             "links": links,
-            "knn": knn(vectors_for(nodes)[mask], max(1, round(len(links) / n))),
+            "vectors": vectors_for(nodes)[mask],
+            "k": max(1, round(len(links) / n)),
             "group": clusters(links, n),
             "budgets": {key: b[name, key] for key, _, _ in ds.predicates},
             "predicates": {key: (masks[key][mask], np.nan_to_num(scores[key][mask]) + tie) for key, _, _ in ds.predicates},
@@ -98,7 +112,7 @@ def main():
     out(f"cluster bootstrap over the link components, threads on CAD and dialogues on MELD, {DRAWS} draws")
     out(f"each draw reruns the 06 orders under QBCB with k {K} and r {R}, {RUNS} runs, and BARGAIN plus checking")
     out(f"at the budget of its wide best from playground/bargain_screen/results/wide.txt, {BARGAIN_RUNS} runs")
-    out("kNN edges between clusters go to the first copy of the neighbour, rewired is redone on each draw's links")
+    out("kNN is rebuilt on each draw among the drawn rows without pairs of copies of one row, rewired is redone on each draw's links")
     out("links minus each arm, mean over predicates, in points of the rows, full data then the 95% interval")
     out()
     out(f"{'dataset':>8} " + " ".join(f"{c:>22}" for c in OTHERS))
