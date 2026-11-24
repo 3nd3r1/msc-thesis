@@ -63,9 +63,11 @@ let
 
     pythonImportsCheck = [ "BARGAIN" ];
   };
+  verdaVersion = "1.10.0"; # github.com/verda-cloud/verda-cli, not in nixpkgs
 in
 pkgs.mkShell {
   buildInputs = with pkgs; [
+    go
     sqlite
     python3
     python3Packages.pip
@@ -87,4 +89,12 @@ pkgs.mkShell {
     lotus-ai
     bargain
   ];
+  shellHook = ''
+    verdaBin="$PWD/.bin/verda-${verdaVersion}"
+    export PATH="$verdaBin:$PATH"
+    if [ ! -x "$verdaBin/verda" ]; then
+      echo "Installing verda-cli ${verdaVersion}..."
+      GOBIN="$verdaBin" GOFLAGS=-modcacherw go install github.com/verda-cloud/verda-cli/cmd/verda@v${verdaVersion}
+    fi
+  '';
 }
