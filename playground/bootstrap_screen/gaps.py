@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments/lib"))
 
 from corpora import DATASETS, loaded, proxy_scores, subgraph, vectors_for
-from guarantee import bargain, clusters, order, qbcb, remap, resample, rewire, stop_count
+from guarantee import bargain, clusters, knn_draw, order, qbcb, remap, resample, rewire, stop_count
 from report import report
 from search import adjacency
 
@@ -42,19 +42,6 @@ def budgets():
         if m:
             out[m.group(1), m.group(2)] = float(m.group(3))
     return out
-
-
-def knn_draw(vectors, rows, k, block=2048):
-    """Top k by cosine among the drawn rows, never to another copy of the same row."""
-    v = vectors[rows]
-    pairs = set()
-    for s in range(0, len(rows), block):
-        sim = v[s:s + block] @ v.T
-        sim[rows[s:s + block, None] == rows[None, :]] = -2
-        for r, top in enumerate(np.argpartition(-sim, k, axis=1)[:, :k]):
-            i = s + r
-            pairs.update((min(i, int(j)), max(i, int(j))) for j in top)
-    return np.array(sorted(pairs))
 
 
 def gaps(name, rows, copy, seed):

@@ -19,6 +19,19 @@ def rewire(edges, seed=0):
     return stubs[stubs[:, 0] != stubs[:, 1]]
 
 
+def knn_draw(vectors, rows, k, block=2048):
+    """Top k by cosine among the given rows, never to another copy of the same row."""
+    v = vectors[rows]
+    pairs = set()
+    for s in range(0, len(rows), block):
+        sim = v[s:s + block] @ v.T
+        sim[rows[s:s + block, None] == rows[None, :]] = -2
+        for r, top in enumerate(np.argpartition(-sim, k, axis=1)[:, :k]):
+            i = s + r
+            pairs.update((min(i, int(j)), max(i, int(j))) for j in top)
+    return np.array(sorted(pairs))
+
+
 def order(p, y, neighbours=None):
     """Highest p first, with any neighbour of a confirmed positive above every other row."""
     cur = p.copy()
