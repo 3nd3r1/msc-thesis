@@ -54,6 +54,37 @@
   file = {/home/ender/Zotero/storage/7U4ERCYB/Boutaleb et al. - 2025 - Something's Fishy In The Data Lake A Critical Re-evaluation of Table Union Search Benchmarks.pdf;/home/ender/Zotero/storage/RYQ4ULVJ/2505.html}
 }
 
+@inproceedings{cad,
+  title = {Introducing {{CAD}}: The {{Contextual Abuse Dataset}}},
+  shorttitle = {Introducing {{CAD}}},
+  booktitle = {Proceedings of the 2021 {{Conference}} of the {{North American Chapter}} of the {{Association}} for {{Computational Linguistics}}: {{Human Language Technologies}}},
+  author = {Vidgen, Bertie and Nguyen, Dong and Margetts, Helen and Rossini, Patricia and Tromble, Rebekah},
+  year = 2021,
+  pages = {2289--2303},
+  publisher = {Association for Computational Linguistics},
+  address = {Online},
+  doi = {10.18653/v1/2021.naacl-main.182},
+  urldate = {2026-11-25},
+  langid = {english},
+  file = {/home/ender/Zotero/storage/LJWABEDM/Vidgen et al. - 2021 - Introducing CAD the Contextual Abuse Dataset.pdf}
+}
+
+@inproceedings{cal,
+  title = {Evaluation of Machine-Learning Protocols for Technology-Assisted Review in Electronic Discovery},
+  booktitle = {Proceedings of the 37th International {{ACM SIGIR}} Conference on {{Research}} \& Development in Information Retrieval},
+  author = {Cormack, Gordon V. and Grossman, Maura R.},
+  year = 2014,
+  month = jul,
+  pages = {153--162},
+  publisher = {ACM},
+  address = {Gold Coast Queensland Australia},
+  doi = {10.1145/2600428.2609601},
+  urldate = {2026-11-25},
+  isbn = {978-1-4503-2257-7},
+  langid = {english},
+  file = {/home/ender/Zotero/storage/8JHJALYT/Cormack and Grossman - 2014 - Evaluation of machine-learning protocols for technology-assisted review in electronic discovery.pdf}
+}
+
 @misc{CharacterizingGraphDatasets,
   title = {Characterizing {{Graph Datasets}} for {{Node Classification}}: {{Homophily}}--{{Heterophily Dichotomy}} and {{Beyond}}},
   urldate = {2026-11-12},
@@ -79,6 +110,37 @@
   file = {/home/ender/Zotero/storage/4DMJBGMH/Chaudhuri et al. - 1999 - On random sampling over joins.pdf}
 }
 
+@article{cora,
+  title = {Automating the {{Construction}} of {{Internet Portals}} with {{Machine Learning}}},
+  author = {McCallum, Andrew Kachites and Nigam, Kamal and Rennie, Jason and Seymore, Kristie},
+  year = 2000,
+  month = jul,
+  journal = {Information Retrieval},
+  volume = {3},
+  number = {2},
+  pages = {127--163},
+  issn = {1386-4564, 1573-7659},
+  doi = {10.1023/A:1009953814988},
+  urldate = {2026-11-25},
+  langid = {english}
+}
+
+@inproceedings{cormackEngineeringQualityReliability2016,
+  title = {Engineering {{Quality}} and {{Reliability}} in {{Technology-Assisted Review}}},
+  booktitle = {Proceedings of the 39th {{International ACM SIGIR}} Conference on {{Research}} and {{Development}} in {{Information Retrieval}}},
+  author = {Cormack, Gordon V. and Grossman, Maura R.},
+  year = 2016,
+  month = jul,
+  pages = {75--84},
+  publisher = {ACM},
+  address = {Pisa Italy},
+  doi = {10.1145/2911451.2911510},
+  urldate = {2026-11-25},
+  isbn = {978-1-4503-4069-4},
+  langid = {english},
+  file = {/home/ender/Zotero/storage/HWVK8N4K/Cormack and Grossman - 2016 - Engineering Quality and Reliability in Technology-Assisted Review.pdf}
+}
+
 @misc{csv,
   title = {Beyond {{Linear LLM Invocation}}: {{An Efficient}} and {{Effective Semantic Filter Paradigm}}},
   shorttitle = {Beyond {{Linear LLM Invocation}}},
@@ -98,23 +160,18 @@
   file = {/home/ender/Zotero/storage/B4L2I8BR/Hou et al. - 2026 - Beyond Linear LLM Invocation An Efficient and Effective Semantic Filter Paradigm.pdf;/home/ender/Zotero/storage/S3LE78YC/2603.html}
 }
 
-@misc{hassanzadehSemanticViewsCertified2026,
-  title = {Semantic {{Views}}: {{Certified Reuse}} of {{LLM Labels Across Semantic Queries}}},
-  shorttitle = {Semantic {{Views}}},
-  author = {Hassanzadeh, Oktie and Subramanian, Dharmashankar},
+@misc{heCascadeFilterCostEfficientSemantic2026,
+  title = {{{CascadeFilter}}: {{Cost-Efficient Semantic Filtering}} with {{Joint Threshold Selection}}},
+  author = {He, Yanji and Zhong, Tao and Chen, Hongyang and Zhang, Xiaobo and Yang, Mingyu and Wang, Wei},
   year = 2026,
-  month = oct,
-  number = {arXiv:2610.12768},
-  eprint = {2610.12768},
-  primaryclass = {cs.DB},
+  month = nov,
+  number = {arXiv:2611.08367},
+  eprint = {2611.08367},
   publisher = {arXiv},
-  doi = {10.48550/arXiv.2610.12768},
-  urldate = {2026-10-13},
-  abstract = {Semantic query engines evaluate natural-language filters with a large language model, and every evaluation is a costly oracle call. Optimizers that reduce these calls face a dilemma: cascades that trust a cheap proxy miss their precision and recall targets on many queries, methods with finite-sample guarantees save little, and all of them discard the oracle's labels when the query ends. We present SemViews, a certified semantic filter that orders tuples by signals that cost no oracle calls (the labels that earlier queries left behind as semantic views, a local embedding, and a helper model's score), refines that order with labels it must pay for anyway, and certifies its answer with fresh stratified oracle samples. The answer meets user precision and recall targets with probability at least \$1-{$\delta\$$} for every workload and every catalog, so a stale or misleading view can cost oracle calls but never accuracy. On four workloads replayed against 725,000 recorded oracle labels, SemViews meets both targets on 99.63\% of queries and saves 28\%-45\% of the oracle calls, whereas the only prior method in our study with the same guarantee needs 1.32x-1.71x as many calls. When a question returns in different words, views cut its calls by a further 27\%-36\%, with both targets met on at least 99.8\% of such queries; similarity caches and entailment-based reuse meet them on only 17\%-47\%.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Artificial Intelligence,Computer Science - Databases},
-  note = {Comment: Code and data: https://github.com/semviews/lotus-semviews},
-  file = {/home/ender/Zotero/storage/6CLD3UGU/Hassanzadeh and Subramanian - 2026 - Semantic Views Certified Reuse of LLM Labels Across Semantic Queries.pdf;/home/ender/Zotero/storage/RZWA44L7/2610.html}
+  doi = {10.48550/arXiv.2611.08367},
+  urldate = {2026-11-25},
+  abstract = {Semantic filtering selects records that satisfy a natural-language predicate and is an important operation in data analytics based on large language models (LLMs). Executing an expensive model on every document incurs substantial inference cost. Existing approaches reduce this cost by accepting predictions from cheaper models and forwarding uncertain records to an oracle. Task Cascades further varies document portions and operations, and provides an accuracy-guaranteed extension. However, its threshold calibration follows a prescribed adjustment sequence after cascade assembly, rather than minimizing cost over alternative combinations of stage thresholds. Motivated by this, we propose CascadeFilter, a three-stage semantic filtering method that jointly searches the thresholds for a small language model operating on extracted evidence and full documents, with unresolved records forwarded to the oracle. For a fixed cascade, we formulate threshold selection as minimizing token-aware cost subject to an oracle-relative error constraint, and select the least-cost certified configuration in a pre-specified grid. A finite-population calibration procedure bounds oracle-relative error after selection, using fixed-sequence tests on threshold tracks to allocate the multiple-testing budget. We further combine lexical and dense retrieval, reranking, and neighborhood-supported confidence to improve evidence extraction and routing. These components enhance the cascade while leaving its certification interface unchanged. Across six datasets and 13 evaluation settings, the reported results have the highest benchmark accuracy and macro-averaged F1 score in 12 settings each. These comparisons describe the reported operating points; the accuracy guarantee concerns agreement with the oracle.},
+  archiveprefix = {arXiv}
 }
 
 @misc{huangCombiningLabelPropagation2020,
@@ -316,6 +373,52 @@ They dont touch cardinality estimation but assume it has moderate errors.},
   file = {/home/ender/Zotero/storage/ZJZE9RXS/Mang et al. - 2026 - PLOP Cost-Based Placement of Semantic Operators in Hybrid Query Plans.pdf;/home/ender/Zotero/storage/KKAACN5T/2604.html}
 }
 
+@article{mcphersonBirdsFeatherHomophily2001,
+  title = {Birds of a {{Feather}}: {{Homophily}} in {{Social Networks}}},
+  shorttitle = {Birds of a {{Feather}}},
+  author = {McPherson, Miller and {Smith-Lovin}, Lynn and Cook, James M},
+  year = 2001,
+  month = aug,
+  journal = {Annual Review of Sociology},
+  volume = {27},
+  number = {1},
+  pages = {415--444},
+  issn = {0360-0572, 1545-2115},
+  doi = {10.1146/annurev.soc.27.1.415},
+  urldate = {2026-11-25},
+  abstract = {Similarity breeds connection. This principle---the homophily principle---structures network ties of every type, including marriage, friendship, work, advice, support, information transfer, exchange, comembership, and other types of relationship. The result is that people's personal networks are homogeneous with regard to many sociodemographic, behavioral, and intrapersonal characteristics. Homophily limits people's social worlds in a way that has powerful implications for the information they receive, the attitudes they form, and the interactions they experience. Homophily in race and ethnicity creates the strongest divides in our personal environments, with age, religion, education, occupation, and gender following in roughly that order. Geographic propinquity, families, organizations, and isomorphic positions in social systems all create contexts in which homophilous relations form. Ties between nonsimilar individuals also dissolve at a higher rate, which sets the stage for the formation of niches (localized positions) within social space. We argue for more research on: (a) the basic ecological processes that link organizations, associations, cultural communities, social movements, and many other social forms; (b) the impact of multiplex ties on the patterns of homophily; and (c) the dynamics of network change over time through which networks and other social entities co-evolve.},
+  langid = {english}
+}
+
+@inproceedings{meld,
+  title = {{{MELD}}: {{A Multimodal Multi-Party Dataset}} for {{Emotion Recognition}} in {{Conversations}}},
+  shorttitle = {{{MELD}}},
+  booktitle = {Proceedings of the 57th {{Annual Meeting}} of the {{Association}} for {{Computational Linguistics}}},
+  author = {Poria, Soujanya and Hazarika, Devamanyu and Majumder, Navonil and Naik, Gautam and Cambria, Erik and Mihalcea, Rada},
+  year = 2019,
+  pages = {527--536},
+  publisher = {Association for Computational Linguistics},
+  address = {Florence, Italy},
+  doi = {10.18653/v1/P19-1050},
+  urldate = {2026-11-25},
+  langid = {english},
+  file = {/home/ender/Zotero/storage/U9NYA6DB/Poria et al. - 2019 - MELD A Multimodal Multi-Party Dataset for Emotion Recognition in Conversations.pdf}
+}
+
+@misc{meniniAbuseContextualWhat2021,
+  title = {Abuse Is {{Contextual}}, {{What}} about {{NLP}}? {{The Role}} of {{Context}} in {{Abusive Language Annotation}} and {{Detection}}},
+  author = {Menini, Stefano and Aprosio, Alessio Palmero and Tonelli, Sara},
+  year = 2021,
+  month = mar,
+  number = {arXiv:2103.14916},
+  eprint = {2103.14916},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2103.14916},
+  urldate = {2026-11-25},
+  abstract = {The datasets most widely used for abusive language detection contain lists of messages, usually tweets, that have been manually judged as abusive or not by one or more annotators, with the annotation performed at message level. In this paper, we investigate what happens when the hateful content of a message is judged also based on the context, given that messages are often ambiguous and need to be interpreted in the context of occurrence. We first re-annotate part of a widely used dataset for abusive language detection in English in two conditions, i.e. with and without context. Then, we compare the performance of three classification algorithms obtained on these two types of dataset, arguing that a context-aware classification is more challenging but also more similar to a real application scenario.},
+  archiveprefix = {arXiv}
+}
+
 @misc{nooralahzadehMultiModalDataExploration2025,
   title = {Multi-{{Modal Data Exploration}} via {{Language Agents}}},
   author = {Nooralahzadeh, Farhad and Zhang, Yi and Furst, Jonathan and Stockinger, Kurt},
@@ -350,6 +453,55 @@ They dont touch cardinality estimation but assume it has moderate errors.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Information Retrieval,Computer Science - Machine Learning},
   file = {/home/ender/Zotero/storage/JJNCULWG/He et al. - 2025 - PaSa An LLM Agent for Comprehensive Academic Paper Search.pdf;/home/ender/Zotero/storage/77QRHED3/2501.html}
+}
+
+@inproceedings{pavlopoulosToxicityDetectionDoes2020,
+  title = {Toxicity {{Detection}}: {{Does Context Really Matter}}?},
+  shorttitle = {Toxicity {{Detection}}},
+  booktitle = {Proceedings of the 58th {{Annual Meeting}} of the {{Association}} for {{Computational Linguistics}}},
+  author = {Pavlopoulos, John and Sorensen, Jeffrey and Dixon, Lucas and Thain, Nithum and Androutsopoulos, Ion},
+  year = 2020,
+  pages = {4296--4305},
+  publisher = {Association for Computational Linguistics},
+  address = {Online},
+  doi = {10.18653/v1/2020.acl-main.396},
+  urldate = {2026-11-25},
+  langid = {english},
+  file = {/home/ender/Zotero/storage/GCZ5CTS5/Pavlopoulos et al. - 2020 - Toxicity Detection Does Context Really Matter.pdf}
+}
+
+@misc{probe,
+  title = {{{PROBE}}: {{Learned Proxy-Based Execution}} for {{Highly Selective Multimodal Semantic Queries}}},
+  shorttitle = {{{PROBE}}},
+  author = {Zhao, Haikai and Fu, Haisheng and Miao, Zhengjie and Fang, Zhenman},
+  year = 2026,
+  month = nov,
+  number = {arXiv:2611.01454},
+  eprint = {2611.01454},
+  primaryclass = {cs.DB},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2611.01454},
+  urldate = {2026-11-12},
+  abstract = {Large language models (LLMs) enable semantic queries over unstructured data, but invoking an LLM on every row is prohibitively expensive. Proxy-based execution can reduce this ple with the LLM and training a lightweight proxyto label the remaining rows. Nevertheless, in practical scenarios where semantic queries are highly selective, it remainschallenging to identify representative samples foLM budget and to achieve accurate predictions overthe remaining data using the proxy. We present PROBE, a learned proxy-based execution framework for highly selective multimodal semantic queries. PROBE uses selectivity-adaptive sampling to discover rare polightweight proxy on the acquired labels. It thenrefines proxy predictions through residual correction and homogeneity smoothing over a similarity graph. To address sampling bias, PROBE jointly calibrates refined scores usiarate calibration sample, then selectively routescandidates to the LLM by optimizing the tradeoff between estimated F1 and evaluation cost. On queries from SemBench and LRO-Bench with positive rates as low as 2.17x10\textasciicircum -5 budget yields a geometric-mean F1 of 0.762,compared with 0.797 for exhaustive LLM evaluation, at a geometric-mean speedup of 4.87x and a maximum speedup of 9.3x.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Databases},
+  file = {/home/ender/Zotero/storage/IUBI8CC4/Zhao et al. - 2026 - PROBE Learned Proxy-Based Execution for Highly Selective Multimodal Semantic Queries.pdf;/home/ender/Zotero/storage/56UTAN6A/2611.html}
+}
+
+@inproceedings{qbcb,
+  title = {Certifying {{One-Phase Technology-Assisted Reviews}}},
+  booktitle = {Proceedings of the 30th {{ACM International Conference}} on {{Information}} \& {{Knowledge Management}}},
+  author = {Lewis, David D. and Yang, Eugene and Frieder, Ophir},
+  year = 2021,
+  month = oct,
+  pages = {893--902},
+  publisher = {ACM},
+  address = {Virtual Event Queensland Australia},
+  doi = {10.1145/3459637.3482415},
+  urldate = {2026-11-25},
+  isbn = {978-1-4503-8446-9},
+  langid = {english},
+  file = {/home/ender/Zotero/storage/WWMB4E9J/Lewis et al. - 2021 - Certifying One-Phase Technology-Assisted Reviews.pdf}
 }
 
 @misc{qiSemaHighperformanceSystem2026,
@@ -392,6 +544,42 @@ They dont touch cardinality estimation but assume it has moderate errors.},
   file = {/home/ender/Zotero/storage/IJMCXWLR/Russo et al. - 2026 - Abacus A Cost-Based Optimizer for Semantic Operator Systems.pdf;/home/ender/Zotero/storage/AJWXEIRI/2505.html}
 }
 
+@misc{semviews,
+  title = {Semantic {{Views}}: {{Certified Reuse}} of {{LLM Labels Across Semantic Queries}}},
+  shorttitle = {Semantic {{Views}}},
+  author = {Hassanzadeh, Oktie and Subramanian, Dharmashankar},
+  year = 2026,
+  month = oct,
+  number = {arXiv:2610.12768},
+  eprint = {2610.12768},
+  primaryclass = {cs.DB},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2610.12768},
+  urldate = {2026-10-13},
+  abstract = {Semantic query engines evaluate natural-language filters with a large language model, and every evaluation is a costly oracle call. Optimizers that reduce these calls face a dilemma: cascades that trust a cheap proxy miss their precision and recall targets on many queries, methods with finite-sample guarantees save little, and all of them discard the oracle's labels when the query ends. We present SemViews, a certified semantic filter that orders tuples by signals that cost no oracle calls (the labels that earlier queries left behind as semantic views, a local embedding, and a helper model's score), refines that order with labels it must pay for anyway, and certifies its answer with fresh stratified oracle samples. The answer meets user precision and recall targets with probability at least \$1-{$\delta\$$} for every workload and every catalog, so a stale or misleading view can cost oracle calls but never accuracy. On four workloads replayed against 725,000 recorded oracle labels, SemViews meets both targets on 99.63\% of queries and saves 28\%-45\% of the oracle calls, whereas the only prior method in our study with the same guarantee needs 1.32x-1.71x as many calls. When a question returns in different words, views cut its calls by a further 27\%-36\%, with both targets met on at least 99.8\% of such queries; similarity caches and entailment-based reuse meet them on only 17\%-47\%.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Databases},
+  note = {Comment: Code and data: https://github.com/semviews/lotus-semviews},
+  file = {/home/ender/Zotero/storage/6CLD3UGU/Hassanzadeh and Subramanian - 2026 - Semantic Views Certified Reuse of LLM Labels Across Semantic Queries.pdf;/home/ender/Zotero/storage/RZWA44L7/2610.html}
+}
+
+@article{senCollectiveClassificationNetwork2008,
+  title = {Collective {{Classification}} in {{Network Data}}},
+  author = {Sen, Prithviraj and Namata, Galileo and Bilgic, Mustafa and Getoor, Lise and Gallagher, Brian and Eliassi-Rad, Tina},
+  year = 2008,
+  month = sep,
+  journal = {AI Magazine},
+  volume = {29},
+  number = {3},
+  pages = {93--106},
+  issn = {0738-4602, 2371-9621},
+  doi = {10.1609/aimag.v29i3.2157},
+  urldate = {2026-11-25},
+  abstract = {Many real-world applications produce networked data such as the worldwide web (hypertext documents connected through hyperlinks), social networks (such as people connected by friendship links), communication networks (computers connected through communication links), and biological networks (such as protein interaction networks). A recent focus in machine-learning research has been to extend traditional machine-learning classification techniques to classify nodes in such networks. In this article, we provide a brief introduction to this area of research and how it has progressed during the past decade. We introduce four of the most widely used inference algorithms for classifying networked data and empirically compare them on both synthetic and real-world data.},
+  copyright = {http://onlinelibrary.wiley.com/termsAndConditions\#vor},
+  langid = {english}
+}
+
 @misc{shiSPARScholarPaper2025,
   title = {{{SPAR}}: {{Scholar Paper Retrieval}} with {{LLM}}-Based {{Agents}} for {{Enhanced Academic Search}}},
   shorttitle = {{{SPAR}}},
@@ -408,6 +596,23 @@ They dont touch cardinality estimation but assume it has moderate errors.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Information Retrieval},
   file = {/home/ender/Zotero/storage/E63Y2CLL/Shi et al. - 2025 - SPAR Scholar Paper Retrieval with LLM-based Agents for Enhanced Academic Search.pdf;/home/ender/Zotero/storage/DNCJATI2/2507.html}
+}
+
+@article{supg,
+  title = {Approximate Selection with Guarantees Using Proxies},
+  author = {Kang, Daniel and Gan, Edward and Bailis, Peter and Hashimoto, Tatsunori and Zaharia, Matei},
+  year = 2020,
+  month = aug,
+  journal = {Proceedings of the VLDB Endowment},
+  volume = {13},
+  number = {12},
+  pages = {1990--2003},
+  issn = {2150-8097},
+  doi = {10.14778/3407790.3407804},
+  urldate = {2026-11-25},
+  abstract = {Due to the falling costs of data acquisition and storage, researchers and industry analysts often want to find all instances of rare events in large datasets. For instance, scientists can cheaply capture thousands of hours of video, but are limited by the need to manually inspect long videos to identify relevant objects and events. To reduce this cost, recent work proposes to use cheap proxy models, such as image classifiers, to identify an approximate set of data points satisfying a data selection filter. Unfortunately, this recent work does not provide the statistical accuracy guarantees necessary in scientific and production settings.                            In this work, we introduce novel algorithms for approximate selection queries with               statistical accuracy guarantees.               Namely, given a limited number of exact identifications from an oracle, often a human or an expensive machine learning model, our algorithms meet a minimum precision or recall target with high probability. In contrast, existing approaches can catastrophically fail in satisfying these recall and precision targets. We show that our algorithms can improve query result quality by up to 30 x for both the precision and recall targets in both real and synthetic datasets.},
+  langid = {english},
+  file = {/home/ender/Zotero/storage/3XHQE4NC/Kang et al. - 2020 - Approximate selection with guarantees using proxies.pdf}
 }
 
 @misc{thapaliyaWhereLLMAnnotators2026,
@@ -533,24 +738,6 @@ They dont touch cardinality estimation but assume it has moderate errors.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Databases,Computer Science - Machine Learning},
   file = {/home/ender/Zotero/storage/TWLLGGQF/Zhao et al. - 2026 - Larch Learned Query Optimization for Semantic Predicates.pdf;/home/ender/Zotero/storage/GWFM9BTT/2606.html}
-}
-
-@misc{zhaoPROBELearnedProxyBased2026,
-  title = {{{PROBE}}: {{Learned Proxy-Based Execution}} for {{Highly Selective Multimodal Semantic Queries}}},
-  shorttitle = {{{PROBE}}},
-  author = {Zhao, Haikai and Fu, Haisheng and Miao, Zhengjie and Fang, Zhenman},
-  year = 2026,
-  month = nov,
-  number = {arXiv:2611.01454},
-  eprint = {2611.01454},
-  primaryclass = {cs.DB},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2611.01454},
-  urldate = {2026-11-12},
-  abstract = {Large language models (LLMs) enable semantic queries over unstructured data, but invoking an LLM on every row is prohibitively expensive. Proxy-based execution can reduce this ple with the LLM and training a lightweight proxyto label the remaining rows. Nevertheless, in practical scenarios where semantic queries are highly selective, it remainschallenging to identify representative samples foLM budget and to achieve accurate predictions overthe remaining data using the proxy. We present PROBE, a learned proxy-based execution framework for highly selective multimodal semantic queries. PROBE uses selectivity-adaptive sampling to discover rare polightweight proxy on the acquired labels. It thenrefines proxy predictions through residual correction and homogeneity smoothing over a similarity graph. To address sampling bias, PROBE jointly calibrates refined scores usiarate calibration sample, then selectively routescandidates to the LLM by optimizing the tradeoff between estimated F1 and evaluation cost. On queries from SemBench and LRO-Bench with positive rates as low as 2.17x10\textasciicircum -5 budget yields a geometric-mean F1 of 0.762,compared with 0.797 for exhaustive LLM evaluation, at a geometric-mean speedup of 4.87x and a maximum speedup of 9.3x.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Databases},
-  file = {/home/ender/Zotero/storage/IUBI8CC4/Zhao et al. - 2026 - PROBE Learned Proxy-Based Execution for Highly Selective Multimodal Semantic Queries.pdf;/home/ender/Zotero/storage/56UTAN6A/2611.html}
 }
 
 @misc{zhengMICROLightweightMiddleware2026,
