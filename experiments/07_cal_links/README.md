@@ -47,3 +47,18 @@ The interval runs from the 2.5th to the 97.5th percentile of the draws.
 
 `python run.py` writes `results/costs.txt` with the table, the gaps with their intervals and the verdict.
 Every finished draw goes to `results/draws.jsonl`, so a stopped run resumes.
+
+## Result
+
+Pass. On CAD and MELD, QBCB over CAL with link features costs less than CAL alone, CAL with kNN features and CAL with rewired link features, by 2.10 to 3.68 points of the rows.
+
+Cal+links minus each arm, mean over predicates, in points of the rows, full data then the 95% cluster bootstrap interval, from `results/costs.txt`:
+
+| dataset | cal                  | cal+knn              | cal+rewired          | bargain                |
+| ------- | -------------------- | -------------------- | -------------------- | ---------------------- |
+| cad     | -2.29 [-3.21, -1.09] | -2.22 [-2.90, -0.38] | -2.10 [-3.03, -0.73] | -13.25 [-16.60, -9.75] |
+| meld    | -3.40 [-4.08, -1.32] | -3.15 [-3.72, -0.98] | -3.68 [-3.55, -0.81] | -5.92 [-7.88, -3.38]   |
+| cora    | +0.62                | +0.15                | +0.19                | -2.02                  |
+| stack   | +0.04                | +0.03                | -0.13                | -8.15                  |
+
+Closed.
