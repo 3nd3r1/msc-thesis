@@ -33,7 +33,7 @@ ARMS = ["cal", "cal+knn", "cal+rewired", "cal+links"]
 RULE = ["cal", "cal+knn", "cal+rewired"]
 OTHERS = RULE + ["bargain"]
 FLOOR = 0.88
-WORKERS = max(1, (os.cpu_count() or 2) // 2)
+WORKERS = int(os.environ.get("WORKERS", max(1, (os.cpu_count() or 2) // 2)))
 DONE = RESULTS / "draws.jsonl"
 DATA = {}
 
